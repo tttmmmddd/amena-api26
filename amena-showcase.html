@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آمنة — نموذج المنصة الزراعية الرقمية</title>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — AMENA BRAND
+═══════════════════════════════════════════ */
+:root {
+  --forest:    #0a3d1f;
+  --forest-m:  #145a2e;
+  --forest-l:  #1e7a40;
+  --forest-xl: #27ae60;
+  --gold:      #d4a017;
+  --gold-l:    #f0c040;
+  --gold-bg:   #fdf8ec;
+  --clay:      #f5f0e8;
+  --clay-d:    #e8e0d0;
+  --slate:     #2c3e50;
+  --slate-l:   #445566;
+  --mist:      #8899aa;
+  --white:     #ffffff;
+  --red:       #c0392b;
+  --red-l:     #fde8e8;
+  --blue:      #2563eb;
+  --purple:    #7c3aed;
+  --border:    #ddd8ce;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth }
+body {
+  font-family:'Segoe UI',Tahoma,Arial,sans-serif;
+  background: var(--clay);
+  color: var(--slate);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   TOP NAVIGATION
+═══════════════════════════════════════════ */
+.top-nav {
+  background: var(--forest);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  box-shadow: 0 2px 20px rgba(0,0,0,.25);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-icon {
+  width: 34px; height: 34px;
+  background: var(--gold);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 900; color: var(--forest);
+}
+.brand-name {
+  font-size: 1.35rem; font-weight: 900; color: #fff;
+  letter-spacing: -.02em;
+}
+.brand-name span { color: var(--gold-l); }
+.brand-tag {
+  font-size: .7rem; color: rgba(255,255,255,.55);
+  font-weight: 500;
+  border-right: 1px solid rgba(255,255,255,.2);
+  padding-right: 10px;
+  margin-right: 4px;
+}
+.nav-pills {
+  display: flex; gap: 4px;
+}
+.nav-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: .78rem; font-weight: 700;
+  color: rgba(255,255,255,.65);
+  cursor: pointer;
+  border: none; background: none; font-family: inherit;
+  transition: .2s;
+}
+.nav-pill:hover, .nav-pill.active {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+}
+.nav-cta {
+  background: var(--gold);
+  color: var(--forest);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: .78rem; font-weight: 800;
+  border: none; cursor: pointer; font-family: inherit;
+  transition: .2s;
+}
+.nav-cta:hover { background: var(--gold-l); }
+@media(max-width:768px){
+  .nav-pills { display:none; }
+  .brand-tag { display:none; }
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT — SHOWCASE GRID
+═══════════════════════════════════════════ */
+.showcase {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 60px);
+}
+@media(max-width:900px){
+  .showcase { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   LEFT SIDEBAR — PORTAL SELECTOR
+═══════════════════════════════════════════ */
+.sidebar {
+  background: var(--white);
+  border-left: 1px solid var(--border);
+  padding: 24px 16px;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+.sidebar-label {
+  font-size: .68rem; font-weight: 800; letter-spacing: .1em;
+  color: var(--mist); text-transform: uppercase;
+  margin-bottom: 12px; padding-right: 4px;
+}
+.portal-btn {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 12px 14px;
+  border-radius: 12px; border: 2px solid transparent;
+  background: none; cursor: pointer; font-family: inherit;
+  text-align: right; transition: .2s; margin-bottom: 4px;
+}
+.portal-btn:hover { background: var(--clay); }
+.portal-btn.active {
+  background: var(--forest); border-color: var(--forest);
+  box-shadow: 0 4px 16px rgba(10,61,31,.25);
+}
+.portal-btn.active .pb-icon { background: rgba(255,255,255,.2); }
+.portal-btn.active .pb-title { color: #fff; }
+.portal-btn.active .pb-sub { color: rgba(255,255,255,.65); }
+.pb-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--clay); display: flex; align-items: center;
+  justify-content: center; font-size: 18px; flex-shrink: 0;
+  transition: .2s;
+}
+.pb-info { flex: 1; }
+.pb-title { font-size: .88rem; font-weight: 700; color: var(--slate); }
+.pb-sub { font-size: .72rem; color: var(--mist); margin-top: 1px; }
+.sidebar-divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+.sidebar-stat {
+  background: var(--clay);
+  border-radius: 10px; padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.ss-label { font-size: .68rem; color: var(--mist); font-weight: 600; margin-bottom: 3px; }
+.ss-val { font-size: 1.1rem; font-weight: 800; color: var(--forest); }
+
+/* ═══════════════════════════════════════════
+   RIGHT CONTENT — SCREEN DISPLAY
+═══════════════════════════════════════════ */
+.content-area {
+  padding: 32px;
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+@media(max-width:600px){ .content-area { padding: 16px; } }
+
+/* ─── PORTAL INFO PANEL ─── */
+.portal-info {
+  flex: 1; min-width: 260px;
+}
+.portal-header {
+  margin-bottom: 28px;
+}
+.portal-eyebrow {
+  font-size: .72rem; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 8px;
+}
+.portal-title {
+  font-size: clamp(1.6rem,3.5vw,2.4rem);
+  font-weight: 900; color: var(--forest);
+  line-height: 1.08; letter-spacing: -.03em;
+  margin-bottom: 12px;
+}
+.portal-desc {
+  font-size: .95rem; color: var(--slate-l);
+  line-height: 1.7; margin-bottom: 24px;
+}
+.feature-list {
+  list-style: none; display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 28px;
+}
+.feature-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .88rem; color: var(--slate); line-height: 1.5;
+}
+.feature-dot {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--gold-bg); border: 1.5px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0; margin-top: 1px;
+}
+.stats-row {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
+  margin-bottom: 28px;
+}
+.stat-box {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px 12px; text-align: center;
+}
+.stat-val { font-size: 1.25rem; font-weight: 900; color: var(--forest); line-height: 1; }
+.stat-lbl { font-size: .68rem; color: var(--mist); margin-top: 4px; font-weight: 600; }
+.action-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-main {
+  padding: 12px 22px; border-radius: 12px;
+  font-size: .88rem; font-weight: 800; cursor: pointer;
+  border: none; font-family: inherit; transition: .25s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-primary { background: var(--forest); color: #fff; }
+.btn-primary:hover { background: var(--forest-l); transform: translateY(-1px); }
+.btn-gold { background: var(--gold); color: var(--forest); }
+.btn-gold:hover { background: var(--gold-l); transform: translateY(-1px); }
+.btn-outline {
+  background: transparent; color: var(--forest);
+  border: 2px solid var(--forest);
+}
+.btn-outline:hover { background: var(--forest); color: #fff; }
+
+/* ─── PHONE MOCKUP ─── */
+.phone-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  flex-shrink: 0;
+}
+.phone-frame {
+  width: 300px;
+  background: #111;
+  border-radius: 44px;
+  padding: 14px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.08),
+    0 30px 80px rgba(0,0,0,.35),
+    inset 0 0 0 1px rgba(255,255,255,.04);
+  position: relative;
+}
+.phone-pill {
+  width: 90px; height: 24px; background: #111;
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto 6px;
+  border: 1px solid rgba(255,255,255,.06);
+  border-top: none;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px;
+}
+.phone-pill::before {
+  content: ''; width: 50px; height: 4px;
+  background: #333; border-radius: 2px;
+}
+.phone-screen {
+  background: var(--clay);
+  border-radius: 32px;
+  overflow: hidden;
+  min-height: 580px;
+  position: relative;
+}
+/* phone tab nav */
+.phone-nav {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 8px 0 12px;
+}
+.pn-item {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+  font-size: .6rem; font-weight: 600; color: var(--mist);
+  cursor: pointer;
+}
+.pn-item.active { color: var(--forest); }
+.pn-icon { font-size: 1.1rem; }
+
+/* phone content panels */
+.phone-content { padding: 0 0 70px; }
+.p-topbar {
+  background: var(--forest);
+  padding: 14px 16px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.p-topbar-left { font-size: .65rem; color: rgba(255,255,255,.6); }
+.p-logo { font-size: 1rem; font-weight: 900; color: #fff; }
+.p-logo span { color: var(--gold-l); }
+.p-topbar-right { display: flex; gap: 8px; }
+.p-icon-btn {
+  width: 30px; height: 30px; background: rgba(255,255,255,.12);
+  border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-size: 13px; cursor: pointer;
+}
+/* search */
+.p-search {
+  margin: 10px 12px;
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 9px 12px;
+  display: flex; align-items: center; gap: 7px;
+}
+.p-search-icon { font-size: 12px; color: var(--mist); }
+.p-search-text { font-size: .72rem; color: var(--mist); }
+/* pills/chips */
+.p-chips {
+  display: flex; gap: 6px; padding: 0 12px 10px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.p-chip {
+  font-size: .65rem; font-weight: 700; padding: 5px 12px;
+  border-radius: 20px; white-space: nowrap; cursor: pointer;
+  transition: .15s;
+}
+.p-chip.on { background: var(--forest); color: #fff; }
+.p-chip.off { background: var(--white); color: var(--slate); border: 1px solid var(--border); }
+/* section label */
+.p-sec { padding: 4px 12px 8px; font-size: .7rem; font-weight: 700; color: var(--mist); }
+/* product grid inside phone */
+.p-prod-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; padding: 0 10px;
+}
+.p-prod {
+  background: var(--white); border-radius: 12px; padding: 12px;
+  border: 1.5px solid var(--border); transition: .2s; cursor: pointer;
+}
+.p-prod:hover { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(10,61,31,.07); }
+.pp-emoji { font-size: 1.6rem; margin-bottom: 6px; }
+.pp-name { font-size: .68rem; font-weight: 700; color: var(--slate); margin-bottom: 3px; }
+.pp-price { font-size: .75rem; font-weight: 800; color: var(--forest); }
+.pp-badge {
+  font-size: .58rem; font-weight: 700; padding: 2px 7px;
+  border-radius: 20px; margin-top: 4px; display: inline-block;
+}
+.badge-gold { background: var(--gold-bg); color: #8a5c00; }
+.badge-green { background: #f0fdf4; color: #14532d; }
+.badge-red { background: var(--red-l); color: var(--red); }
+.badge-blue { background: #eff6ff; color: #1e3a8a; }
+/* banner */
+.p-banner {
+  margin: 8px 10px;
+  background: linear-gradient(120deg,var(--forest),var(--forest-l));
+  border-radius: 12px; padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer;
+}
+.pb-left { }
+.pb-live { display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+.live-dot-sm { width: 6px; height: 6px; border-radius: 50%; background: #ff4444; animation: blink 1.2s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.pb-live-text { font-size: .63rem; font-weight: 700; color: rgba(255,255,255,.8); }
+.pb-title { font-size: .72rem; font-weight: 800; color: #fff; }
+.pb-watch { font-size: .58rem; color: rgba(255,255,255,.6); }
+.pb-btn {
+  background: var(--gold); color: var(--forest);
+  font-size: .63rem; font-weight: 800; padding: 5px 10px;
+  border-radius: 8px; white-space: nowrap;
+}
+/* stat strip inside phone */
+.p-stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--clay-d);
+  margin: 10px 10px;
+  border-radius: 10px; overflow: hidden;
+}
+.p-stat {
+  background: var(--white); padding: 10px 6px; text-align: center;
+}
+.ps-val { font-size: .85rem; font-weight: 900; color: var(--forest); }
+.ps-lbl { font-size: .58rem; color: var(--mist); margin-top: 2px; }
+/* order card in phone */
+.p-order-card {
+  background: var(--white); margin: 6px 10px;
+  border-radius: 12px; padding: 12px;
+  border: 1.5px solid var(--border);
+}
+.poc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.poc-num { font-size: .72rem; font-weight: 800; color: var(--slate); font-family: monospace; }
+.poc-status { font-size: .6rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
+.poc-items { font-size: .68rem; color: var(--mist); margin-bottom: 8px; }
+.poc-escrow {
+  background: var(--gold-bg); border: 1px solid var(--gold);
+  border-radius: 8px; padding: 7px 10px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: .65rem; font-weight: 700; color: #8a5c00;
+}
+/* farmer dashboard inside phone */
+.p-farm-card {
+  background: linear-gradient(120deg,var(--forest),var(--forest-l));
+  margin: 8px 10px; border-radius: 12px; padding: 14px;
+}
+.pfc-label { font-size: .65rem; color: rgba(255,255,255,.65); margin-bottom: 2px; }
+.pfc-val { font-size: 1.3rem; font-weight: 900; color: var(--gold-l); }
+.pfc-sub { font-size: .65rem; color: rgba(255,255,255,.65); }
+/* escrow flow inside phone */
+.p-escrow-flow {
+  display: flex; gap: 4px; margin: 8px 10px; align-items: center;
+}
+.pef-step {
+  flex: 1; background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 8px 4px; text-align: center;
+  font-size: .62rem; font-weight: 700; color: var(--mist);
+}
+.pef-step.done { background: #f0fdf4; border-color: #86efac; color: #14532d; }
+.pef-step.curr { background: var(--gold-bg); border-color: var(--gold); color: #8a5c00; }
+.pef-icon { font-size: 1rem; margin-bottom: 2px; }
+.pef-arrow { font-size: .8rem; color: var(--border); }
+/* expert card */
+.p-expert-card {
+  background: var(--white); margin: 6px 10px;
+  border-radius: 12px; padding: 12px; border: 1.5px solid var(--border);
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.pec-avatar {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg,var(--purple),#9f67fa);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.pec-name { font-size: .75rem; font-weight: 800; color: var(--slate); }
+.pec-spec { font-size: .65rem; color: var(--mist); margin: 2px 0; }
+.pec-rate { font-size: .65rem; color: var(--gold); font-weight: 700; }
+.pec-fee { font-size: .65rem; color: var(--forest); font-weight: 800; }
+/* admin card */
+.p-admin-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 12px; border-bottom: 1px solid var(--border);
+  font-size: .7rem;
+}
+.par-label { font-weight: 700; color: var(--slate); }
+.par-val { font-weight: 900; color: var(--forest); font-size: .78rem; }
+.par-badge { font-size: .6rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+/* transporter */
+.p-route-card {
+  background: var(--white); margin: 6px 10px;
+  border-radius: 12px; padding: 12px; border: 1.5px solid var(--border);
+}
+.prc-route {
+  display: flex; align-items: center; gap: 6px;
+  font-size: .72rem; font-weight: 700; color: var(--slate); margin-bottom: 6px;
+}
+.prc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--forest); flex-shrink: 0; }
+.prc-line { flex: 1; height: 2px; background: repeating-linear-gradient(90deg,var(--forest) 0,var(--forest) 4px,transparent 4px,transparent 8px); }
+.prc-dest { font-size: .68rem; color: var(--mist); }
+.prc-earn { font-size: .85rem; font-weight: 900; color: var(--forest); }
+/* listing card */
+.p-list-card {
+  background: var(--white); margin: 6px 10px;
+  border-radius: 12px; padding: 12px; border: 1.5px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.plc-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.plc-name { font-size: .75rem; font-weight: 700; color: var(--slate); }
+.plc-meta { font-size: .65rem; color: var(--mist); margin-top: 2px; }
+.plc-price { font-size: .82rem; font-weight: 800; color: var(--forest); margin-right: auto; }
+
+/* ─── SCREEN TABS (below phone) ─── */
+.screen-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  max-width: 300px;
+}
+.screen-tab {
+  padding: 6px 12px; border-radius: 8px;
+  font-size: .72rem; font-weight: 700; cursor: pointer;
+  border: 1.5px solid var(--border); background: var(--white);
+  color: var(--mist); transition: .2s;
+}
+.screen-tab.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+
+/* ═══════════════════════════════════════════
+   SECTION: HERO LANDING PREVIEW
+═══════════════════════════════════════════ */
+.hero-preview {
+  background: linear-gradient(160deg, var(--forest) 0%, #1a5c35 60%, #0a3d1f 100%);
+  padding: 64px 32px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: 24px;
+  border-radius: 20px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-preview::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,160,23,.12) 0%, transparent 70%);
+}
+.hp-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(212,160,23,.18); border: 1px solid rgba(212,160,23,.4);
+  color: var(--gold-l); font-size: .75rem; font-weight: 700;
+  letter-spacing: .06em; padding: 5px 16px; border-radius: 20px;
+  position: relative;
+}
+.hp-title {
+  font-size: clamp(2rem,5vw,3.4rem);
+  font-weight: 900; color: #fff; line-height: 1.0;
+  letter-spacing: -.04em; position: relative;
+}
+.hp-title em { color: var(--gold-l); font-style: normal; display: block; }
+.hp-sub {
+  font-size: 1rem; color: rgba(255,255,255,.7);
+  max-width: 480px; line-height: 1.7; position: relative;
+}
+.hp-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; position: relative; }
+.hpa-btn {
+  padding: 13px 26px; border-radius: 14px; font-size: .95rem;
+  font-weight: 800; cursor: pointer; border: none; font-family: inherit;
+  transition: .25s; display: flex; align-items: center; gap: 8px;
+}
+.hpa-gold { background: var(--gold); color: var(--forest); }
+.hpa-gold:hover { background: var(--gold-l); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,160,23,.4); }
+.hpa-ghost { background: rgba(255,255,255,.12); color: #fff; border: 2px solid rgba(255,255,255,.3); }
+.hpa-ghost:hover { background: rgba(255,255,255,.2); }
+.hp-stats {
+  display: flex; gap: 32px; position: relative;
+  flex-wrap: wrap; justify-content: center;
+}
+.hps { text-align: center; }
+.hps-val { font-size: 1.6rem; font-weight: 900; color: var(--gold-l); line-height: 1; }
+.hps-lbl { font-size: .72rem; color: rgba(255,255,255,.6); font-weight: 600; margin-top: 4px; }
+.hp-divider { width: 1px; height: 40px; background: rgba(255,255,255,.15); align-self: center; }
+
+/* ═══════════════════════════════════════════
+   PILLAR CARDS
+═══════════════════════════════════════════ */
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 14px;
+  margin-bottom: 32px;
+}
+@media(max-width:700px){ .pillars-grid { grid-template-columns: 1fr 1fr; } }
+.pillar-c {
+  border-radius: 16px; padding: 20px 18px;
+  border: 2px solid; transition: .3s; cursor: pointer;
+}
+.pillar-c:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+.pillar-c.p1 { background: #fef9c3; border-color: #fde047; }
+.pillar-c.p2 { background: #f0fdf4; border-color: #86efac; }
+.pillar-c.p3 { background: #eff6ff; border-color: #93c5fd; }
+.pillar-c.p4 { background: #fdf4ff; border-color: #d8b4fe; }
+.pc-icon { font-size: 2rem; margin-bottom: 10px; }
+.pc-title { font-size: .9rem; font-weight: 800; color: var(--slate); margin-bottom: 8px; }
+.pc-items { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.pc-items li { font-size: .75rem; color: var(--slate-l); display: flex; align-items: flex-start; gap: 5px; }
+.pc-items li::before { content: '•'; color: var(--forest); font-size: 10px; margin-top: 3px; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════
+   ESCROW VISUAL
+═══════════════════════════════════════════ */
+.escrow-visual {
+  background: linear-gradient(135deg,var(--forest),#1e7a40);
+  border-radius: 20px; padding: 28px;
+  margin-bottom: 32px; color: #fff;
+}
+.ev-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+.ev-sub { font-size: .82rem; color: rgba(255,255,255,.7); margin-bottom: 20px; }
+.ev-flow {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: rgba(255,255,255,.1);
+  border-radius: 12px; overflow: hidden;
+}
+@media(max-width:600px){ .ev-flow { grid-template-columns: 1fr 1fr; } }
+.ev-step {
+  background: rgba(255,255,255,.06); padding: 16px 10px;
+  text-align: center; transition: .2s; cursor: default;
+}
+.ev-step:hover { background: rgba(255,255,255,.12); }
+.ev-step.highlight { background: rgba(212,160,23,.2); }
+.ev-s-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.ev-s-title { font-size: .78rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.ev-s-desc { font-size: .67rem; color: rgba(255,255,255,.6); line-height: 1.4; }
+.ev-badge {
+  display: inline-block; background: var(--gold); color: var(--forest);
+  font-size: .6rem; font-weight: 800; padding: 2px 9px;
+  border-radius: 20px; margin-top: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   HIDDEN SCREEN VARIANTS
+═══════════════════════════════════════════ */
+.screen-variant { display: none; }
+.screen-variant.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ TOP NAV ════════════════════════════ -->
+<nav class="top-nav">
+  <div class="brand">
+    <div class="brand-icon">🌾</div>
+    <span class="brand-tag">منصة</span>
+    <span class="brand-name">آ<span>م</span>نة</span>
+  </div>
+  <div class="nav-pills">
+    <button class="nav-pill active" onclick="showSection('app')">نموذج التطبيق</button>
+    <button class="nav-pill" onclick="showSection('landing')">واجهة المنصة</button>
+    <button class="nav-pill" onclick="showSection('pillars')">الأسواق</button>
+    <button class="nav-pill" onclick="showSection('escrow')">الدفع الآمن</button>
+  </div>
+  <button class="nav-cta" onclick="showSection('app')">🚀 عرض النموذج</button>
+</nav>
+
+<!-- ═══════════════════ MAIN ════════════════════════════════ -->
+<div class="showcase">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-label">البوابات الست</div>
+
+    <button class="portal-btn active" onclick="switchPortal('consumer',this)">
+      <div class="pb-icon">🛒</div>
+      <div class="pb-info">
+        <div class="pb-title">المستهلك</div>
+        <div class="pb-sub">تسوّق وتتبع طلباتك</div>
+      </div>
+    </button>
+
+    <button class="portal-btn" onclick="switchPortal('farmer',this)">
+      <div class="pb-icon">🌾</div>
+      <div class="pb-info">
+        <div class="pb-title">المزارع</div>
+        <div class="pb-sub">أدر منتجاتك وأرباحك</div>
+      </div>
+    </button>
+
+    <button class="portal-btn" onclick="switchPortal('trader',this)">
+      <div class="pb-icon">🏪</div>
+      <div class="pb-info">
+        <div class="pb-title">التاجر</div>
+        <div class="pb-sub">عقود الجملة والتوريد</div>
+      </div>
+    </button>
+
+    <button class="portal-btn" onclick="switchPortal('transporter',this)">
+      <div class="pb-icon">🚚</div>
+      <div class="pb-info">
+        <div class="pb-title">الناقل</div>
+        <div class="pb-sub">مهام النقل والأرباح</div>
+      </div>
+    </button>
+
+    <button class="portal-btn" onclick="switchPortal('expert',this)">
+      <div class="pb-icon">🏅</div>
+      <div class="pb-info">
+        <div class="pb-title">الخبير الزراعي</div>
+        <div class="pb-sub">شهادات الجودة والاستشارات</div>
+      </div>
+    </button>
+
+    <button class="portal-btn" onclick="switchPortal('admin',this)">
+      <div class="pb-icon">🔐</div>
+      <div class="pb-info">
+        <div class="pb-title">لوحة الإدارة</div>
+        <div class="pb-sub">إحصائيات وأمان المنصة</div>
+      </div>
+    </button>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-label">إحصائيات مباشرة</div>
+    <div class="sidebar-stat"><div class="ss-label">إجمالي المستخدمين</div><div class="ss-val">328,410</div></div>
+    <div class="sidebar-stat"><div class="ss-label">حجم المعاملات</div><div class="ss-val">4.2B دج</div></div>
+    <div class="sidebar-stat"><div class="ss-label">الولايات المغطاة</div><div class="ss-val">69 ولاية</div></div>
+  </aside>
+
+  <!-- ── CONTENT ── -->
+  <main class="content-area" id="mainContent">
+
+    <!-- PORTAL INFO -->
+    <div class="portal-info" id="portalInfo">
+
+      <!-- LANDING HERO -->
+      <div id="section-landing" style="display:none">
+        <div class="hero-preview">
+          <div class="hp-badge"><div class="live-dot-sm"></div> السوق الزراعي الرقمي الجزائري الأول</div>
+          <h1 class="hp-title">من الحقل<em>إلى طاولتك</em></h1>
+          <p class="hp-sub">منصة آمنة تربط المزارعين بالمستهلكين والتجار مباشرةً — دفع Escrow مضمون، تتبع QR، خبراء معتمدون عبر 69 ولاية.</p>
+          <div class="hp-actions">
+            <button class="hpa-btn hpa-gold">🚀 ابدأ مجاناً</button>
+            <button class="hpa-btn hpa-ghost">كيف تعمل؟</button>
+          </div>
+          <div class="hp-stats">
+            <div class="hps"><div class="hps-val">50K+</div><div class="hps-lbl">مزارع مسجّل</div></div>
+            <div class="hp-divider"></div>
+            <div class="hps"><div class="hps-val">69</div><div class="hps-lbl">ولاية مغطاة</div></div>
+            <div class="hp-divider"></div>
+            <div class="hps"><div class="hps-val">4.2B</div><div class="hps-lbl">دج معاملات</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILLARS -->
+      <div id="section-pillars" style="display:none">
+        <div class="portal-header">
+          <div class="portal-eyebrow">الأسواق — الأعمدة الأربعة</div>
+          <h2 class="portal-title">كل ما يحتاجه القطاع الزراعي</h2>
+          <p class="portal-desc">هيكل متكامل يغطي دورة القيمة الزراعية كاملة من البذرة حتى التصدير عبر الـ69 ولاية.</p>
+        </div>
+        <div class="pillars-grid">
+          <div class="pillar-c p1">
+            <div class="pc-icon">🌴</div>
+            <div class="pc-title">المحاصيل الطازجة</div>
+            <ul class="pc-items">
+              <li>تمور دقلة نور وبرحي</li>
+              <li>خضروات وفواكه موسمية</li>
+              <li>حبوب وبقوليات</li>
+              <li>زيت الزيتون البكر</li>
+            </ul>
+          </div>
+          <div class="pillar-c p2">
+            <div class="pc-icon">🧪</div>
+            <div class="pc-title">مستلزمات الإنتاج</div>
+            <ul class="pc-items">
+              <li>فسائل وبذور معتمدة</li>
+              <li>أسمدة عضوية وكيماوية</li>
+              <li>مبيدات مصادقة</li>
+              <li>معالجات التربة</li>
+            </ul>
+          </div>
+          <div class="pillar-c p3">
+            <div class="pc-icon">🚜</div>
+            <div class="pc-title">العتاد والآلات</div>
+            <ul class="pc-items">
+              <li>جرارات وآلات الحصاد</li>
+              <li>أنظمة الري الحديثة</li>
+              <li>معدات التغليف</li>
+              <li>الطاقة الشمسية</li>
+            </ul>
+          </div>
+          <div class="pillar-c p4">
+            <div class="pc-icon">🚚</div>
+            <div class="pc-title">الخدمات واللوجستيات</div>
+            <ul class="pc-items">
+              <li>النقل المبرد</li>
+              <li>تحاليل التربة والمياه</li>
+              <li>اليد العاملة المؤهلة</li>
+              <li>التقارير الجوية</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ESCROW -->
+      <div id="section-escrow" style="display:none">
+        <div class="portal-header">
+          <div class="portal-eyebrow">نظام الدفع الآمن</div>
+          <h2 class="portal-title">Escrow — ضامن كل معاملة</h2>
+          <p class="portal-desc">مبلغك لا يُحوَّل للبائع إلا بعد تأكيدك الاستلام. آمنة تحمي الطرفين في آنٍ واحد.</p>
+        </div>
+        <div class="escrow-visual">
+          <div class="ev-title">🔒 كيف يحمي Escrow معاملتك</div>
+          <div class="ev-sub">دورة مالية مغلقة لا تُفتح إلا بموافقة الطرفين</div>
+          <div class="ev-flow">
+            <div class="ev-step">
+              <div class="ev-s-icon">💳</div>
+              <div class="ev-s-title">المشتري يدفع</div>
+              <div class="ev-s-desc">BaridiMob / CIB / CCP</div>
+            </div>
+            <div class="ev-step highlight">
+              <div class="ev-s-icon">🔒</div>
+              <div class="ev-s-title">مجمَّد في آمنة</div>
+              <div class="ev-s-desc">وسيط أمين يحمل المبلغ</div>
+              <div class="ev-badge">آمن 100%</div>
+            </div>
+            <div class="ev-step">
+              <div class="ev-s-icon">🚚</div>
+              <div class="ev-s-title">التسليم</div>
+              <div class="ev-s-desc">الناقل يوصل الطلب</div>
+            </div>
+            <div class="ev-step">
+              <div class="ev-s-icon">✅</div>
+              <div class="ev-s-title">يصل للمزارع</div>
+              <div class="ev-s-desc">بعد تأكيد المشتري</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- APP SECTION (default) -->
+      <div id="section-app">
+        <div class="portal-header" id="portalHeader">
+          <div class="portal-eyebrow" id="pEyebrow">بوابة المستهلك</div>
+          <h2 class="portal-title" id="pTitle">تسوّق من الحقل مباشرة</h2>
+          <p class="portal-desc" id="pDesc">تصفّح منتجات موثّقة بشهادات جودة من مزارعين معتمدين، وادفع بأمان عبر نظام Escrow — مبلغك محمي حتى تأكد الاستلام.</p>
+        </div>
+
+        <ul class="feature-list" id="featureList">
+          <li><div class="feature-dot">🌴</div> تمور وخضروات وزيوت من 69 ولاية مع تتبع QR لحظة بلحظة</li>
+          <li><div class="feature-dot">🔒</div> دفع Escrow مضمون — مبلغك لا يصل للبائع إلا بعد تأكيدك</li>
+          <li><div class="feature-dot">📡</div> بث مباشر ومزادات تمور دقلة نور في الوقت الحقيقي</li>
+          <li><div class="feature-dot">🏅</div> شهادات جودة صادرة من خبراء زراعيين معتمدين</li>
+          <li><div class="feature-dot">🤖</div> مساعد ذكاء اصطناعي يقترح لك أفضل الأسعار والموردين</li>
+        </ul>
+
+        <div class="stats-row" id="statsRow">
+          <div class="stat-box"><div class="stat-val" id="s1">267K</div><div class="stat-lbl">مستهلك نشط</div></div>
+          <div class="stat-box"><div class="stat-val" id="s2">9,210</div><div class="stat-lbl">طلب هذا الشهر</div></div>
+          <div class="stat-box"><div class="stat-val" id="s3">4.7⭐</div><div class="stat-lbl">تقييم المنصة</div></div>
+        </div>
+
+        <div class="action-btns">
+          <button class="btn-main btn-primary">🛒 تصفح السوق</button>
+          <button class="btn-main btn-gold">📡 بث مباشر</button>
+          <button class="btn-main btn-outline">📋 طلباتي</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHONE MOCKUP -->
+    <div class="phone-wrap" id="phoneWrap">
+      <div class="phone-frame">
+        <div class="phone-pill"></div>
+        <div class="phone-screen">
+
+          <!-- CONSUMER SCREEN -->
+          <div class="screen-variant active" id="screen-consumer">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div>
+                  <div class="p-topbar-left">مساء الخير، فاطمة</div>
+                  <div class="p-logo">آ<span>م</span>نة</div>
+                </div>
+                <div class="p-topbar-right">
+                  <div class="p-icon-btn">🔔</div>
+                  <div class="p-icon-btn">👤</div>
+                </div>
+              </div>
+              <div class="p-search"><span class="p-search-icon">🔍</span><span class="p-search-text">ابحث عن منتج أو مزارع...</span></div>
+              <div class="p-chips">
+                <span class="p-chip on">🌴 التمور</span>
+                <span class="p-chip off">🥕 خضروات</span>
+                <span class="p-chip off">🫒 زيت</span>
+                <span class="p-chip off">🌾 حبوب</span>
+                <span class="p-chip off">🚜 عتاد</span>
+              </div>
+              <div class="p-banner">
+                <div class="pb-left">
+                  <div class="pb-live"><div class="live-dot-sm"></div><span class="pb-live-text">بث مباشر الآن</span></div>
+                  <div class="pb-title">مزاد تمور دقلة نور — بسكرة</div>
+                  <div class="pb-watch">🧑 214 مشاهد</div>
+                </div>
+                <div class="pb-btn">شاهد الآن</div>
+              </div>
+              <div class="p-sec">منتجات موثّقة قريبة منك</div>
+              <div class="p-prod-grid">
+                <div class="p-prod">
+                  <div class="pp-emoji">🌴</div>
+                  <div class="pp-name">تمور دقلة نور</div>
+                  <div class="pp-price">450 دج/كغ</div>
+                  <span class="pp-badge badge-gold">⭐ 4.9 بسكرة</span>
+                </div>
+                <div class="p-prod">
+                  <div class="pp-emoji">🫒</div>
+                  <div class="pp-name">زيت زيتون بكر</div>
+                  <div class="pp-price">1,100 دج/ل</div>
+                  <span class="pp-badge badge-green">✅ شهادة جودة</span>
+                </div>
+                <div class="p-prod">
+                  <div class="pp-emoji">🥕</div>
+                  <div class="pp-name">خضروات موسمية</div>
+                  <div class="pp-price">80 دج/كغ</div>
+                  <span class="pp-badge badge-blue">🔒 Escrow</span>
+                </div>
+                <div class="p-prod">
+                  <div class="pp-emoji">🍯</div>
+                  <div class="pp-name">عسل سدر طبيعي</div>
+                  <div class="pp-price">3,200 دج/كغ</div>
+                  <span class="pp-badge badge-gold">⭐ 5.0 باتنة</span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item active"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">🛒</div>السوق</div>
+              <div class="pn-item"><div class="pn-icon">📋</div>طلباتي</div>
+              <div class="pn-item"><div class="pn-icon">🔒</div>Escrow</div>
+              <div class="pn-item"><div class="pn-icon">👤</div>حسابي</div>
+            </div>
+          </div>
+
+          <!-- FARMER SCREEN -->
+          <div class="screen-variant" id="screen-farmer">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div>
+                  <div class="p-topbar-left">مزرعة بن علي — بسكرة</div>
+                  <div class="p-logo">آ<span>م</span>نة</div>
+                </div>
+                <div class="p-topbar-right">
+                  <div class="p-icon-btn">➕</div>
+                  <div class="p-icon-btn">🔔</div>
+                </div>
+              </div>
+              <div class="p-farm-card">
+                <div class="pfc-label">أرباح هذا الشهر</div>
+                <div class="pfc-val">142,500 دج</div>
+                <div class="pfc-sub">↑ +28% مقارنة بالشهر الماضي</div>
+              </div>
+              <div class="p-stats">
+                <div class="p-stat"><div class="ps-val">14</div><div class="ps-lbl">منتج نشط</div></div>
+                <div class="p-stat"><div class="ps-val">38</div><div class="ps-lbl">طلب هذا الشهر</div></div>
+                <div class="p-stat"><div class="ps-val">4.9⭐</div><div class="ps-lbl">تقييمي</div></div>
+              </div>
+              <div class="p-sec">منتجاتي الأكثر مبيعاً</div>
+              <div class="p-list-card">
+                <div class="plc-icon" style="background:#fef9c3">🌴</div>
+                <div><div class="plc-name">تمور دقلة نور</div><div class="plc-meta">المتاح: 2,800 كغ</div></div>
+                <div class="plc-price">450 دج</div>
+              </div>
+              <div class="p-list-card">
+                <div class="plc-icon" style="background:#f0fdf4">🌿</div>
+                <div><div class="plc-name">أعشاب طبية</div><div class="plc-meta">المتاح: 150 كغ</div></div>
+                <div class="plc-price">280 دج</div>
+              </div>
+              <div class="p-list-card">
+                <div class="plc-icon" style="background:#eff6ff">🫙</div>
+                <div><div class="plc-name">تمر معلّب فاخر</div><div class="plc-meta">المتاح: 420 علبة</div></div>
+                <div class="plc-price">1,800 دج</div>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item active"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">📦</div>منتجاتي</div>
+              <div class="pn-item"><div class="pn-icon">📊</div>إحصائيات</div>
+              <div class="pn-item"><div class="pn-icon">💰</div>الأرباح</div>
+              <div class="pn-item"><div class="pn-icon">⚙️</div>حسابي</div>
+            </div>
+          </div>
+
+          <!-- TRADER SCREEN -->
+          <div class="screen-variant" id="screen-trader">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div>
+                  <div class="p-topbar-left">سوبرماركت الأمل</div>
+                  <div class="p-logo">آ<span>م</span>نة</div>
+                </div>
+                <div class="p-topbar-right"><div class="p-icon-btn">📄</div></div>
+              </div>
+              <div class="p-stats" style="margin:10px">
+                <div class="p-stat"><div class="ps-val">14</div><div class="ps-lbl">عقد نشط</div></div>
+                <div class="p-stat"><div class="ps-val">1.2M</div><div class="ps-lbl">دج/شهر</div></div>
+                <div class="p-stat"><div class="ps-val">8</div><div class="ps-lbl">مورد دائم</div></div>
+              </div>
+              <div class="p-sec">العقود النشطة</div>
+              <div class="p-order-card">
+                <div class="poc-header">
+                  <span class="poc-num">عقد #CT-2201</span>
+                  <span class="poc-status badge-green">نشط ✓</span>
+                </div>
+                <div class="poc-items">🌴 تمور دقلة نور — 200 كغ/شهر — مزرعة بن علي</div>
+                <div class="poc-escrow">🔒 380 دج/كغ — ينتهي 31/12/2026</div>
+              </div>
+              <div class="p-order-card">
+                <div class="poc-header">
+                  <span class="poc-num">عقد #CT-2198</span>
+                  <span class="poc-status badge-gold">يجدَّد قريباً</span>
+                </div>
+                <div class="poc-items">🥕 خضروات — 500 كغ/أسبوع — تعاونية البليدة</div>
+                <div class="poc-escrow">🔒 75 دج/كغ — ينتهي 01/09/2026</div>
+              </div>
+              <div class="p-sec">طلب عروض أسعار جديد</div>
+              <div style="margin:0 10px;background:var(--forest);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;color:#fff;font-size:.75rem;font-weight:700;cursor:pointer">
+                <span style="font-size:1.1rem">📋</span> أرسل طلب عروض RFQ للمزارعين
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item active"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">🔎</div>احتياجاتي</div>
+              <div class="pn-item"><div class="pn-icon">📄</div>العقود</div>
+              <div class="pn-item"><div class="pn-icon">📦</div>الشحنات</div>
+              <div class="pn-item"><div class="pn-icon">💳</div>المحفظة</div>
+            </div>
+          </div>
+
+          <!-- TRANSPORTER SCREEN -->
+          <div class="screen-variant" id="screen-transporter">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div>
+                  <div class="p-topbar-left">عمر بن يوسف — ناقل</div>
+                  <div class="p-logo">آ<span>م</span>نة</div>
+                </div>
+                <div class="p-topbar-right"><div class="p-icon-btn">🗺️</div></div>
+              </div>
+              <div class="p-farm-card" style="background:linear-gradient(120deg,#1d4ed8,#2563eb)">
+                <div class="pfc-label">أرباح هذا الشهر</div>
+                <div class="pfc-val">48,500 دج</div>
+                <div class="pfc-sub">🛣️ 1,240 كم قطعتها · ⭐ 4.8</div>
+              </div>
+              <div class="p-sec">مهمتك الجارية 📍</div>
+              <div class="p-route-card">
+                <div class="prc-route">
+                  <div class="prc-dot"></div>
+                  <span style="font-size:.68rem;font-weight:700;color:var(--forest)">بسكرة</span>
+                  <div class="prc-line"></div>
+                  <span style="font-size:.68rem;font-weight:700;color:var(--slate)">الجزائر العاصمة</span>
+                  <div class="prc-dot" style="background:var(--red)"></div>
+                </div>
+                <div class="prc-dest">🌴 تمور دقلة نور — 200 كغ · 420 كم</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                  <div class="prc-earn">12,000 دج</div>
+                  <span class="pp-badge badge-gold">في الطريق 🚚</span>
+                </div>
+              </div>
+              <div class="p-sec">مهام متاحة قريبة منك</div>
+              <div class="p-route-card">
+                <div class="prc-route">
+                  <div class="prc-dot"></div>
+                  <span style="font-size:.68rem;font-weight:700;color:var(--forest)">البليدة</span>
+                  <div class="prc-line"></div>
+                  <span style="font-size:.68rem;font-weight:700;color:var(--slate)">وهران</span>
+                  <div class="prc-dot" style="background:var(--mist)"></div>
+                </div>
+                <div class="prc-dest">🥕 خضروات — 500 كغ · 280 كم</div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                  <div class="prc-earn">9,500 دج</div>
+                  <span style="background:var(--forest);color:#fff;font-size:.63rem;font-weight:700;padding:4px 12px;border-radius:8px;cursor:pointer">اقبل</span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item active"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">📋</div>المهام</div>
+              <div class="pn-item"><div class="pn-icon">🗺️</div>التتبع</div>
+              <div class="pn-item"><div class="pn-icon">💰</div>الأرباح</div>
+              <div class="pn-item"><div class="pn-icon">🚚</div>مركبتي</div>
+            </div>
+          </div>
+
+          <!-- EXPERT SCREEN -->
+          <div class="screen-variant" id="screen-expert">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div>
+                  <div class="p-topbar-left">م. صالح بوزيد — خبير</div>
+                  <div class="p-logo">آ<span>م</span>نة</div>
+                </div>
+                <div class="p-topbar-right"><div class="p-icon-btn">🏅</div></div>
+              </div>
+              <div class="p-farm-card" style="background:linear-gradient(120deg,var(--purple),#9f67fa)">
+                <div class="pfc-label">أتعاب هذا الشهر</div>
+                <div class="pfc-val">84,000 دج</div>
+                <div class="pfc-sub">142 تقرير صادر · ⭐ 4.95</div>
+              </div>
+              <div class="p-sec">طلبات فحص جديدة</div>
+              <div class="p-expert-card">
+                <div class="pec-avatar">🌴</div>
+                <div style="flex:1">
+                  <div class="pec-name">فحص تمور برحي — مزرعة بن علي</div>
+                  <div class="pec-spec">بسكرة · 1.2 طن</div>
+                  <div class="pec-rate">★★★★★</div>
+                </div>
+                <div>
+                  <div class="pec-fee">5,000 دج</div>
+                  <span style="background:var(--purple);color:#fff;font-size:.6rem;font-weight:700;padding:3px 10px;border-radius:8px;cursor:pointer;display:block;margin-top:4px;text-align:center">اقبل</span>
+                </div>
+              </div>
+              <div class="p-expert-card">
+                <div class="pec-avatar">🍯</div>
+                <div style="flex:1">
+                  <div class="pec-name">فحص عسل — باتنة</div>
+                  <div class="pec-spec">80 كغ · تحليل مختبري</div>
+                  <div class="pec-rate">★★★★★</div>
+                </div>
+                <div>
+                  <div class="pec-fee">4,500 دج</div>
+                  <span style="background:var(--purple);color:#fff;font-size:.6rem;font-weight:700;padding:3px 10px;border-radius:8px;cursor:pointer;display:block;margin-top:4px;text-align:center">اقبل</span>
+                </div>
+              </div>
+              <div class="p-sec">آخر الشهادات الصادرة</div>
+              <div class="p-list-card">
+                <div class="plc-icon" style="background:#f5f3ff">📋</div>
+                <div><div class="plc-name">تمور دقلة نور — A+</div><div class="plc-meta">صادرة 12/06/2026 · صالحة 3 أشهر</div></div>
+                <span class="pp-badge badge-green">معتمدة</span>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item active"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">📋</div>الطلبات</div>
+              <div class="pn-item"><div class="pn-icon">📝</div>التقارير</div>
+              <div class="pn-item"><div class="pn-icon">💬</div>استشارات</div>
+              <div class="pn-item"><div class="pn-icon">💰</div>الأتعاب</div>
+            </div>
+          </div>
+
+          <!-- ADMIN SCREEN -->
+          <div class="screen-variant" id="screen-admin">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div>
+                  <div class="p-topbar-left">🔐 المشرف العام · 2FA ✓</div>
+                  <div class="p-logo">آ<span>م</span>نة</div>
+                </div>
+                <div class="p-topbar-right"><div class="p-icon-btn">⚙️</div></div>
+              </div>
+              <div class="p-stats" style="margin:10px">
+                <div class="p-stat"><div class="ps-val" style="font-size:.85rem">328K</div><div class="ps-lbl">مستخدم</div></div>
+                <div class="p-stat"><div class="ps-val" style="font-size:.85rem">4.2B</div><div class="ps-lbl">دج</div></div>
+                <div class="p-stat"><div class="ps-val" style="font-size:.85rem">98.7%</div><div class="ps-lbl">نجاح</div></div>
+              </div>
+              <div class="p-sec">أحداث حية</div>
+              <div style="background:var(--white);margin:0 10px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)">
+                <div class="p-admin-row">
+                  <div><div class="par-label">✅ مستخدم جديد</div><div style="font-size:.62rem;color:var(--mist)">فلاح · بسكرة · الآن</div></div>
+                  <span class="par-badge badge-green">تسجيل</span>
+                </div>
+                <div class="p-admin-row">
+                  <div><div class="par-label">💳 معاملة Escrow</div><div style="font-size:.62rem;color:var(--mist)">24,000 دج · قبل دقيقتين</div></div>
+                  <span class="par-badge badge-blue">Escrow</span>
+                </div>
+                <div class="p-admin-row" style="border:none">
+                  <div><div class="par-label" style="color:var(--red)">⚠️ محاولة دخول مشبوهة</div><div style="font-size:.62rem;color:var(--mist)">IP: 185.x.x.x · قبل 7 د</div></div>
+                  <span class="par-badge badge-red">تنبيه</span>
+                </div>
+              </div>
+              <div class="p-sec">حالة الخدمات</div>
+              <div style="background:var(--white);margin:0 10px;border-radius:12px;overflow:hidden;border:1.5px solid var(--border)">
+                <div class="p-admin-row"><span class="par-label">🔒 نظام Escrow</span><span class="par-badge badge-green">يعمل ✓</span></div>
+                <div class="p-admin-row"><span class="par-label">📡 البث المباشر</span><span class="par-badge badge-green">يعمل ✓</span></div>
+                <div class="p-admin-row" style="border:none"><span class="par-label">🤖 مساعد AI</span><span class="par-badge badge-green">يعمل ✓</span></div>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item active"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">👥</div>المستخدمون</div>
+              <div class="pn-item"><div class="pn-icon">💳</div>المعاملات</div>
+              <div class="pn-item"><div class="pn-icon">🔐</div>الأمان</div>
+              <div class="pn-item"><div class="pn-icon">📊</div>تحليلات</div>
+            </div>
+          </div>
+
+        </div><!-- phone-screen -->
+      </div><!-- phone-frame -->
+
+      <!-- SCREEN TABS -->
+      <div class="screen-tabs" id="screenTabs">
+        <button class="screen-tab active" onclick="switchScreen('home',this,'consumer')">الرئيسية</button>
+        <button class="screen-tab" onclick="switchScreen('orders',this,'consumer')">طلباتي</button>
+        <button class="screen-tab" onclick="switchScreen('escrow-flow',this,'consumer')">Escrow</button>
+      </div>
+
+      <!-- ESCROW FLOW SCREEN (alternate) -->
+      <div style="display:none" id="alt-escrow-screen">
+        <div class="phone-frame" style="margin-top:0">
+          <div class="phone-pill"></div>
+          <div class="phone-screen">
+            <div class="phone-content">
+              <div class="p-topbar">
+                <div><div class="p-topbar-left">الدفع الآمن</div><div class="p-logo">آ<span>م</span>نة</div></div>
+              </div>
+              <div style="margin:12px 10px;background:var(--gold-bg);border:1.5px solid var(--gold);border-radius:10px;padding:10px 12px;font-size:.72rem;font-weight:700;color:#8a5c00">
+                🛡️ مبلغك محمي في Escrow حتى تأكيد الاستلام
+              </div>
+              <div class="p-escrow-flow">
+                <div class="pef-step done"><div class="pef-icon">💳</div>دفعت</div>
+                <div class="pef-arrow">←</div>
+                <div class="pef-step done"><div class="pef-icon">🔒</div>مجمَّد</div>
+                <div class="pef-arrow">←</div>
+                <div class="pef-step curr"><div class="pef-icon">🚚</div>في الطريق</div>
+                <div class="pef-arrow">←</div>
+                <div class="pef-step"><div class="pef-icon">✅</div>مكتمل</div>
+              </div>
+              <div class="p-order-card" style="margin-top:8px">
+                <div class="poc-header"><span class="poc-num">AM-3221</span><span class="poc-status badge-gold">قيد التسليم</span></div>
+                <div class="poc-items">🌴 تمور دقلة نور × 5 كغ — 2,250 دج</div>
+                <div class="poc-escrow">🔒 2,250 دج محجوزة · تُحرَّر بعد تأكيدك</div>
+              </div>
+              <div style="margin:8px 10px">
+                <div style="background:var(--forest);color:#fff;border-radius:10px;padding:12px;text-align:center;font-size:.78rem;font-weight:800;cursor:pointer">✅ أكّد الاستلام وحرّر المبلغ للمزارع</div>
+                <div style="background:var(--red-l);color:var(--red);border-radius:10px;padding:10px;text-align:center;font-size:.72rem;font-weight:700;cursor:pointer;margin-top:6px">⚠️ فتح نزاع</div>
+              </div>
+            </div>
+            <div class="phone-nav">
+              <div class="pn-item"><div class="pn-icon">🏠</div>الرئيسية</div>
+              <div class="pn-item"><div class="pn-icon">🛒</div>السوق</div>
+              <div class="pn-item"><div class="pn-icon">📋</div>طلباتي</div>
+              <div class="pn-item active"><div class="pn-icon">🔒</div>Escrow</div>
+              <div class="pn-item"><div class="pn-icon">👤</div>حسابي</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- phone-wrap -->
+  </main>
+</div>
+
+<script>
+// ─── PORTAL DATA ─────────────────────────────────────────────
+const PORTALS = {
+  consumer: {
+    eyebrow: 'بوابة المستهلك',
+    title: 'تسوّق من الحقل مباشرة',
+    desc: 'تصفّح منتجات موثّقة بشهادات جودة من مزارعين معتمدين، وادفع بأمان عبر Escrow — مبلغك محمي حتى تأكيد الاستلام.',
+    features: [
+      ['🌴','تمور وخضروات وزيوت من 69 ولاية مع تتبع QR لحظة بلحظة'],
+      ['🔒','دفع Escrow مضمون — لا يصل للبائع إلا بعد تأكيدك'],
+      ['📡','بث مباشر ومزادات في الوقت الحقيقي'],
+      ['🏅','شهادات جودة صادرة من خبراء معتمدين'],
+      ['🤖','مساعد ذكاء اصطناعي يقترح أفضل الأسعار'],
+    ],
+    stats: [['267K','مستهلك نشط'],['9,210','طلب هذا الشهر'],['4.7⭐','تقييم المنصة']],
+    btns: ['🛒 تصفح السوق','📡 بث مباشر','📋 طلباتي'],
+    tabs: [['home','الرئيسية'],['orders','طلباتي'],['escrow-flow','Escrow']],
+  },
+  farmer: {
+    eyebrow: 'بوابة المزارع',
+    title: 'أدر مزرعتك رقمياً',
+    desc: 'أضف منتجاتك، تابع طلباتك، وأدر أرباحك — كل شيء في مكان واحد مع ضمان دفع Escrow وشهادات جودة معتمدة.',
+    features: [
+      ['📦','أضف منتجاتك بالصور والأسعار والكميات في دقائق'],
+      ['💰','ضمان دفع كامل عبر Escrow — لا مخاطرة بعدم الدفع'],
+      ['📡','ابثّ مباشراً وأجرِ مزادات لتمورك في الموسم'],
+      ['🏅','احصل على شهادة جودة من خبير معتمد لرفع سعرك'],
+      ['📊','تقارير مبيعات وأرباح شهرية تفصيلية'],
+    ],
+    stats: [['50K+','مزارع مسجّل'],['142,500','دج متوسط دخل/شهر'],['4.8⭐','تقييم متوسط']],
+    btns: ['📦 أضف منتجاً','📡 ابدأ بثاً','📊 إحصائياتي'],
+    tabs: [['home','الرئيسية'],['products','منتجاتي'],['earnings','الأرباح']],
+  },
+  trader: {
+    eyebrow: 'بوابة التاجر',
+    title: 'توريد بالجملة بكل أمان',
+    desc: 'حدّد احتياجاتك، أرسل طلبات عروض أسعار RFQ، وتعاقد مع أفضل المزارعين بعقود موثّقة ودفع Escrow.',
+    features: [
+      ['📋','أرسل طلب عروض RFQ — المزارعون يردّون في 24 ساعة'],
+      ['📄','عقود توريد موثّقة قانونياً مع تجديد تلقائي'],
+      ['🔒','Escrow للعقود الكبيرة — دفعك مضمون حتى الاستلام'],
+      ['📦','تتبع شحناتك الجملة لحظة بلحظة'],
+      ['📊','تحليلات تكاليف وهامش ربح لكل صنف'],
+    ],
+    stats: [['8,440','تاجر مسجّل'],['14','متوسط عقود/تاجر'],['1.2M','دج حجم/شهر']],
+    btns: ['📋 طلب عروض','📄 عقودي','📦 الشحنات'],
+    tabs: [['home','الرئيسية'],['contracts','العقود'],['rfq','طلبات RFQ']],
+  },
+  transporter: {
+    eyebrow: 'بوابة الناقل',
+    title: 'نقّل واكسب — مسارك محمي',
+    desc: 'اختر مهام النقل المناسبة لمركبتك ومسارك، تتبع رحلاتك بـ GPS، وتقاضَ أتعابك فور تأكيد التسليم.',
+    features: [
+      ['🚚','مهام النقل متاحة قريبة منك مع تفاصيل الأجر والمسار'],
+      ['📍','تتبع GPS حي يُحدَّث كل 30 ثانية'],
+      ['💰','دفع مضمون فور تأكيد التسليم عبر Escrow'],
+      ['🌡️','شاحنات مبردة مخصصة للمنتجات الحساسة'],
+      ['⭐','تقييمات تراكمية تزيد من عروضك المستقبلية'],
+    ],
+    stats: [['1,840','ناقل نشط'],['48,500','دج متوسط دخل/شهر'],['4.8⭐','تقييم متوسط']],
+    btns: ['📋 المهام المتاحة','🗺️ تتبع حي','💰 أرباحي'],
+    tabs: [['home','الرئيسية'],['jobs','المهام'],['map','التتبع']],
+  },
+  expert: {
+    eyebrow: 'بوابة الخبير الزراعي',
+    title: 'خبرتك تحمي المنتجين',
+    desc: 'اصدر شهادات جودة معتمدة، قدّم استشارات مدفوعة، وساهم في بناء ثقة السوق الزراعي الجزائري.',
+    features: [
+      ['🏅','شهادات جودة معتمدة تُرفع إلى قاعدة بيانات المنصة'],
+      ['💬','استشارات مدفوعة للمزارعين والتجار'],
+      ['📋','تقارير فحص مفصّلة مع صور ونتائج مخبرية'],
+      ['💰','أتعاب تنافسية تُدفع فور إصدار الشهادة'],
+      ['📈','سجل مهني رقمي يبني سمعتك في السوق'],
+    ],
+    stats: [['320','خبير معتمد'],['84,000','دج متوسط أتعاب/شهر'],['4.95⭐','تقييم متوسط']],
+    btns: ['📋 طلبات الفحص','📝 التقارير','💬 استشاراتي'],
+    tabs: [['home','الرئيسية'],['requests','الطلبات'],['reports','التقارير']],
+  },
+  admin: {
+    eyebrow: 'لوحة الإدارة',
+    title: 'رقابة كاملة على المنصة',
+    desc: 'سجل أمان كامل، إدارة المستخدمين والمعاملات، ورقابة على كل معاملة Escrow في الوقت الحقيقي.',
+    features: [
+      ['🔐','مصادقة ثنائية 2FA إجبارية لكل المشرفين'],
+      ['📊','لوحة إحصائيات مباشرة: مستخدمون ومعاملات وأحداث'],
+      ['⚠️','تنبيهات أمنية فورية لأي نشاط مشبوه'],
+      ['👥','إدارة 328K مستخدم مع فلترة حسب الولاية والدور'],
+      ['💳','مراجعة وحل النزاعات المالية بين المشترين والبائعين'],
+    ],
+    stats: [['328K','مستخدم إجمالي'],['98.7%','نسبة النجاح'],['47','IP محظور']],
+    btns: ['👥 المستخدمون','💳 المعاملات','🔐 سجل الأمان'],
+    tabs: [['home','الرئيسية'],['users','المستخدمون'],['security','الأمان']],
+  },
+};
+
+// ─── SWITCH PORTAL ────────────────────────────────────────────
+function switchPortal(key, btn){
+  // sidebar active state
+  document.querySelectorAll('.portal-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const d = PORTALS[key];
+  // update info panel
+  document.getElementById('section-app').style.display = 'block';
+  document.getElementById('section-landing').style.display = 'none';
+  document.getElementById('section-pillars').style.display = 'none';
+  document.getElementById('section-escrow').style.display = 'none';
+
+  document.getElementById('pEyebrow').textContent = d.eyebrow;
+  document.getElementById('pTitle').textContent   = d.title;
+  document.getElementById('pDesc').textContent    = d.desc;
+
+  const fl = document.getElementById('featureList');
+  fl.innerHTML = d.features.map(([icon,text])=>
+    `<li><div class="feature-dot">${icon}</div>${text}</li>`
+  ).join('');
+
+  const sr = document.getElementById('statsRow');
+  sr.innerHTML = d.stats.map(([val,lbl])=>
+    `<div class="stat-box"><div class="stat-val">${val}</div><div class="stat-lbl">${lbl}</div></div>`
+  ).join('');
+
+  const ab = document.querySelector('.action-btns');
+  ab.innerHTML = d.btns.map((b,i)=>
+    `<button class="btn-main ${i===0?'btn-primary':i===1?'btn-gold':'btn-outline'}">${b}</button>`
+  ).join('');
+
+  // update screen tabs
+  const st = document.getElementById('screenTabs');
+  st.innerHTML = d.tabs.map(([id,label],i)=>
+    `<button class="screen-tab${i===0?' active':''}" onclick="switchScreen('${id}',this,'${key}')">${label}</button>`
+  ).join('');
+
+  // update phone
+  document.querySelectorAll('.screen-variant').forEach(s=>s.classList.remove('active'));
+  const sc = document.getElementById('screen-'+key);
+  if(sc) sc.classList.add('active');
+
+  // hide alternate escrow screen
+  document.getElementById('alt-escrow-screen').style.display = 'none';
+  document.getElementById('phoneWrap').querySelector('.phone-frame').style.display = 'block';
+}
+
+// ─── SWITCH SCREEN TAB ───────────────────────────────────────
+function switchScreen(screenId, btn, portal){
+  document.querySelectorAll('.screen-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const altEscrow = document.getElementById('alt-escrow-screen');
+  const mainFrame = document.getElementById('phoneWrap').querySelector('.phone-frame');
+
+  if(screenId === 'escrow-flow'){
+    altEscrow.style.display = 'block';
+    mainFrame.style.display = 'none';
+  } else {
+    altEscrow.style.display = 'none';
+    mainFrame.style.display = 'block';
+  }
+}
+
+// ─── TOP NAV SECTIONS ─────────────────────────────────────────
+function showSection(sec){
+  document.querySelectorAll('.nav-pill').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const ids = ['section-app','section-landing','section-pillars','section-escrow'];
+  ids.forEach(id=>document.getElementById(id).style.display='none');
+  if(sec==='app') document.getElementById('section-app').style.display='block';
+  else if(sec==='landing') document.getElementById('section-landing').style.display='block';
+  else if(sec==='pillars') document.getElementById('section-pillars').style.display='block';
+  else if(sec==='escrow') document.getElementById('section-escrow').style.display='block';
+}
+
+// ─── SCROLL REVEAL ────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  // init as consumer portal
+  document.querySelector('.portal-btn').click();
+});
+</script>
+</body>
+</html>

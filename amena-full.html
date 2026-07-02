@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آمنة AMENA - نموذج تجريبي</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #15803d;
+            --primary-light: #22c55e;
+            --primary-bg: #f0fdf4;
+            --secondary: #1d4ed8;
+            --secondary-bg: #eff6ff;
+            --accent: #d97706;
+            --accent-bg: #fffbeb;
+            --purple: #7c3aed;
+            --purple-bg: #f5f3ff;
+            --cyan: #06b6d4;
+            --cyan-bg: #ecfeff;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --dark: #111827;
+            --light: #f9fafb;
+            --white: #fff;
+            --border: #e5e7eb;
+            --text: #374151;
+            --muted: #6b7280;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ===== TOP BAR (shared) ===== */
+        .topbar {
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 16px;
+        }
+        .topbar-inner {
+            max-width: 1600px;
+            margin: 0 auto;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .brand {
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .brand-icon { font-size: 26px; }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .brand-main { font-size: 17px; font-weight: 900; color: var(--primary); }
+        .brand-sub { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: 1px; }
+        .portal-tag {
+            font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+        }
+        .tag-consumer { background: var(--cyan-bg); color: #0e7490; }
+        .tag-farmer { background: var(--primary-bg); color: var(--primary); }
+
+        .topbar-actions { display: flex; align-items: center; gap: 10px; }
+        .icon-btn {
+            width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border);
+            background: var(--white); display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 17px; position: relative; transition: .2s;
+        }
+        .icon-btn:hover { background: var(--light); }
+        .badge-dot {
+            position: absolute; top: -4px; left: -4px; background: var(--danger); color: white;
+            font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; padding: 0 3px;
+        }
+        .home-link-btn {
+            font-size: 13px; font-weight: 600; color: var(--text); background: var(--light);
+            border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; cursor: pointer;
+        }
+        .home-link-btn:hover { background: var(--border); }
+
+        /* ===== LAYOUT ===== */
+        .app-shell { display: flex; max-width: 1600px; margin: 0 auto; min-height: calc(100vh - 64px); }
+        .sidebar {
+            width: 230px; background: var(--white); border-left: 1px solid var(--border);
+            padding: 16px 10px; flex-shrink: 0;
+        }
+        .sidebar-item {
+            display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 10px;
+            cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px;
+            transition: .2s;
+        }
+        .sidebar-item:hover { background: var(--light); }
+        .sidebar-item.active { background: var(--primary-bg); color: var(--primary); }
+        .sidebar-item.active.farmer-active { background: var(--primary-bg); color: var(--primary); }
+        .sidebar-icon { font-size: 18px; width: 22px; text-align: center; }
+
+        .main-content { flex: 1; padding: 20px 24px; min-width: 0; }
+        .page-title { font-size: 22px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+        .page-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+        /* ===== CARDS / GRIDS ===== */
+        .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+        .stat-card {
+            background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+        }
+        .stat-card .stat-icon { font-size: 22px; margin-bottom: 8px; }
+        .stat-card .stat-value { font-size: 24px; font-weight: 800; color: var(--dark); }
+        .stat-card .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .stat-card .stat-delta { font-size: 11px; font-weight: 700; margin-top: 6px; }
+        .delta-up { color: var(--primary); }
+        .delta-down { color: var(--danger); }
+
+        .panel {
+            background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+            padding: 18px; margin-bottom: 18px;
+        }
+        .panel-header {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+        }
+        .panel-title { font-size: 16px; font-weight: 800; color: var(--dark); }
+        .link-btn { font-size: 12px; font-weight: 700; color: var(--secondary); cursor: pointer; background: none; border: none; }
+
+        .content-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; }
+
+        /* Buttons */
+        .btn {
+            border: none; border-radius: 10px; font-weight: 700; font-size: 13px; padding: 10px 18px;
+            cursor: pointer; transition: .2s; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #166534; }
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-outline { background: var(--white); border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: var(--light); }
+        .btn-danger { background: var(--danger-bg); color: var(--danger); }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: right; color: var(--muted); font-weight: 700; font-size: 12px; padding: 8px 6px; border-bottom: 1px solid var(--border); }
+        td { padding: 10px 6px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+
+        .pill {
+            font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; display: inline-block;
+        }
+        .pill-success { background: var(--primary-bg); color: var(--primary); }
+        .pill-warning { background: var(--accent-bg); color: var(--accent); }
+        .pill-danger { background: var(--danger-bg); color: var(--danger); }
+        .pill-info { background: var(--secondary-bg); color: var(--secondary); }
+        .pill-purple { background: var(--purple-bg); color: var(--purple); }
+
+        /* Product / order cards */
+        .item-row {
+            display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border);
+        }
+        .item-row:last-child { border-bottom: none; }
+        .item-thumb {
+            width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 22px; flex-shrink: 0;
+        }
+        .item-info { flex: 1; min-width: 0; }
+        .item-title { font-size: 13px; font-weight: 700; color: var(--dark); }
+        .item-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+        .item-meta { text-align: left; flex-shrink: 0; }
+        .item-price { font-size: 13px; font-weight: 800; color: var(--dark); }
+
+        /* Forms */
+        .form-row { margin-bottom: 14px; }
+        .form-row label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
+        .form-row input, .form-row select, .form-row textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px;
+            font-size: 13px; font-family: inherit; background: var(--white);
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        /* Marketplace product grid (consumer) */
+        .products-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+        }
+        .pg-card {
+            background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+            cursor: pointer; transition: .2s;
+        }
+        .pg-card:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .pg-image {
+            height: 110px; display: flex; align-items: center; justify-content: center; font-size: 40px;
+            position: relative;
+        }
+        .qr-badge {
+            position: absolute; top: 8px; left: 8px; background: var(--primary-bg); color: var(--primary);
+            font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px;
+        }
+        .pg-body { padding: 12px; }
+        .pg-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+        .pg-sub { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+        .pg-price-row { display: flex; align-items: center; justify-content: space-between; }
+        .pg-price { font-size: 14px; font-weight: 800; color: var(--primary); }
+
+        /* Categories chips */
+        .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+        .chip {
+            padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;
+            border: 1px solid var(--border); background: var(--white); color: var(--text); transition: .2s;
+        }
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* ===== Market Four Pillars Section ===== */
+        .market-pillars-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+        }
+        .mp-icon { font-size: 30px; flex-shrink: 0; }
+        .mp-title { font-size: 18px; font-weight: 800; color: var(--dark); }
+        .mp-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .market-pillars-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 26px;
+        }
+        .mp-card {
+            background: var(--white); border: 1px solid var(--border); border-radius: 16px;
+            padding: 18px; cursor: pointer; transition: .2s; border-top: 4px solid transparent;
+        }
+        .mp-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.07); }
+        .mp-card-1 { border-top-color: var(--accent); }
+        .mp-card-2 { border-top-color: var(--primary); }
+        .mp-card-3 { border-top-color: var(--secondary); }
+        .mp-card-4 { border-top-color: var(--purple); }
+        .mp-card-icon { font-size: 28px; margin-bottom: 10px; }
+        .mp-card-title { font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 12px; }
+        .mp-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+        .mp-list li { font-size: 12px; color: var(--text); line-height: 1.5; display: flex; align-items: flex-start; gap: 6px; }
+        .mp-emoji { flex-shrink: 0; }
+
+        @media (max-width: 980px) {
+            .market-pillars-grid { grid-template-columns: 1fr; }
+        }
+        @media (min-width: 981px) and (max-width: 1280px) {
+            .market-pillars-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+
+        /* Live banner */
+        .live-banner {
+            display: flex; align-items: center; gap: 12px; background: var(--danger-bg); border: 1px solid #fecaca;
+            border-radius: 14px; padding: 14px 18px; margin-bottom: 18px; cursor: pointer;
+        }
+        .live-dot {
+            width: 10px; height: 10px; border-radius: 50%; background: var(--danger);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+        .live-text { font-size: 13px; font-weight: 700; color: #991b1b; flex: 1; }
+
+        /* Map placeholder */
+        .map-box {
+            background: var(--secondary-bg); border-radius: 14px; height: 220px; display: flex;
+            flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--secondary);
+            font-weight: 700; font-size: 13px;
+        }
+        .map-box .map-icon { font-size: 40px; }
+
+        /* AI assistant box */
+        .ai-box {
+            background: var(--purple-bg); border-radius: 14px; padding: 16px; display: flex; gap: 12px;
+            align-items: flex-start; margin-bottom: 18px;
+        }
+        .ai-icon { font-size: 26px; flex-shrink: 0; }
+        .ai-title { font-size: 14px; font-weight: 800; color: var(--purple); margin-bottom: 4px; }
+        .ai-text { font-size: 12px; color: #5b21b6; }
+
+        /* Security strip (shared, used in farmer dashboard quick info) */
+        .security-strip {
+            display: flex; align-items: center; gap: 8px; background: var(--primary-bg); color: var(--primary);
+            font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 10px; margin-bottom: 18px;
+        }
+
+        /* Mobile bottom nav (visible only in mobile preview width) */
+        .bottom-nav {
+            display: none;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 980px) {
+            .app-shell { flex-direction: column; }
+            .sidebar {
+                width: 100%; border-left: none; border-bottom: 1px solid var(--border);
+                display: flex; overflow-x: auto; gap: 4px; padding: 10px;
+            }
+            .sidebar-item { flex-direction: column; gap: 4px; font-size: 11px; min-width: 70px; text-align: center; padding: 8px 6px; }
+            .sidebar-icon { font-size: 20px; }
+            .stat-row { grid-template-columns: repeat(2, 1fr); }
+            .content-grid { grid-template-columns: 1fr; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-grid { grid-template-columns: 1fr; }
+            .main-content { padding: 14px; padding-bottom: 70px; }
+            .brand-sub, .portal-tag { display: none; }
+            .bottom-nav {
+                display: flex; position: fixed; bottom: 0; right: 0; left: 0; background: var(--white);
+                border-top: 1px solid var(--border); justify-content: space-around; padding: 8px 0; z-index: 999;
+            }
+            .bottom-nav-item {
+                display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px;
+                color: var(--muted); cursor: pointer;
+            }
+            .bottom-nav-item.active { color: var(--primary); }
+            .bottom-nav-item .bn-icon { font-size: 20px; }
+            .sidebar.desktop-only { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= TOP BAR ================= -->
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="brand" onclick="goHome()">
+                <span class="brand-icon">🌾</span>
+                <div class="brand-text">
+                    <span class="brand-main">آمنة AMENA</span>
+                    <span class="brand-sub">منتج موجود • خدمات وسوق بلا حدود</span>
+                </div>
+                <span class="portal-tag tag-consumer" id="portalTagConsumer">بوابة المستهلك</span>
+                <span class="portal-tag tag-farmer hidden" id="portalTagFarmer">بوابة المزارع</span>
+                <span class="portal-tag hidden" id="portalTagTrader" style="background:#fffbeb;color:#d97706">بوابة التاجر</span>
+                <span class="portal-tag hidden" id="portalTagTransporter" style="background:#eff6ff;color:#1d4ed8">بوابة الناقل</span>
+                <span class="portal-tag hidden" id="portalTagExpert" style="background:#f5f3ff;color:#7c3aed">بوابة الخبير</span>
+                <span class="portal-tag hidden" id="portalTagAdmin" style="background:#fef2f2;color:#dc2626">🔐 لوحة الإدارة</span>
+            </div>
+            <div class="topbar-actions">
+                <button class="home-link-btn" onclick="goHome()">⟵ الرئيسية</button>
+                <button class="home-link-btn" onclick="document.getElementById('switcherModal').classList.remove('hidden')">🔄 تبديل البوابة</button>
+                <div class="icon-btn" title="الإشعارات">🔔<span class="badge-dot">5</span></div>
+                <div class="icon-btn" title="المحفظة">💳</div>
+                <div class="icon-btn" title="الحساب">👤</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SWITCHER MODAL ================= -->
+    <div id="switcherModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;direction:rtl;font-family:'Segoe UI',Tahoma,sans-serif;">
+        <div style="background:white;border-radius:20px;padding:28px;max-width:560px;width:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <div style="font-size:18px;font-weight:800;">اختر بوابتك</div>
+                <button onclick="document.getElementById('switcherModal').classList.add('hidden')" style="border:none;background:none;font-size:22px;cursor:pointer;">✕</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                <div onclick="goToPortal('consumer')" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;cursor:pointer;">
+                    <div style="font-size:26px;margin-bottom:6px;">🛒</div><div style="font-size:13px;font-weight:700;">المستهلك</div>
+                </div>
+                <div onclick="goToPortal('farmer')" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;cursor:pointer;">
+                    <div style="font-size:26px;margin-bottom:6px;">🌾</div><div style="font-size:13px;font-weight:700;">المزارع</div>
+                </div>
+                <div onclick="goToPortal('trader')" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;cursor:pointer;">
+                    <div style="font-size:26px;margin-bottom:6px;">🏪</div><div style="font-size:13px;font-weight:700;">التاجر</div>
+                </div>
+                <div onclick="goToPortal('transporter')" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;cursor:pointer;">
+                    <div style="font-size:26px;margin-bottom:6px;">🚚</div><div style="font-size:13px;font-weight:700;">الناقل</div>
+                </div>
+                <div onclick="goToPortal('expert')" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;cursor:pointer;">
+                    <div style="font-size:26px;margin-bottom:6px;">🏅</div><div style="font-size:13px;font-weight:700;">الخبير</div>
+                </div>
+                <div onclick="goToPortal('admin')" style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;text-align:center;cursor:pointer;">
+                    <div style="font-size:26px;margin-bottom:6px;">🔐</div><div style="font-size:13px;font-weight:700;">الإدارة</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CONSUMER PORTAL ================= -->
+    <div id="consumerPortal" class="app-shell">
+
+        <!-- Sidebar -->
+        <div class="sidebar desktop-only">
+            <div class="sidebar-item active" onclick="showConsumerTab('home', this)"><span class="sidebar-icon">🏠</span> الرئيسية</div>
+            <div class="sidebar-item" onclick="showConsumerTab('map', this)"><span class="sidebar-icon">🗺️</span> الولايات (69)</div>
+            <div class="sidebar-item" onclick="showConsumerTab('live', this)"><span class="sidebar-icon">📡</span> البث المباشر</div>
+            <div class="sidebar-item" onclick="showConsumerTab('orders', this)"><span class="sidebar-icon">🧾</span> طلباتي</div>
+            <div class="sidebar-item" onclick="showConsumerTab('escrow', this)"><span class="sidebar-icon">🔒</span> الدفع الآمن Escrow</div>
+            <div class="sidebar-item" onclick="showConsumerTab('loyalty', this)"><span class="sidebar-icon">🏆</span> الولاء والمكافآت</div>
+            <div class="sidebar-item" onclick="showConsumerTab('account', this)"><span class="sidebar-icon">⚙️</span> حسابي</div>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+
+            <!-- TAB: HOME -->
+            <div id="c-home" class="c-tab">
+                <div class="page-title">مرحباً بك في آمنة 👋</div>
+                <div class="page-subtitle">تسوّق آمن من الحقل مباشرة إلى منزلك — تتبع كامل عبر QR وضمان Escrow</div>
+
+                <div class="live-banner" onclick="showConsumerTab('live', null)">
+                    <div class="live-dot"></div>
+                    📡 <div class="live-text">بث مباشر الآن: مزاد تمور دقلة نور من بسكرة — 214 مشاهد</div>
+                    <button class="btn btn-danger btn-sm">شاهد الآن</button>
+                </div>
+
+                <!-- ===== الأسواق: الأعمدة الأربعة ===== -->
+                <div class="market-pillars-header">
+                    <div class="mp-icon">🌿</div>
+                    <div>
+                        <div class="mp-title">الأسواق — الأعمدة الأربعة للسوق</div>
+                        <div class="mp-sub">هيكل متكامل يغطي دورة القيمة الزراعية من البذرة إلى التصدير</div>
+                    </div>
+                </div>
+                <div class="market-pillars-grid">
+
+                    <div class="mp-card mp-card-1" onclick="showConsumerTab('market', null)">
+                        <div class="mp-card-icon">🌴</div>
+                        <div class="mp-card-title">المحاصيل الطازجة</div>
+                        <ul class="mp-list">
+                            <li><span class="mp-emoji">🌴</span> التمور (دقلة نور، برحي) — جملة / تجزئة / تصدير</li>
+                            <li><span class="mp-emoji">🥔</span> الخضروات والفواكه الموسمية</li>
+                            <li><span class="mp-emoji">🌾</span> المحاصيل الاستراتيجية (حبوب، بقوليات)</li>
+                            <li><span class="mp-emoji">🫒</span> الزيتون وزيت الزيتون البكر</li>
+                        </ul>
+                    </div>
+
+                    <div class="mp-card mp-card-2" onclick="showConsumerTab('market', null)">
+                        <div class="mp-card-icon">🧪</div>
+                        <div class="mp-card-title">مستلزمات الإنتاج</div>
+                        <ul class="mp-list">
+                            <li><span class="mp-emoji">🌱</span> الفسائل والبذور المعتمدة</li>
+                            <li><span class="mp-emoji">🧪</span> الأسمدة العضوية والكيماوية</li>
+                            <li><span class="mp-emoji">🛡️</span> مواد الحماية والمبيدات المصادَقة</li>
+                            <li><span class="mp-emoji">💧</span> منظمات النمو ومعالجات التربة</li>
+                        </ul>
+                    </div>
+
+                    <div class="mp-card mp-card-3" onclick="showConsumerTab('market', null)">
+                        <div class="mp-card-icon">🚜</div>
+                        <div class="mp-card-title">العتاد والآلات</div>
+                        <ul class="mp-list">
+                            <li><span class="mp-emoji">🚜</span> الجرارات وآلات الحصاد</li>
+                            <li><span class="mp-emoji">💧</span> أنظمة الري الحديثة والمستشعرات</li>
+                            <li><span class="mp-emoji">📦</span> معدات التغليف والصناديق المعتمدة</li>
+                            <li><span class="mp-emoji">☀️</span> الطاقة الشمسية والمضخات</li>
+                        </ul>
+                    </div>
+
+                    <div class="mp-card mp-card-4" onclick="showConsumerTab('market', null)">
+                        <div class="mp-card-icon">🚚</div>
+                        <div class="mp-card-title">الخدمات واللوجستيات</div>
+                        <ul class="mp-list">
+                            <li><span class="mp-emoji">❄️</span> النقل المبرد والتخزين المؤقت</li>
+                            <li><span class="mp-emoji">🔬</span> استشارات وتحاليل التربة / المياه</li>
+                            <li><span class="mp-emoji">👷</span> اليد العاملة المؤهلة (جني، تلقيح)</li>
+                            <li><span class="mp-emoji">🌤️</span> التقارير الجوية الذكية</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- ===== نهاية قسم الأسواق ===== -->
+
+                <div class="chip-row" style="align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <div class="chip active">الكل</div>
+                        <div class="chip">🌾 محاصيل ومنتجات</div>
+                        <div class="chip">🌱 مستلزمات الإنتاج</div>
+                        <div class="chip">⚙️ عتاد وآلات</div>
+                        <div class="chip">🚚 خدمات ولوجستيك</div>
+                    </div>
+                    <select style="padding:8px 12px; border:1px solid var(--border); border-radius:20px; font-size:13px; font-weight:600;"><option>📍 كل الولايات (69)</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select>
+                </div>
+
+                <div class="panel-header">
+                    <div class="panel-title">أحدث المنتجات والعروض</div>
+                    <button class="link-btn">عرض الكل ←</button>
+                </div>
+                <div class="products-grid" style="margin-bottom:24px;">
+                    <div class="pg-card" onclick="alert('🌴 تمور دقلة نور - بسكرة\n450 دج / كغ\nبائع موثق ✓ — تتبع QR كامل من المزرعة')">
+                        <div class="pg-image" style="background: var(--accent-bg);">🌴<span class="qr-badge">QR ✓</span></div>
+                        <div class="pg-body">
+                            <div class="pg-title">تمور دقلة نور</div>
+                            <div class="pg-sub">بسكرة · فلاح موثق</div>
+                            <div class="pg-price-row"><span class="pg-price">450 دج/كغ</span><span class="pill pill-success">متوفر</span></div>
+                        </div>
+                    </div>
+                    <div class="pg-card" onclick="alert('🥕 خضروات موسمية طازجة - البليدة\n80 دج / كغ')">
+                        <div class="pg-image" style="background: var(--primary-bg);">🥕<span class="qr-badge">QR ✓</span></div>
+                        <div class="pg-body">
+                            <div class="pg-title">خضروات موسمية طازجة</div>
+                            <div class="pg-sub">البليدة · فلاح موثق</div>
+                            <div class="pg-price-row"><span class="pg-price">80 دج/كغ</span><span class="pill pill-success">متوفر</span></div>
+                        </div>
+                    </div>
+                    <div class="pg-card" onclick="alert('🚜 جرار زراعي حديث - وهران\nللإيجار اليومي: 8,000 دج')">
+                        <div class="pg-image" style="background: var(--secondary-bg);">🚜</div>
+                        <div class="pg-body">
+                            <div class="pg-title">جرار زراعي للإيجار</div>
+                            <div class="pg-sub">وهران · عتاد وآلات</div>
+                            <div class="pg-price-row"><span class="pg-price">8,000 دج/يوم</span><span class="pill pill-info">إيجار</span></div>
+                        </div>
+                    </div>
+                    <div class="pg-card" onclick="alert('🫒 زيت زيتون بكر ممتاز - تيزي وزو\n1,200 دج / لتر')">
+                        <div class="pg-image" style="background: var(--accent-bg);">🫒<span class="qr-badge">QR ✓</span></div>
+                        <div class="pg-body">
+                            <div class="pg-title">زيت زيتون بكر ممتاز</div>
+                            <div class="pg-sub">تيزي وزو · فلاح موثق</div>
+                            <div class="pg-price-row"><span class="pg-price">1,200 دج/لتر</span><span class="pill pill-success">متوفر</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-box">
+                    <div class="ai-icon">🤖</div>
+                    <div>
+                        <div class="ai-title">مساعد آمنة الذكي (AI)</div>
+                        <div class="ai-text">اسألني: "ما أفضل وقت لشراء التمور هذا الشهر؟" أو "قارن أسعار الطماطم بين الولايات" — تحليل فوري للأسعار وتوقعات المحصول.</div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">طلباتي الأخيرة</div><button class="link-btn" onclick="showConsumerTab('orders', null)">التفاصيل ←</button></div>
+                        <div class="item-row">
+                            <div class="item-thumb" style="background: var(--accent-bg);">🌴</div>
+                            <div class="item-info">
+                                <div class="item-title">تمور دقلة نور - 5 كغ</div>
+                                <div class="item-sub">طلب #AM-3321 · بسكرة</div>
+                            </div>
+                            <div class="item-meta"><span class="pill pill-warning">قيد النقل</span></div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-thumb" style="background: var(--primary-bg);">🥕</div>
+                            <div class="item-info">
+                                <div class="item-title">خضروات موسمية - 10 كغ</div>
+                                <div class="item-sub">طلب #AM-3318 · البليدة</div>
+                            </div>
+                            <div class="item-meta"><span class="pill pill-success">تم التسليم</span></div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">نقاط الولاء</div></div>
+                        <div style="text-align:center; padding: 10px 0;">
+                            <div style="font-size:32px; font-weight:900; color: var(--primary);">2,450</div>
+                            <div style="font-size:12px; color: var(--muted); margin-bottom:12px;">نقطة — وسام "مستهلك ذهبي" 🏆</div>
+                            <button class="btn btn-outline btn-block" onclick="showConsumerTab('loyalty', null)">استبدل نقاطك</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: MAP -->
+            <div id="c-map" class="c-tab hidden">
+                <div class="page-title">خريطة الولايات الحية 🗺️</div>
+                <div class="page-subtitle">تتبع المزارعين، الشحنات، والناقلين عبر 69 ولاية في الوقت الحقيقي — وفق التقسيم الإقليمي الجديد (القانون 06-26)</div>
+                <div class="map-box" onclick="alert('🗺️ خريطة تفاعلية لـ 69 ولاية\nانقر على أي ولاية لعرض المزارعين والمنتجات والناقلين النشطين فيها')">
+                    <div class="map-icon">🗺️</div>
+                    <div>خريطة الجزائر التفاعلية — 69 ولاية</div>
+                    <div style="font-size:11px; color:var(--muted); font-weight:500;">(انقر للتجربة)</div>
+                </div>
+                <div class="stat-row" style="margin-top:18px;">
+                    <div class="stat-card"><div class="stat-icon">👨‍🌾</div><div class="stat-value">50K</div><div class="stat-label">فلاح موثق</div></div>
+                    <div class="stat-card"><div class="stat-icon">🚚</div><div class="stat-value">1,840</div><div class="stat-label">ناقل نشط</div></div>
+                    <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value">9,210</div><div class="stat-label">شحنة جارية</div></div>
+                    <div class="stat-card"><div class="stat-icon">🏙️</div><div class="stat-value">69</div><div class="stat-label">ولاية مغطاة</div></div>
+                </div>
+
+                <div class="panel" style="margin-top:18px;">
+                    <div class="panel-header">
+                        <div class="panel-title">🆕 الولايات المستحدثة (11 ولاية جديدة — أرقام 59 إلى 69)</div>
+                        <span style="font-size:11px; color:var(--muted);">وفق القانون 06-26 — أفريل 2026</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">59 — أفلو</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">60 — بريكة</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">61 — القنطرة</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">62 — بئر العاتر</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">63 — العريشة</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">64 — قصر الشلالة</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">65 — عين وسارة</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">66 — مسعد</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">67 — قصر البخاري</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">68 — بوسعادة</div></div></div>
+                        <div class="item-row" style="border:1px solid var(--border); border-radius:10px; padding:10px;"><div class="item-info"><div class="item-title">69 — الأبيض سيدي الشيخ</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- TAB: LIVE -->
+            <div id="c-live" class="c-tab hidden">
+                <div class="page-title">البث المباشر والمزايدات 📡</div>
+                <div class="page-subtitle">شاهد الحصاد مباشرة من الحقل وشارك في مزادات شفافة وفورية</div>
+                <div class="content-grid">
+                    <div class="panel" style="padding:0; overflow:hidden;">
+                        <div style="background:#111827; height:280px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; gap:10px;">
+                            <div class="live-dot" style="background:#ef4444;"></div>
+                            <div style="font-size:14px; font-weight:700;">🌴 مزاد تمور دقلة نور — مزرعة بسكرة</div>
+                            <div style="font-size:12px; color:#9ca3af;">214 مشاهد · 23 مزايد نشط</div>
+                            <button class="btn btn-danger" onclick="alert('🔴 جاري الاتصال بالبث المباشر...')">تشغيل البث ▶</button>
+                        </div>
+                        <div style="padding:14px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <div style="font-weight:800;">السعر الحالي للمزاد</div>
+                                <div style="font-size:20px; font-weight:900; color:var(--primary);">480 دج/كغ</div>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <input type="number" placeholder="عرضك (دج/كغ)" style="flex:1; padding:10px; border:1px solid var(--border); border-radius:10px;">
+                                <button class="btn btn-primary" onclick="alert('✅ تم تقديم عرضك في المزايدة!')">قدّم عرضاً</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">دردشة المزايدة 💬</div>
+                        <div style="display:flex; flex-direction:column; gap:10px; font-size:12px; max-height:240px; overflow:auto;">
+                            <div><b>أحمد ب.</b> <span style="color:var(--muted)">— أين تقع المزرعة بالضبط؟</span></div>
+                            <div><b>المزارع 🌾</b> <span style="color:var(--muted)">— بسكرة، منطقة سيدي عقبة</span></div>
+                            <div><b>سارة م.</b> <span style="color:var(--muted)">— عرضت 480 دج/كغ ✋</span></div>
+                            <div><b>كريم ل.</b> <span style="color:var(--muted)">— هل التغليف متوفر؟</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: ORDERS -->
+            <div id="c-orders" class="c-tab hidden">
+                <div class="page-title">طلباتي 🧾</div>
+                <div class="page-subtitle">تتبع كل طلباتك من التأكيد حتى التسليم</div>
+                <div class="panel">
+                    <table>
+                        <tr><th>رقم الطلب</th><th>المنتج</th><th>البائع</th><th>القيمة</th><th>الحالة</th><th></th></tr>
+                        <tr><td>#AM-3321</td><td>تمور دقلة نور - 5 كغ</td><td>مزرعة بسكرة</td><td>2,250 دج</td><td><span class="pill pill-warning">قيد النقل 🚚</span></td><td><button class="btn btn-outline btn-sm" onclick="alert('📍 تتبع مباشر: الشحنة في الطريق - متبقي 45 دقيقة')">تتبع</button></td></tr>
+                        <tr><td>#AM-3318</td><td>خضروات موسمية - 10 كغ</td><td>تعاونية البليدة</td><td>800 دج</td><td><span class="pill pill-success">تم التسليم ✓</span></td><td><button class="btn btn-outline btn-sm" onclick="alert('⭐ تم فتح نافذة التقييم')">قيّم</button></td></tr>
+                        <tr><td>#AM-3310</td><td>زيت زيتون - 2 لتر</td><td>تيزي وزو</td><td>2,400 دج</td><td><span class="pill pill-info">في انتظار الدفع 🔒</span></td><td><button class="btn btn-primary btn-sm" onclick="showConsumerTab('escrow', null)">إكمال الدفع</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: ESCROW -->
+            <div id="c-escrow" class="c-tab hidden">
+                <div class="page-title">الدفع الآمن — Escrow 🔒</div>
+                <div class="page-subtitle">يُجمَّد المبلغ في حساب آمن ولا يُحوَّل للبائع إلا بعد تأكيد استلامك للمنتج</div>
+                <div class="security-strip">🔒 جميع معاملاتك مشفّرة ومحمية بنظام Escrow الجزائري المعتمد</div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">طريقة الدفع</div>
+                        <div class="form-row"><label>اختر وسيلة الدفع</label>
+                            <select>
+                                <option>CIB - بطاقة الدفع الذهبية</option>
+                                <option>BaridiMob</option>
+                                <option>CCP - بريد الجزائر</option>
+                                <option>الدفع عند الاستلام</option>
+                            </select>
+                        </div>
+                        <div class="form-row"><label>رقم البطاقة / الحساب</label><input type="text" placeholder="•••• •••• •••• ••••"></div>
+                        <button class="btn btn-primary btn-block" onclick="alert('✅ تم تجميد المبلغ في حساب Escrow الآمن.\nسيُحوَّل للبائع تلقائياً بعد تأكيدك استلام الطلب.')">تأكيد ودفع 2,400 دج بأمان</button>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">ملخص الطلب</div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">زيت زيتون بكر ممتاز - 2 لتر</div><div class="item-sub">تيزي وزو</div></div><div class="item-meta"><div class="item-price">2,400 دج</div></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">رسوم النقل والتأمين</div></div><div class="item-meta"><div class="item-price">0 دج</div></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title" style="font-weight:900;">الإجمالي</div></div><div class="item-meta"><div class="item-price" style="color:var(--primary); font-size:16px;">2,400 دج</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: LOYALTY -->
+            <div id="c-loyalty" class="c-tab hidden">
+                <div class="page-title">الولاء والمكافآت 🏆</div>
+                <div class="page-subtitle">اكسب نقاطاً مع كل طلب واستبدلها بخصومات وأوسام مميزة</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value">2,450</div><div class="stat-label">نقطة حالية</div></div>
+                    <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-value">ذهبي</div><div class="stat-label">وسامك الحالي</div></div>
+                    <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value">38</div><div class="stat-label">طلب مكتمل</div></div>
+                    <div class="stat-card"><div class="stat-icon">🎁</div><div class="stat-value">3</div><div class="stat-label">قسائم متاحة</div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-title" style="margin-bottom:12px;">قسائم متاحة للاستبدال</div>
+                    <div class="item-row"><div class="item-thumb" style="background:var(--primary-bg);">🎁</div><div class="item-info"><div class="item-title">خصم 10% على طلبك القادم</div><div class="item-sub">يتطلب 500 نقطة</div></div><div class="item-meta"><button class="btn btn-outline btn-sm" onclick="alert('✅ تم استبدال القسيمة!')">استبدل</button></div></div>
+                    <div class="item-row"><div class="item-thumb" style="background:var(--secondary-bg);">🚚</div><div class="item-info"><div class="item-title">توصيل مجاني لمرة واحدة</div><div class="item-sub">يتطلب 800 نقطة</div></div><div class="item-meta"><button class="btn btn-outline btn-sm" onclick="alert('✅ تم استبدال القسيمة!')">استبدل</button></div></div>
+                </div>
+            </div>
+
+            <!-- TAB: ACCOUNT -->
+            <div id="c-account" class="c-tab hidden">
+                <div class="page-title">حسابي ⚙️</div>
+                <div class="page-subtitle">إدارة بياناتك الشخصية وتفضيلات الأمان</div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="form-row"><label>الاسم الكامل</label><input type="text" value="محمد عبد الرحمن"></div>
+                        <div class="form-grid">
+                            <div class="form-row"><label>البريد الإلكتروني</label><input type="email" value="m.consumer@amena.dz"></div>
+                            <div class="form-row"><label>رقم الهاتف</label><input type="text" value="+213 6XX XX XX XX"></div>
+                        </div>
+                        <div class="form-row"><label>الولاية</label><select><option selected>الجزائر العاصمة</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select></div>
+                        <button class="btn btn-primary">حفظ التعديلات</button>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">الأمان والخصوصية</div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">المصادقة الثنائية (2FA)</div><div class="item-sub">حماية إضافية لحسابك</div></div><div class="item-meta"><span class="pill pill-success">مفعّلة ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">إشعارات الجلسات الجديدة</div></div><div class="item-meta"><span class="pill pill-success">مفعّلة ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">سجل تسجيل الدخول</div></div><div class="item-meta"><button class="btn btn-outline btn-sm">عرض</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile bottom nav -->
+        <div class="bottom-nav">
+            <div class="bottom-nav-item active" onclick="showConsumerTab('home', this)"><span class="bn-icon">🏠</span>الرئيسية</div>
+            <div class="bottom-nav-item" onclick="showConsumerTab('map', this)"><span class="bn-icon">🗺️</span>الولايات</div>
+            <div class="bottom-nav-item" onclick="showConsumerTab('live', this)"><span class="bn-icon">📡</span>البث</div>
+            <div class="bottom-nav-item" onclick="showConsumerTab('orders', this)"><span class="bn-icon">🧾</span>طلباتي</div>
+            <div class="bottom-nav-item" onclick="showConsumerTab('account', this)"><span class="bn-icon">👤</span>حسابي</div>
+        </div>
+    </div>
+
+    <!-- ================= FARMER PORTAL ================= -->
+    <div id="farmerPortal" class="app-shell hidden">
+
+        <div class="sidebar desktop-only">
+            <div class="sidebar-item active farmer-active" onclick="showFarmerTab('home', this)"><span class="sidebar-icon">🏠</span> الرئيسية</div>
+            <div class="sidebar-item" onclick="showFarmerTab('products', this)"><span class="sidebar-icon">🌾</span> منتجاتي</div>
+            <div class="sidebar-item" onclick="showFarmerTab('live', this)"><span class="sidebar-icon">📡</span> البث والمزايدات</div>
+            <div class="sidebar-item" onclick="showFarmerTab('orders', this)"><span class="sidebar-icon">📦</span> الطلبات</div>
+            <div class="sidebar-item" onclick="showFarmerTab('wallet', this)"><span class="sidebar-icon">💰</span> المحفظة المالية</div>
+            <div class="sidebar-item" onclick="showFarmerTab('quality', this)"><span class="sidebar-icon">🏅</span> شهادات الجودة</div>
+            <div class="sidebar-item" onclick="showFarmerTab('account', this)"><span class="sidebar-icon">⚙️</span> حسابي</div>
+        </div>
+
+        <div class="main-content">
+
+            <!-- TAB: HOME -->
+            <div id="f-home" class="f-tab">
+                <div class="page-title">مرحباً، مزرعة بن علي 🌾</div>
+                <div class="page-subtitle">لوحة تحكم المزارع — إدارة منتجاتك، طلباتك، وأرباحك في مكان واحد</div>
+                <div class="security-strip">✓ حسابك موثق من آمنة — شارة "فلاح موثوق" نشطة على جميع منتجاتك</div>
+
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">186,400 دج</div><div class="stat-label">إيرادات هذا الشهر</div><div class="stat-delta delta-up">↑ +50% عن المعتاد</div></div>
+                    <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value">23</div><div class="stat-label">طلبات نشطة</div></div>
+                    <div class="stat-card"><div class="stat-icon">🌾</div><div class="stat-value">12</div><div class="stat-label">منتج معروض</div></div>
+                    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value">4.9</div><div class="stat-label">تقييم البائع</div></div>
+                </div>
+
+                <div class="live-banner" style="background: var(--primary-bg); border-color: var(--primary-light);" onclick="showFarmerTab('live', null)">
+                    <div style="font-size:18px;">📡</div>
+                    <div class="live-text" style="color: var(--primary);">ابدأ بثاً مباشراً من حقلك الآن — جذب المزايدين الفوري وزيادة دخلك حتى 50%</div>
+                    <button class="btn btn-primary btn-sm">بدء البث</button>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">آخر الطلبات الواردة</div><button class="link-btn" onclick="showFarmerTab('orders', null)">عرض الكل ←</button></div>
+                        <div class="item-row">
+                            <div class="item-thumb" style="background: var(--accent-bg);">🌴</div>
+                            <div class="item-info"><div class="item-title">طلب تمور دقلة نور - 5 كغ</div><div class="item-sub">من: محمد عبد الرحمن · #AM-3321</div></div>
+                            <div class="item-meta"><span class="pill pill-warning">جاري التحضير</span></div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-thumb" style="background: var(--secondary-bg);">🏪</div>
+                            <div class="item-info"><div class="item-title">عقد جملة - 200 كغ تمور</div><div class="item-sub">تاجر: سوبرمارکت الأمل</div></div>
+                            <div class="item-meta"><span class="pill pill-info">عقد جديد</span></div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-thumb" style="background: var(--primary-bg);">🚚</div>
+                            <div class="item-info"><div class="item-title">شحنة جاهزة للنقل - 50 كغ</div><div class="item-sub">في انتظار قبول ناقل</div></div>
+                            <div class="item-meta"><span class="pill pill-danger">يتطلب إجراء</span></div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">مساعد آمنة الذكي 🤖</div>
+                        <div class="ai-box" style="margin-bottom:0;">
+                            <div class="ai-icon">🤖</div>
+                            <div>
+                                <div class="ai-title">توصية اليوم</div>
+                                <div class="ai-text">أسعار التمور في بسكرة اليوم أعلى بـ8% من المتوسط الأسبوعي. يُنصح بالبيع الآن أو عبر مزاد مباشر.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: PRODUCTS -->
+            <div id="f-products" class="f-tab hidden">
+                <div class="page-title">منتجاتي 🌾</div>
+                <div class="page-subtitle">أضف وأدر منتجاتك المعروضة في السوق</div>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:14px;">
+                    <button class="btn btn-primary" onclick="alert('📝 نموذج إضافة منتج جديد:\n- نوع المنتج\n- الكمية والسعر\n- صور / فيديو\n- شهادة جودة (اختياري)\n- الولاية ومكان الاستلام')">+ إضافة منتج جديد</button>
+                </div>
+                <div class="panel">
+                    <table>
+                        <tr><th>المنتج</th><th>الكمية المتوفرة</th><th>السعر</th><th>الحالة</th><th>الجودة</th><th></th></tr>
+                        <tr><td>🌴 تمور دقلة نور</td><td>3 طن</td><td>450 دج/كغ</td><td><span class="pill pill-success">نشط</span></td><td><span class="pill pill-purple">معتمدة ✓</span></td><td><button class="btn btn-outline btn-sm">تعديل</button></td></tr>
+                        <tr><td>🌴 تمور برحي</td><td>1.2 طن</td><td>380 دج/كغ</td><td><span class="pill pill-success">نشط</span></td><td><span class="pill pill-warning">قيد المراجعة</span></td><td><button class="btn btn-outline btn-sm">تعديل</button></td></tr>
+                        <tr><td>🫒 زيت زيتون بكر</td><td>500 لتر</td><td>1,200 دج/لتر</td><td><span class="pill pill-success">نشط</span></td><td><span class="pill pill-purple">معتمدة ✓</span></td><td><button class="btn btn-outline btn-sm">تعديل</button></td></tr>
+                        <tr><td>🌾 قمح صلب</td><td>10 طن</td><td>45 دج/كغ</td><td><span class="pill pill-danger">نفذ المخزون</span></td><td>—</td><td><button class="btn btn-outline btn-sm">تعديل</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: LIVE -->
+            <div id="f-live" class="f-tab hidden">
+                <div class="page-title">البث المباشر والمزايدات 📡</div>
+                <div class="page-subtitle">ابدأ بثاً مباشراً من حقلك ودع المشترين يتزايدون مباشرة</div>
+                <div class="content-grid">
+                    <div class="panel" style="padding:0; overflow:hidden;">
+                        <div style="background:#111827; height:280px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; gap:10px;">
+                            <div style="font-size:14px;">📷 معاينة الكاميرا</div>
+                            <div style="font-size:12px; color:#9ca3af;">جاهز للبدء — تأكد من الإضاءة والاتصال بالإنترنت</div>
+                            <button class="btn btn-danger" onclick="alert('🔴 بدأ البث المباشر! المتابعون سيتلقون إشعاراً فورياً.')">بدء البث الآن ⏺</button>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="form-row"><label>عنوان البث</label><input type="text" placeholder="مثال: حصاد تمور دقلة نور 2026"></div>
+                        <div class="form-row"><label>المنتج المعروض للمزايدة</label><select><option>تمور دقلة نور - 3 طن</option><option>زيت زيتون بكر - 500 لتر</option></select></div>
+                        <div class="form-row"><label>سعر الانطلاق (دج/كغ)</label><input type="number" placeholder="450"></div>
+                        <button class="btn btn-outline btn-block">حفظ كمسودة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: ORDERS -->
+            <div id="f-orders" class="f-tab hidden">
+                <div class="page-title">إدارة الطلبات 📦</div>
+                <div class="page-subtitle">تابع طلبات المستهلكين والتجار وحالة الشحن</div>
+                <div class="panel">
+                    <table>
+                        <tr><th>رقم الطلب</th><th>العميل</th><th>المنتج</th><th>القيمة</th><th>الحالة</th><th></th></tr>
+                        <tr><td>#AM-3321</td><td>محمد عبد الرحمن (مستهلك)</td><td>تمور دقلة نور - 5 كغ</td><td>2,250 دج</td><td><span class="pill pill-warning">جاري التحضير</span></td><td><button class="btn btn-primary btn-sm" onclick="alert('✅ تم تأكيد جهوزية الشحنة للناقل')">جاهز للشحن</button></td></tr>
+                        <tr><td>#AM-3300</td><td>سوبرمارکت الأمل (تاجر)</td><td>عقد جملة 200 كغ</td><td>90,000 دج</td><td><span class="pill pill-info">عقد جديد</span></td><td><button class="btn btn-outline btn-sm">عرض العقد</button></td></tr>
+                        <tr><td>#AM-3290</td><td>مطعم الواحة</td><td>زيت زيتون - 20 لتر</td><td>24,000 دج</td><td><span class="pill pill-success">تم التسليم</span></td><td><button class="btn btn-outline btn-sm">الفاتورة</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: WALLET -->
+            <div id="f-wallet" class="f-tab hidden">
+                <div class="page-title">المحفظة المالية 💰</div>
+                <div class="page-subtitle">أرباحك من Escrow، السحوبات، والمعاملات الآمنة</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">186,400 دج</div><div class="stat-label">الرصيد المتاح</div></div>
+                    <div class="stat-card"><div class="stat-icon">🔒</div><div class="stat-value">42,000 دج</div><div class="stat-label">مجمّد في Escrow</div></div>
+                    <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-value">4.2B دج</div><div class="stat-label">معاملات المنصة الكلية</div></div>
+                    <div class="stat-card"><div class="stat-icon">🏦</div><div class="stat-value">CCP</div><div class="stat-label">حساب السحب المرتبط</div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">سجل المعاملات</div><button class="btn btn-primary btn-sm" onclick="alert('💸 طلب سحب إلى حسابك CCP / BaridiMob — يستغرق 24 ساعة')">طلب سحب</button></div>
+                    <table>
+                        <tr><th>التاريخ</th><th>الوصف</th><th>القيمة</th><th>الحالة</th></tr>
+                        <tr><td>2026-06-14</td><td>بيع تمور - طلب #AM-3290</td><td style="color:var(--primary); font-weight:800;">+24,000 دج</td><td><span class="pill pill-success">مؤكد</span></td></tr>
+                        <tr><td>2026-06-13</td><td>عمولة المنصة (2%)</td><td style="color:var(--danger); font-weight:800;">-480 دج</td><td><span class="pill pill-success">مؤكد</span></td></tr>
+                        <tr><td>2026-06-12</td><td>بيع زيت زيتون - طلب #AM-3250</td><td style="color:var(--accent); font-weight:800;">42,000 دج</td><td><span class="pill pill-warning">مجمّد Escrow</span></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: QUALITY -->
+            <div id="f-quality" class="f-tab hidden">
+                <div class="page-title">شهادات الجودة 🏅</div>
+                <div class="page-subtitle">تقارير الخبراء وشهادات الجودة المعتمدة لمنتجاتك</div>
+                <div class="panel">
+                    <div class="item-row">
+                        <div class="item-thumb" style="background:var(--purple-bg);">🏅</div>
+                        <div class="item-info"><div class="item-title">تقرير جودة - تمور دقلة نور</div><div class="item-sub">الخبير: م. صالح بوزيد · 12 يونيو 2026 · صالح حتى 12 سبتمبر 2026</div></div>
+                        <div class="item-meta"><span class="pill pill-success">معتمدة ✓</span></div>
+                    </div>
+                    <div class="item-row">
+                        <div class="item-thumb" style="background:var(--purple-bg);">🏅</div>
+                        <div class="item-info"><div class="item-title">تقرير جودة - زيت الزيتون البكر</div><div class="item-sub">الخبير: د. أمينة شريف · 1 يونيو 2026 · صالح حتى 1 ديسمبر 2026</div></div>
+                        <div class="item-meta"><span class="pill pill-success">معتمدة ✓</span></div>
+                    </div>
+                    <div class="item-row">
+                        <div class="item-thumb" style="background:var(--accent-bg);">⏳</div>
+                        <div class="item-info"><div class="item-title">طلب فحص جديد - تمور برحي</div><div class="item-sub">في انتظار تعيين خبير</div></div>
+                        <div class="item-meta"><span class="pill pill-warning">قيد المراجعة</span></div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="alert('📋 طلب فحص جودة جديد — سيتم تعيين خبير زراعي قريب منك')">+ طلب شهادة جودة جديدة</button>
+            </div>
+
+            <!-- TAB: ACCOUNT -->
+            <div id="f-account" class="f-tab hidden">
+                <div class="page-title">حسابي ⚙️</div>
+                <div class="page-subtitle">بيانات المزرعة، الموقع، ووسائل التواصل</div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="form-row"><label>اسم المزرعة / النشاط</label><input type="text" value="مزرعة بن علي"></div>
+                        <div class="form-grid">
+                            <div class="form-row"><label>الولاية</label><select><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option selected>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select></div>
+                            <div class="form-row"><label>رقم الهاتف</label><input type="text" value="+213 6XX XX XX XX"></div>
+                        </div>
+                        <div class="form-row"><label>وصف مختصر للمزرعة</label><textarea rows="3">مزرعة تمور عائلية في بسكرة منذ 1985، متخصصة في دقلة نور والبرحي.</textarea></div>
+                        <button class="btn btn-primary">حفظ التعديلات</button>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">الأمان والخصوصية</div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">المصادقة الثنائية (2FA)</div></div><div class="item-meta"><span class="pill pill-success">مفعّلة ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">التحقق من الهوية (KYC)</div></div><div class="item-meta"><span class="pill pill-success">موثّق ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">سجل الدخول والأجهزة</div></div><div class="item-meta"><button class="btn btn-outline btn-sm">عرض</button></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="bottom-nav-item active" onclick="showFarmerTab('home', this)"><span class="bn-icon">🏠</span>الرئيسية</div>
+            <div class="bottom-nav-item" onclick="showFarmerTab('products', this)"><span class="bn-icon">🌾</span>منتجاتي</div>
+            <div class="bottom-nav-item" onclick="showFarmerTab('live', this)"><span class="bn-icon">📡</span>البث</div>
+            <div class="bottom-nav-item" onclick="showFarmerTab('orders', this)"><span class="bn-icon">📦</span>الطلبات</div>
+            <div class="bottom-nav-item" onclick="showFarmerTab('wallet', this)"><span class="bn-icon">💰</span>المحفظة</div>
+        </div>
+    </div>
+
+
+    <!-- ================= TRADER PORTAL ================= -->
+    <div id="traderPortal" class="app-shell hidden">
+        <div class="sidebar desktop-only">
+            <div class="sidebar-item active" onclick="showTraderTab('home', this)"><span class="sidebar-icon">🏠</span> الرئيسية</div>
+            <div class="sidebar-item" onclick="showTraderTab('sourcing', this)"><span class="sidebar-icon">🔎</span> تحديد الاحتياجات</div>
+            <div class="sidebar-item" onclick="showTraderTab('contracts', this)"><span class="sidebar-icon">📄</span> العقود</div>
+            <div class="sidebar-item" onclick="showTraderTab('shipments', this)"><span class="sidebar-icon">📦</span> الشحنات</div>
+            <div class="sidebar-item" onclick="showTraderTab('wallet', this)"><span class="sidebar-icon">💳</span> المحفظة</div>
+            <div class="sidebar-item" onclick="showTraderTab('account', this)"><span class="sidebar-icon">⚙️</span> حسابي</div>
+        </div>
+        <div class="main-content">
+
+            <div id="t-home" class="t-tab">
+                <div class="page-title">لوحة التاجر 🏪</div>
+                <div class="page-subtitle">حدّد احتياجاتك بالجملة وتعاقد مع أفضل المزارعين</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">📄</div><div class="stat-value">14</div><div class="stat-label">عقد نشط</div></div>
+                    <div class="stat-card"><div class="stat-icon">🌾</div><div class="stat-value">8</div><div class="stat-label">موردون دائمون</div></div>
+                    <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value">6</div><div class="stat-label">شحنة جارية</div></div>
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">1.2M دج</div><div class="stat-label">مشتريات هذا الشهر</div></div>
+                </div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">العقود النشطة</div><button class="link-btn" onclick="showTraderTab('contracts', null)">عرض الكل ←</button></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--accent-bg);">🌴</div><div class="item-info"><div class="item-title">عقد تمور - مزرعة بن علي</div><div class="item-sub">200 كغ شهرياً · 380 دج/كغ</div></div><div class="item-meta"><span class="pill pill-success">نشط</span></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--primary-bg);">🥕</div><div class="item-info"><div class="item-title">عقد خضروات - تعاونية البليدة</div><div class="item-sub">500 كغ أسبوعياً</div></div><div class="item-meta"><span class="pill pill-warning">تجديد قريب</span></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--accent-bg);">🫒</div><div class="item-info"><div class="item-title">عقد زيت زيتون - تيزي وزو</div><div class="item-sub">100 لتر شهرياً</div></div><div class="item-meta"><span class="pill pill-success">نشط</span></div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">إنشاء طلب عروض RFQ</div>
+                        <div class="form-row"><label>المنتج المطلوب</label><input type="text" placeholder="مثال: تمور دقلة نور"></div>
+                        <div class="form-row"><label>الكمية (كغ)</label><input type="number" placeholder="500"></div>
+                        <div class="form-row"><label>تاريخ التسليم المطلوب</label><input type="date"></div>
+                        <button class="btn btn-primary btn-block" onclick="alert('✅ تم إرسال طلب العروض!\nالمزارعون المؤهلون سيتواصلون معك خلال 24 ساعة.')">إرسال طلب العروض</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="t-sourcing" class="t-tab hidden">
+                <div class="page-title">تحديد الاحتياجات 🔎</div>
+                <div class="page-subtitle">ابحث عن المزارعين المناسبين لتلبية احتياجاتك بالجملة</div>
+                <div class="panel">
+                    <div class="form-grid">
+                        <div class="form-row"><label>نوع المنتج</label><select><option>تمور</option><option>خضروات</option><option>زيوت</option><option>حبوب</option></select></div>
+                        <div class="form-row"><label>الكمية (كغ/وحدة)</label><input type="number" placeholder="1000"></div>
+                        <div class="form-row"><label>الولاية المفضلة</label><select><option>الكل</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select></div>
+                        <div class="form-row"><label>السعر الأقصى (دج/كغ)</label><input type="number" placeholder="500"></div>
+                    </div>
+                    <button class="btn btn-primary" onclick="alert('🔍 تم العثور على 23 مزارعاً مطابقاً:\n• مزرعة بن علي — بسكرة — 450 دج/كغ\n• تعاونية الواحة — 440 دج/كغ\n• مزرعة الجنوب — 420 دج/كغ')">بحث عن موردين</button>
+                </div>
+            </div>
+
+            <div id="t-contracts" class="t-tab hidden">
+                <div class="page-title">العقود 📄</div>
+                <div class="page-subtitle">إدارة عقود التوريد مع المزارعين</div>
+                <div class="panel">
+                    <table>
+                        <tr><th>المورد</th><th>المنتج</th><th>الكمية</th><th>السعر</th><th>انتهاء العقد</th><th>الحالة</th><th></th></tr>
+                        <tr><td>مزرعة بن علي</td><td>تمور دقلة نور</td><td>200 كغ/شهر</td><td>380 دج/كغ</td><td>2026-12-31</td><td><span class="pill pill-success">نشط</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>تعاونية البليدة</td><td>خضروات</td><td>500 كغ/أسبوع</td><td>75 دج/كغ</td><td>2026-09-01</td><td><span class="pill pill-warning">تجديد قريب</span></td><td><button class="btn btn-primary btn-sm" onclick="alert('📝 نموذج تجديد العقد')">جدّد</button></td></tr>
+                        <tr><td>م. أمينة - تيزي وزو</td><td>زيت زيتون بكر</td><td>100 لتر/شهر</td><td>1,100 دج/لتر</td><td>2026-11-15</td><td><span class="pill pill-success">نشط</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="t-shipments" class="t-tab hidden">
+                <div class="page-title">الشحنات 📦</div>
+                <div class="page-subtitle">تتبع شحناتك لحظة بلحظة</div>
+                <div class="panel">
+                    <table>
+                        <tr><th>رقم الشحنة</th><th>المنتج</th><th>المزارع</th><th>الناقل</th><th>الحالة</th><th></th></tr>
+                        <tr><td>#SH-1021</td><td>تمور - 200 كغ</td><td>مزرعة بن علي</td><td>نقل سريع</td><td><span class="pill pill-warning">في الطريق 🚚</span></td><td><button class="btn btn-outline btn-sm" onclick="alert('📍 الشحنة عند الكيلومتر 120 — وصول خلال ساعتين')">تتبع</button></td></tr>
+                        <tr><td>#SH-1018</td><td>خضروات - 500 كغ</td><td>تعاونية البليدة</td><td>الناقل الوطني</td><td><span class="pill pill-success">تم التسليم ✓</span></td><td><button class="btn btn-outline btn-sm">الفاتورة</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="t-wallet" class="t-tab hidden">
+                <div class="page-title">المحفظة 💳</div>
+                <div class="page-subtitle">معاملاتك ومدفوعاتك</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">💳</div><div class="stat-value">342,000 دج</div><div class="stat-label">رصيد Escrow</div></div>
+                    <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-value">1.2M دج</div><div class="stat-label">مشتريات الشهر</div></div>
+                    <div class="stat-card"><div class="stat-icon">🔒</div><div class="stat-value">86,000 دج</div><div class="stat-label">مجمّد — قيد التسليم</div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-value">14</div><div class="stat-label">عملية مكتملة</div></div>
+                </div>
+            </div>
+
+            <div id="t-account" class="t-tab hidden">
+                <div class="page-title">حسابي ⚙️</div>
+                <div class="page-subtitle">بيانات النشاط التجاري</div>
+                <div class="panel">
+                    <div class="form-row"><label>اسم النشاط التجاري</label><input type="text" value="سوبرمارکت الأمل"></div>
+                    <div class="form-grid"><div class="form-row"><label>السجل التجاري</label><input type="text" value="DZ-2020-XXXXX"></div><div class="form-row"><label>الهاتف</label><input type="text" value="+213 6XX XX XX XX"></div></div>
+                    <button class="btn btn-primary">حفظ</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom-nav">
+            <div class="bottom-nav-item active" onclick="showTraderTab('home', this)"><span class="bn-icon">🏠</span>الرئيسية</div>
+            <div class="bottom-nav-item" onclick="showTraderTab('sourcing', this)"><span class="bn-icon">🔎</span>احتياجاتي</div>
+            <div class="bottom-nav-item" onclick="showTraderTab('contracts', this)"><span class="bn-icon">📄</span>العقود</div>
+            <div class="bottom-nav-item" onclick="showTraderTab('shipments', this)"><span class="bn-icon">📦</span>الشحنات</div>
+            <div class="bottom-nav-item" onclick="showTraderTab('wallet', this)"><span class="bn-icon">💳</span>المحفظة</div>
+        </div>
+    </div>
+
+    <!-- ================= TRANSPORTER PORTAL ================= -->
+    <div id="transporterPortal" class="app-shell hidden">
+        <div class="sidebar desktop-only">
+            <div class="sidebar-item active" onclick="showTransporterTab('home', this)"><span class="sidebar-icon">🏠</span> الرئيسية</div>
+            <div class="sidebar-item" onclick="showTransporterTab('jobs', this)"><span class="sidebar-icon">📋</span> مهام النقل</div>
+            <div class="sidebar-item" onclick="showTransporterTab('tracking', this)"><span class="sidebar-icon">🗺️</span> التتبع الحي</div>
+            <div class="sidebar-item" onclick="showTransporterTab('wallet', this)"><span class="sidebar-icon">💰</span> الأرباح</div>
+            <div class="sidebar-item" onclick="showTransporterTab('vehicle', this)"><span class="sidebar-icon">🚚</span> مركبتي</div>
+            <div class="sidebar-item" onclick="showTransporterTab('account', this)"><span class="sidebar-icon">⚙️</span> حسابي</div>
+        </div>
+        <div class="main-content">
+
+            <div id="tr-home" class="tr-tab">
+                <div class="page-title">لوحة الناقل 🚚</div>
+                <div class="page-subtitle">اقبل مهام النقل، تتبع شحناتك، وأدر أرباحك</div>
+                <div class="security-strip">✓ مركبتك موثقة — مرخص للنقل الزراعي عبر المنصة</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value">3</div><div class="stat-label">مهام نشطة</div></div>
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">48,500 دج</div><div class="stat-label">أرباح هذا الشهر</div><div class="stat-delta delta-up">↑ +22%</div></div>
+                    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value">4.8</div><div class="stat-label">تقييمك</div></div>
+                    <div class="stat-card"><div class="stat-icon">🛣️</div><div class="stat-value">1,240 كم</div><div class="stat-label">مسافة هذا الشهر</div></div>
+                </div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">مهام النقل المتاحة</div><button class="link-btn" onclick="showTransporterTab('jobs', null)">عرض الكل ←</button></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--accent-bg);">🌴</div><div class="item-info"><div class="item-title">تمور دقلة نور - 200 كغ</div><div class="item-sub">بسكرة ← الجزائر العاصمة · 420 كم</div></div><div class="item-meta"><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول مهمة النقل!\nموعد الانطلاق: اليوم الساعة 08:00')">اقبل</button></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--primary-bg);">🥕</div><div class="item-info"><div class="item-title">خضروات موسمية - 500 كغ</div><div class="item-sub">البليدة ← وهران · 280 كم</div></div><div class="item-meta"><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول المهمة!')">اقبل</button></div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">مهمتك الجارية 📍</div>
+                        <div style="background: var(--secondary-bg); border-radius: var(--border-radius-md); padding:14px; margin-bottom:12px;">
+                            <div style="font-size:13px; font-weight:700; color:var(--secondary); margin-bottom:6px;">🚚 تمور - 50 كغ — في الطريق</div>
+                            <div style="font-size:12px; color:var(--muted);">من: بسكرة → إلى: الجزائر العاصمة</div>
+                            <div style="font-size:12px; color:var(--muted); margin-top:4px;">وقت الوصول المتوقع: 14:30</div>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="alert('✅ تم تأكيد التسليم!\nسيتم تحويل مبلغ Escrow خلال ساعة.')">تأكيد التسليم ✓</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tr-jobs" class="tr-tab hidden">
+                <div class="page-title">مهام النقل المتاحة 📋</div>
+                <div class="page-subtitle">اختر المهام المناسبة لمركبتك ومسارك</div>
+                <div class="panel">
+                    <div class="form-grid" style="margin-bottom:14px;">
+                        <div class="form-row"><label>من (ولاية الانطلاق)</label><select><option>كل الولايات</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option selected>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select></div>
+                        <div class="form-row"><label>إلى (ولاية الوصول)</label><select><option selected>كل الولايات</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select></div>
+                    </div>
+                    <table>
+                        <tr><th>المنتج</th><th>من</th><th>إلى</th><th>المسافة</th><th>الأجر</th><th>الحالة</th><th></th></tr>
+                        <tr><td>🌴 تمور 200كغ</td><td>بسكرة</td><td>الجزائر العاصمة</td><td>420 كم</td><td>12,000 دج</td><td><span class="pill pill-info">متاح</span></td><td><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول المهمة!')">اقبل</button></td></tr>
+                        <tr><td>🥕 خضروات 500كغ</td><td>البليدة</td><td>وهران</td><td>280 كم</td><td>9,500 دج</td><td><span class="pill pill-info">متاح</span></td><td><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول المهمة!')">اقبل</button></td></tr>
+                        <tr><td>🫒 زيت 100لتر</td><td>تيزي وزو</td><td>قسنطينة</td><td>350 كم</td><td>8,000 دج</td><td><span class="pill pill-info">متاح</span></td><td><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول المهمة!')">اقبل</button></td></tr>
+                        <tr><td>🍯 عسل 80كغ</td><td>باتنة</td><td>بريكة</td><td>65 كم</td><td>3,200 دج</td><td><span class="pill pill-info">متاح</span></td><td><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول المهمة!')">اقبل</button></td></tr>
+                        <tr><td>🌾 قمح 1طن</td><td>ورقلة</td><td>تقرت</td><td>110 كم</td><td>6,500 دج</td><td><span class="pill pill-info">متاح</span></td><td><button class="btn btn-secondary btn-sm" onclick="alert('✅ تم قبول المهمة!')">اقبل</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div id="tr-tracking" class="tr-tab hidden">
+                <div class="page-title">التتبع الحي 🗺️</div>
+                <div class="page-subtitle">موقعك ومساراتك على الخريطة</div>
+                <div class="map-box" onclick="alert('🗺️ خريطة التتبع الحي — مسار بسكرة ← الجزائر العاصمة')">
+                    <div class="map-icon">🗺️</div><div>خريطة التتبع الحي — GPS مباشر</div>
+                </div>
+                <div class="panel">
+                    <div class="panel-title" style="margin-bottom:12px;">تحديث الموقع</div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-secondary" onclick="alert('📍 تم تحديث موقعك على الخريطة')">تحديث الموقع الآن</button>
+                        <button class="btn btn-outline" onclick="alert('🏁 تم تأكيد وصولك إلى نقطة الاستلام')">تأكيد وصول</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tr-wallet" class="tr-tab hidden">
+                <div class="page-title">الأرباح 💰</div>
+                <div class="page-subtitle">سجل مدفوعاتك وأرباح كل مهمة</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">48,500 دج</div><div class="stat-label">أرباح الشهر</div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-value">18</div><div class="stat-label">مهمة مكتملة</div></div>
+                    <div class="stat-card"><div class="stat-icon">🔒</div><div class="stat-value">12,000 دج</div><div class="stat-label">قيد الصرف</div></div>
+                    <div class="stat-card"><div class="stat-icon">🏦</div><div class="stat-value">BaridiMob</div><div class="stat-label">حساب الاستلام</div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header"><div class="panel-title">سجل المهام</div><button class="btn btn-secondary btn-sm" onclick="alert('💸 طلب سحب الأرباح إلى BaridiMob')">طلب سحب</button></div>
+                    <table>
+                        <tr><th>التاريخ</th><th>المهمة</th><th>المسار</th><th>الأجر</th></tr>
+                        <tr><td>2026-06-14</td><td>تمور 50كغ</td><td>بسكرة←جزائر</td><td style="color:var(--primary); font-weight:800;">+12,000 دج</td></tr>
+                        <tr><td>2026-06-12</td><td>خضروات 300كغ</td><td>بليدة←وهران</td><td style="color:var(--primary); font-weight:800;">+9,500 دج</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tr-vehicle" class="tr-tab hidden">
+                <div class="page-title">مركبتي 🚚</div>
+                <div class="page-subtitle">بيانات الشاحنة وتوثيقها</div>
+                <div class="panel">
+                    <div class="form-grid">
+                        <div class="form-row"><label>نوع المركبة</label><input type="text" value="شاحنة مبردة - 5 طن"></div>
+                        <div class="form-row"><label>رقم اللوحة</label><input type="text" value="12345-213-16"></div>
+                        <div class="form-row"><label>سنة الصنع</label><input type="text" value="2019"></div>
+                        <div class="form-row"><label>حالة المركبة</label><select><option>جاهزة للعمل</option><option>صيانة</option></select></div>
+                    </div>
+                    <div class="item-row"><div class="item-info"><div class="item-title">وثيقة التأمين</div><div class="item-sub">صالحة حتى 2027-01-15</div></div><div class="item-meta"><span class="pill pill-success">موثّقة ✓</span></div></div>
+                    <div class="item-row"><div class="item-info"><div class="item-title">رخصة النقل الزراعي</div></div><div class="item-meta"><span class="pill pill-success">موثّقة ✓</span></div></div>
+                </div>
+            </div>
+
+            <div id="tr-account" class="tr-tab hidden">
+                <div class="page-title">حسابي ⚙️</div>
+                <div class="panel">
+                    <div class="form-row"><label>الاسم الكامل</label><input type="text" value="عمر بن يوسف"></div>
+                    <div class="form-grid"><div class="form-row"><label>الهاتف</label><input type="text" value="+213 6XX XX XX XX"></div><div class="form-row"><label>الولاية الرئيسية</label><select><option selected>بسكرة</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select></div></div>
+                    <button class="btn btn-secondary">حفظ</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom-nav">
+            <div class="bottom-nav-item active" onclick="showTransporterTab('home', this)"><span class="bn-icon">🏠</span>الرئيسية</div>
+            <div class="bottom-nav-item" onclick="showTransporterTab('jobs', this)"><span class="bn-icon">📋</span>المهام</div>
+            <div class="bottom-nav-item" onclick="showTransporterTab('tracking', this)"><span class="bn-icon">🗺️</span>التتبع</div>
+            <div class="bottom-nav-item" onclick="showTransporterTab('wallet', this)"><span class="bn-icon">💰</span>الأرباح</div>
+            <div class="bottom-nav-item" onclick="showTransporterTab('vehicle', this)"><span class="bn-icon">🚚</span>مركبتي</div>
+        </div>
+    </div>
+
+    <!-- ================= EXPERT PORTAL ================= -->
+    <div id="expertPortal" class="app-shell hidden">
+        <div class="sidebar desktop-only">
+            <div class="sidebar-item active" onclick="showExpertTab('home', this)"><span class="sidebar-icon">🏠</span> الرئيسية</div>
+            <div class="sidebar-item" onclick="showExpertTab('requests', this)"><span class="sidebar-icon">📋</span> طلبات الفحص</div>
+            <div class="sidebar-item" onclick="showExpertTab('reports', this)"><span class="sidebar-icon">📝</span> التقارير الصادرة</div>
+            <div class="sidebar-item" onclick="showExpertTab('consulting', this)"><span class="sidebar-icon">💬</span> الاستشارات</div>
+            <div class="sidebar-item" onclick="showExpertTab('wallet', this)"><span class="sidebar-icon">💰</span> الأتعاب</div>
+            <div class="sidebar-item" onclick="showExpertTab('account', this)"><span class="sidebar-icon">⚙️</span> ملفي المهني</div>
+        </div>
+        <div class="main-content">
+
+            <div id="ex-home" class="ex-tab">
+                <div class="page-title">لوحة الخبير الزراعي 🏅</div>
+                <div class="page-subtitle">أصدر شهادات الجودة وقدّم استشاراتك المعتمدة</div>
+                <div class="security-strip" style="background:#f5f3ff; color:#7c3aed;">🏅 خبير زراعي معتمد من آمنة — شهاداتك معترف بها على المنصة</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value">7</div><div class="stat-label">طلب فحص جديد</div></div>
+                    <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-value">142</div><div class="stat-label">تقرير أصدرته</div></div>
+                    <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-value">23</div><div class="stat-label">استشارة هذا الشهر</div></div>
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">84,000 دج</div><div class="stat-label">أتعاب هذا الشهر</div></div>
+                </div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">طلبات الفحص الجديدة</div><button class="link-btn" onclick="showExpertTab('requests', null)">عرض الكل ←</button></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--accent-bg);">🌴</div><div class="item-info"><div class="item-title">فحص تمور برحي — مزرعة بن علي</div><div class="item-sub">بسكرة · الكمية: 1.2 طن</div></div><div class="item-meta"><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('✅ تم قبول طلب الفحص. موعد الزيارة: غداً 10:00')">اقبل</button></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--primary-bg);">🥕</div><div class="item-info"><div class="item-title">فحص خضروات — تعاونية البليدة</div><div class="item-sub">البليدة · 500 كغ</div></div><div class="item-meta"><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('✅ تم قبول الطلب!')">اقبل</button></div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">إحصائياتي</div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">تقييم الخبير</div></div><div class="item-meta"><div style="font-weight:800; font-size:16px;">⭐ 4.95</div></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">نسبة القبول</div></div><div class="item-meta"><div style="font-weight:800; color:var(--primary);">98%</div></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">متوسط وقت الفحص</div></div><div class="item-meta"><div style="font-weight:800;">24 ساعة</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ex-requests" class="ex-tab hidden">
+                <div class="page-title">طلبات الفحص 📋</div>
+                <div class="page-subtitle">طلبات شهادات الجودة المعلّقة</div>
+                <div class="panel">
+                    <table>
+                        <tr><th>المزارع</th><th>المنتج</th><th>الكمية</th><th>الولاية</th><th>الأتعاب</th><th></th></tr>
+                        <tr><td>مزرعة بن علي</td><td>🌴 تمور برحي</td><td>1.2 طن</td><td>بسكرة</td><td>5,000 دج</td><td><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('✅ قبلت الطلب!')">اقبل</button></td></tr>
+                        <tr><td>تعاونية البليدة</td><td>🥕 خضروات</td><td>500 كغ</td><td>البليدة</td><td>3,000 دج</td><td><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('✅ قبلت الطلب!')">اقبل</button></td></tr>
+                        <tr><td>م. فاطمة الزهراء</td><td>🍯 عسل طبيعي</td><td>80 كغ</td><td>باتنة</td><td>4,500 دج</td><td><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('✅ قبلت الطلب!')">اقبل</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ex-reports" class="ex-tab hidden">
+                <div class="page-title">التقارير الصادرة 📝</div>
+                <div class="page-subtitle">شهادات الجودة التي أصدرتها</div>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:14px;"><button class="btn" style="background:#7c3aed; color:white;" onclick="alert('📝 نموذج إصدار تقرير جودة جديد')">+ إصدار تقرير جديد</button></div>
+                <div class="panel">
+                    <table>
+                        <tr><th>المنتج</th><th>المزارع</th><th>التاريخ</th><th>التقييم</th><th>الصلاحية</th><th>الحالة</th></tr>
+                        <tr><td>🌴 تمور دقلة نور</td><td>مزرعة بن علي</td><td>12/06/2026</td><td style="color:var(--primary); font-weight:800;">ممتاز A+</td><td>3 أشهر</td><td><span class="pill pill-success">سارية</span></td></tr>
+                        <tr><td>🫒 زيت زيتون بكر</td><td>م. فاطمة</td><td>01/06/2026</td><td style="color:var(--primary); font-weight:800;">ممتاز A</td><td>6 أشهر</td><td><span class="pill pill-success">سارية</span></td></tr>
+                        <tr><td>🥕 خضروات موسمية</td><td>تعاونية وهران</td><td>28/05/2026</td><td style="color:var(--accent); font-weight:800;">جيد B+</td><td>1 شهر</td><td><span class="pill pill-warning">تنتهي قريباً</span></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ex-consulting" class="ex-tab hidden">
+                <div class="page-title">الاستشارات 💬</div>
+                <div class="page-subtitle">قدّم استشارات مدفوعة للمزارعين والتجار</div>
+                <div class="panel">
+                    <div class="panel-title" style="margin-bottom:12px;">استشارات معلّقة</div>
+                    <div class="item-row"><div class="item-thumb" style="background: var(--primary-bg);">👨‍🌾</div><div class="item-info"><div class="item-title">استفسار عن أمراض الزيتون</div><div class="item-sub">مزارع من تيزي وزو · 2,000 دج</div></div><div class="item-meta"><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('💬 تم فتح نافذة الاستشارة')">رد</button></div></div>
+                    <div class="item-row"><div class="item-thumb" style="background: var(--accent-bg);">🏪</div><div class="item-info"><div class="item-title">نصيحة تخزين التمور للتاجر</div><div class="item-sub">تاجر من الجزائر · 1,500 دج</div></div><div class="item-meta"><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('💬 تم فتح نافذة الاستشارة')">رد</button></div></div>
+                </div>
+            </div>
+
+            <div id="ex-wallet" class="ex-tab hidden">
+                <div class="page-title">الأتعاب 💰</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">84,000 دج</div><div class="stat-label">أتعاب الشهر</div></div>
+                    <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-value">142</div><div class="stat-label">تقرير مدفوع</div></div>
+                    <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-value">23</div><div class="stat-label">استشارة مدفوعة</div></div>
+                    <div class="stat-card"><div class="stat-icon">🏦</div><div class="stat-value">CCP</div><div class="stat-label">حساب الاستلام</div></div>
+                </div>
+            </div>
+
+            <div id="ex-account" class="ex-tab hidden">
+                <div class="page-title">ملفي المهني ⚙️</div>
+                <div class="panel">
+                    <div class="form-row"><label>الاسم واللقب</label><input type="text" value="م. صالح بوزيد"></div>
+                    <div class="form-grid"><div class="form-row"><label>التخصص</label><input type="text" value="خبير محاصيل وتمور"></div><div class="form-row"><label>سنوات الخبرة</label><input type="text" value="15 سنة"></div></div>
+                    <div class="form-row"><label>الشهادات العلمية</label><textarea rows="2">مهندس زراعي — جامعة باتنة 1 · دكتوراه في علوم التربة</textarea></div>
+                    <button class="btn" style="background:#7c3aed; color:white;">تحديث الملف</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom-nav">
+            <div class="bottom-nav-item active" onclick="showExpertTab('home', this)"><span class="bn-icon">🏠</span>الرئيسية</div>
+            <div class="bottom-nav-item" onclick="showExpertTab('requests', this)"><span class="bn-icon">📋</span>الطلبات</div>
+            <div class="bottom-nav-item" onclick="showExpertTab('reports', this)"><span class="bn-icon">📝</span>التقارير</div>
+            <div class="bottom-nav-item" onclick="showExpertTab('consulting', this)"><span class="bn-icon">💬</span>الاستشارات</div>
+            <div class="bottom-nav-item" onclick="showExpertTab('wallet', this)"><span class="bn-icon">💰</span>الأتعاب</div>
+        </div>
+    </div>
+
+    <!-- ================= ADMIN PORTAL ================= -->
+    <div id="adminPortal" class="app-shell hidden">
+        <div class="sidebar desktop-only">
+            <div class="sidebar-item active" onclick="showAdminTab('home', this)"><span class="sidebar-icon">🏠</span> لوحة الرئيسية</div>
+            <div class="sidebar-item" onclick="showAdminTab('users', this)"><span class="sidebar-icon">👥</span> إدارة المستخدمين</div>
+            <div class="sidebar-item" onclick="showAdminTab('transactions', this)"><span class="sidebar-icon">💳</span> المعاملات</div>
+            <div class="sidebar-item" onclick="showAdminTab('quality', this)"><span class="sidebar-icon">🏅</span> الجودة والشهادات</div>
+            <div class="sidebar-item" onclick="showAdminTab('security', this)"><span class="sidebar-icon">🔐</span> الأمان</div>
+            <div class="sidebar-item" onclick="showAdminTab('analytics', this)"><span class="sidebar-icon">📊</span> التحليلات</div>
+            <div class="sidebar-item" onclick="showAdminTab('settings', this)"><span class="sidebar-icon">⚙️</span> إعدادات المنصة</div>
+        </div>
+        <div class="main-content">
+
+            <div id="ad-home" class="ad-tab">
+                <div class="page-title">لوحة الإدارة الرئيسية 🔐</div>
+                <div style="display:flex; align-items:center; gap:10px; background: var(--primary-bg); color: var(--primary); font-size:12px; font-weight:700; padding:8px 14px; border-radius: var(--border-radius-md); margin-bottom:18px;">
+                    🔒 جلسة مشفّرة — مصادقة ثنائية مفعّلة — آخر دخول: اليوم 09:32
+                </div>
+                <div class="stat-row">
+                    <div class="stat-card" style="background:linear-gradient(135deg,#15803d,#22c55e); color:white; border:none;"><div class="stat-icon">👥</div><div class="stat-value" style="color:white;">328,410</div><div class="stat-label" style="color:rgba(255,255,255,.85);">إجمالي المستخدمين</div></div>
+                    <div class="stat-card" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6); color:white; border:none;"><div class="stat-icon">💳</div><div class="stat-value" style="color:white;">4.2B دج</div><div class="stat-label" style="color:rgba(255,255,255,.85);">حجم المعاملات الكلي</div></div>
+                    <div class="stat-card" style="background:linear-gradient(135deg,#d97706,#f59e0b); color:white; border:none;"><div class="stat-icon">🚚</div><div class="stat-value" style="color:white;">1,840</div><div class="stat-label" style="color:rgba(255,255,255,.85);">ناقل نشط الآن</div></div>
+                    <div class="stat-card" style="background:linear-gradient(135deg,#7c3aed,#a78bfa); color:white; border:none;"><div class="stat-icon">🏅</div><div class="stat-value" style="color:white;">7</div><div class="stat-label" style="color:rgba(255,255,255,.85);">شهادات قيد المراجعة</div></div>
+                </div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-header"><div class="panel-title">أحداث حية</div><span style="font-size:11px; color:var(--muted);">تحديث كل 30 ثانية</span></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--primary-bg);">✅</div><div class="item-info"><div class="item-title">مستخدم جديد — فلاح - بسكرة</div><div class="item-sub">الآن</div></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--secondary-bg);">💳</div><div class="item-info"><div class="item-title">معاملة Escrow — 24,000 دج</div><div class="item-sub">قبل دقيقتين</div></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--danger-bg);">⚠️</div><div class="item-info"><div class="item-title">محاولة دخول مشبوهة — IP خارجي</div><div class="item-sub">قبل 7 دقائق</div></div><div class="item-meta"><button class="btn btn-danger btn-sm" onclick="alert('🔒 تم حظر IP: 185.X.X.X')">حظر</button></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--purple-bg);">🏅</div><div class="item-info"><div class="item-title">طلب شهادة جودة جديد</div><div class="item-sub">قبل 12 دقيقة</div></div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">سجل الأمان 🔐</div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--primary-bg);">🔑</div><div class="item-info"><div class="item-title">دخول المشرف العام — 2FA ✓</div><div class="item-sub">09:32</div></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--secondary-bg);">⚙️</div><div class="item-info"><div class="item-title">تحديث صلاحيات خبير</div><div class="item-sub">08:50</div></div></div>
+                        <div class="item-row"><div class="item-thumb" style="background: var(--danger-bg);">🚫</div><div class="item-info"><div class="item-title">دخول مرفوض — IP غير معروف</div><div class="item-sub">07:15</div></div></div>
+                        <button class="btn btn-outline btn-block" style="margin-top:12px;" onclick="showAdminTab('security', null)">السجل الكامل</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ad-users" class="ad-tab hidden">
+                <div class="page-title">إدارة المستخدمين 👥</div>
+                <div class="page-subtitle">البحث والإدارة والتوثيق لجميع مستخدمي المنصة</div>
+                <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
+                    <input type="text" placeholder="بحث بالاسم أو الهاتف..." style="flex:1; min-width:160px; padding:9px 12px; border:1px solid var(--border); border-radius:10px; font-size:13px;">
+                    <select style="padding:9px 12px; border:1px solid var(--border); border-radius:10px; font-size:13px;"><option>الكل</option><option>فلاح</option><option>تاجر</option><option>ناقل</option><option>خبير</option><option>مستهلك</option></select>
+                    <select style="padding:9px 12px; border:1px solid var(--border); border-radius:10px; font-size:13px;"><option>جميع الولايات</option><option>أدرار</option><option>الشلف</option><option>الأغواط</option><option>أم البواقي</option><option>باتنة</option><option>بجاية</option><option>بسكرة</option><option>بشار</option><option>البليدة</option><option>البويرة</option><option>تمنراست</option><option>تبسة</option><option>تلمسان</option><option>تيارت</option><option>تيزي وزو</option><option>الجزائر العاصمة</option><option>الجلفة</option><option>جيجل</option><option>سطيف</option><option>سعيدة</option><option>سكيكدة</option><option>سيدي بلعباس</option><option>عنابة</option><option>قالمة</option><option>قسنطينة</option><option>المدية</option><option>مستغانم</option><option>المسيلة</option><option>معسكر</option><option>ورقلة</option><option>وهران</option><option>البيض</option><option>إليزي</option><option>برج بوعريريج</option><option>بومرداس</option><option>الطارف</option><option>تندوف</option><option>تيسمسيلت</option><option>الوادي</option><option>خنشلة</option><option>سوق أهراس</option><option>تيبازة</option><option>ميلة</option><option>عين الدفلى</option><option>النعامة</option><option>عين تموشنت</option><option>غرداية</option><option>غليزان</option><option>تيميمون</option><option>برج باجي مختار</option><option>أولاد جلال</option><option>بني عباس</option><option>عين صالح</option><option>عين قزام</option><option>تقرت</option><option>جانت</option><option>المغير</option><option>المنيعة</option><option>أفلو</option><option>بريكة</option><option>القنطرة</option><option>بئر العاتر</option><option>العريشة</option><option>قصر الشلالة</option><option>عين وسارة</option><option>مسعد</option><option>قصر البخاري</option><option>بوسعادة</option><option>الأبيض سيدي الشيخ</option></select>
+                </div>
+                <div class="panel">
+                    <table>
+                        <tr><th>الاسم</th><th>النوع</th><th>الولاية</th><th>حالة KYC</th><th>تاريخ التسجيل</th><th>الحالة</th><th></th></tr>
+                        <tr><td>مزرعة بن علي</td><td><span class="pill pill-success">فلاح</span></td><td>بسكرة</td><td><span class="pill pill-success">موثّق ✓</span></td><td>2024-03-15</td><td><span class="pill pill-success">نشط</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>سوبرمارکت الأمل</td><td><span class="pill pill-warning">تاجر</span></td><td>الجزائر</td><td><span class="pill pill-success">موثّق ✓</span></td><td>2024-06-01</td><td><span class="pill pill-success">نشط</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>عمر بن يوسف</td><td><span class="pill pill-info">ناقل</span></td><td>بسكرة</td><td><span class="pill pill-success">موثّق ✓</span></td><td>2025-01-10</td><td><span class="pill pill-success">نشط</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>م. صالح بوزيد</td><td><span class="pill pill-purple">خبير</span></td><td>بسكرة</td><td><span class="pill pill-success">موثّق ✓</span></td><td>2024-08-20</td><td><span class="pill pill-success">نشط</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>حساب مجهول</td><td><span class="pill pill-danger">غير معروف</span></td><td>—</td><td><span class="pill pill-danger">غير موثّق</span></td><td>2026-06-15</td><td><span class="pill pill-warning">معلّق</span></td><td><button class="btn btn-danger btn-sm" onclick="alert('🚫 تم تعليق الحساب بانتظار التحقق')">تعليق</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ad-transactions" class="ad-tab hidden">
+                <div class="page-title">المعاملات 💳</div>
+                <div class="page-subtitle">مراقبة كاملة لجميع معاملات Escrow</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">💳</div><div class="stat-value">4.2B دج</div><div class="stat-label">إجمالي المعاملات</div></div>
+                    <div class="stat-card"><div class="stat-icon">🔒</div><div class="stat-value">342M دج</div><div class="stat-label">مجمّد في Escrow</div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-value">98.7%</div><div class="stat-label">نسبة النجاح</div></div>
+                    <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-value">12</div><div class="stat-label">نزاع معلّق</div></div>
+                </div>
+                <div class="panel">
+                    <table>
+                        <tr><th>رقم المعاملة</th><th>البائع</th><th>المشتري</th><th>القيمة</th><th>النوع</th><th>الحالة</th></tr>
+                        <tr><td>#TX-8821</td><td>مزرعة بن علي</td><td>محمد عبد الرحمن</td><td>2,250 دج</td><td>Escrow</td><td><span class="pill pill-warning">قيد التسليم</span></td></tr>
+                        <tr><td>#TX-8820</td><td>تعاونية البليدة</td><td>سوبرمارکت الأمل</td><td>90,000 دج</td><td>عقد جملة</td><td><span class="pill pill-success">مكتمل</span></td></tr>
+                        <tr><td>#TX-8815</td><td>م. أمينة</td><td>مطعم الواحة</td><td>24,000 دج</td><td>Escrow</td><td><span class="pill pill-danger">نزاع</span></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ad-quality" class="ad-tab hidden">
+                <div class="page-title">الجودة والشهادات 🏅</div>
+                <div class="page-subtitle">مراجعة واعتماد شهادات الجودة الصادرة</div>
+                <div class="panel">
+                    <table>
+                        <tr><th>المنتج</th><th>المزارع</th><th>الخبير</th><th>التاريخ</th><th>التقييم</th><th>الحالة</th><th></th></tr>
+                        <tr><td>🌴 تمور دقلة نور</td><td>مزرعة بن علي</td><td>م. صالح بوزيد</td><td>12/06/2026</td><td>A+</td><td><span class="pill pill-success">معتمدة</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>🫒 زيت زيتون</td><td>م. فاطمة</td><td>د. أمينة شريف</td><td>01/06/2026</td><td>A</td><td><span class="pill pill-success">معتمدة</span></td><td><button class="btn btn-outline btn-sm">عرض</button></td></tr>
+                        <tr><td>🌴 تمور برحي</td><td>مزرعة بن علي</td><td>—</td><td>—</td><td>—</td><td><span class="pill pill-warning">قيد التعيين</span></td><td><button class="btn btn-sm" style="background:#7c3aed; color:white;" onclick="alert('👤 تعيين خبير للفحص')">عيّن خبيراً</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ad-security" class="ad-tab hidden">
+                <div class="page-title">الأمان والخصوصية 🔐</div>
+                <div class="page-subtitle">مراقبة كاملة للأنشطة المشبوهة وسجل الجلسات</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">🔐</div><div class="stat-value">100%</div><div class="stat-label">تشفير SSL</div></div>
+                    <div class="stat-card"><div class="stat-icon">⚠️</div><div class="stat-value">3</div><div class="stat-label">تنبيه أمني اليوم</div></div>
+                    <div class="stat-card"><div class="stat-icon">🚫</div><div class="stat-value">47</div><div class="stat-label">IP محظور</div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-value">2FA</div><div class="stat-label">مفعّل للجميع</div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-title" style="margin-bottom:12px;">سجل الأمان المفصّل</div>
+                    <table>
+                        <tr><th>الوقت</th><th>النوع</th><th>التفاصيل</th><th>الحالة</th><th></th></tr>
+                        <tr><td>09:32</td><td>دخول</td><td>المشرف العام — 2FA مؤكد</td><td><span class="pill pill-success">آمن</span></td><td></td></tr>
+                        <tr><td>08:50</td><td>صلاحيات</td><td>تحديث دور خبير زراعي</td><td><span class="pill pill-info">عادي</span></td><td></td></tr>
+                        <tr><td>07:15</td><td>تنبيه</td><td>محاولة دخول فاشلة — IP: 185.x.x.x</td><td><span class="pill pill-danger">مرفوض</span></td><td><button class="btn btn-danger btn-sm" onclick="alert('🔒 تم حظر IP')">حظر</button></td></tr>
+                        <tr><td>06:30</td><td>تنبيه</td><td>5 محاولات دخول فاشلة على حساب واحد</td><td><span class="pill pill-warning">مراقبة</span></td><td><button class="btn btn-danger btn-sm" onclick="alert('🔒 تم تعليق الحساب مؤقتاً')">تعليق</button></td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div id="ad-analytics" class="ad-tab hidden">
+                <div class="page-title">التحليلات والإحصائيات 📊</div>
+                <div class="page-subtitle">نظرة شاملة على أداء المنصة</div>
+                <div class="stat-row">
+                    <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-value">+23%</div><div class="stat-label">نمو المستخدمين الشهري</div></div>
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value">+50%</div><div class="stat-label">نمو المعاملات</div></div>
+                    <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value">4.7</div><div class="stat-label">متوسط تقييم المنصة</div></div>
+                    <div class="stat-card"><div class="stat-icon">🌴</div><div class="stat-value">38%</div><div class="stat-label">التمور — الأكثر تداولاً</div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-title" style="margin-bottom:12px;">توزيع المستخدمين بالنوع</div>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:110px; background: var(--primary-bg); border-radius:12px; padding:14px; text-align:center;"><div style="font-size:20px; font-weight:900; color:var(--primary);">50,213</div><div style="font-size:12px; color:var(--muted);">فلاح</div></div>
+                        <div style="flex:1; min-width:110px; background: var(--accent-bg); border-radius:12px; padding:14px; text-align:center;"><div style="font-size:20px; font-weight:900; color:var(--accent);">8,440</div><div style="font-size:12px; color:var(--muted);">تاجر</div></div>
+                        <div style="flex:1; min-width:110px; background: var(--secondary-bg); border-radius:12px; padding:14px; text-align:center;"><div style="font-size:20px; font-weight:900; color:var(--secondary);">1,840</div><div style="font-size:12px; color:var(--muted);">ناقل</div></div>
+                        <div style="flex:1; min-width:110px; background: var(--purple-bg); border-radius:12px; padding:14px; text-align:center;"><div style="font-size:20px; font-weight:900; color:#7c3aed;">320</div><div style="font-size:12px; color:var(--muted);">خبير</div></div>
+                        <div style="flex:1; min-width:110px; background:#ecfeff; border-radius:12px; padding:14px; text-align:center;"><div style="font-size:20px; font-weight:900; color:#0e7490;">267,597</div><div style="font-size:12px; color:var(--muted);">مستهلك</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ad-settings" class="ad-tab hidden">
+                <div class="page-title">إعدادات المنصة ⚙️</div>
+                <div class="page-subtitle">التحكم في إعدادات المنصة العامة</div>
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="form-row"><label>عمولة المنصة (%)</label><input type="number" value="2"></div>
+                        <div class="form-row"><label>الحد الأدنى للسحب (دج)</label><input type="number" value="1000"></div>
+                        <div class="form-row"><label>مدة Escrow الافتراضية (ساعة)</label><input type="number" value="48"></div>
+                        <div class="form-row"><label>وضع الصيانة</label><select><option>إيقاف</option><option>تفعيل — إظهار صفحة الصيانة</option></select></div>
+                        <button class="btn btn-danger" onclick="alert('⚙️ تم حفظ إعدادات المنصة')">حفظ الإعدادات</button>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-title" style="margin-bottom:12px;">حالة الخدمات</div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">نظام الدفع Escrow</div></div><div class="item-meta"><span class="pill pill-success">يعمل ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">البث المباشر</div></div><div class="item-meta"><span class="pill pill-success">يعمل ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">الإشعارات Push</div></div><div class="item-meta"><span class="pill pill-success">يعمل ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">مساعد AI</div></div><div class="item-meta"><span class="pill pill-success">يعمل ✓</span></div></div>
+                        <div class="item-row"><div class="item-info"><div class="item-title">خريطة الولايات</div></div><div class="item-meta"><span class="pill pill-success">يعمل ✓</span></div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom-nav">
+            <div class="bottom-nav-item active" onclick="showAdminTab('home', this)"><span class="bn-icon">🏠</span>الرئيسية</div>
+            <div class="bottom-nav-item" onclick="showAdminTab('users', this)"><span class="bn-icon">👥</span>المستخدمون</div>
+            <div class="bottom-nav-item" onclick="showAdminTab('transactions', this)"><span class="bn-icon">💳</span>المعاملات</div>
+            <div class="bottom-nav-item" onclick="showAdminTab('security', this)"><span class="bn-icon">🔐</span>الأمان</div>
+            <div class="bottom-nav-item" onclick="showAdminTab('analytics', this)"><span class="bn-icon">📊</span>التحليلات</div>
+        </div>
+    </div>
+    <script>
+        // Generic tab switcher used by all portals
+        function showTab(prefix, portalId, tab, el) {
+            document.querySelectorAll('.' + prefix + '-tab').forEach(t => t.classList.add('hidden'));
+            const target = document.getElementById(prefix + '-' + tab);
+            if (target) target.classList.remove('hidden');
+            const portalEl = document.getElementById(portalId);
+            if (portalEl) {
+                portalEl.querySelectorAll('.sidebar-item, .bottom-nav-item').forEach(i => i.classList.remove('active'));
+                if (el) {
+                    el.classList.add('active');
+                } else {
+                    portalEl.querySelectorAll('.sidebar-item, .bottom-nav-item').forEach(i => {
+                        if (i.textContent.trim().includes(tabLabel(tab))) i.classList.add('active');
+                    });
+                }
+            }
+            window.scrollTo(0,0);
+        }
+
+        function showConsumerTab(tab, el) { showTab('c', 'consumerPortal', tab, el); }
+        function showFarmerTab(tab, el) { showTab('f', 'farmerPortal', tab, el); }
+        function showTraderTab(tab, el) { showTab('t', 'traderPortal', tab, el); }
+        function showTransporterTab(tab, el) { showTab('tr', 'transporterPortal', tab, el); }
+        function showExpertTab(tab, el) { showTab('ex', 'expertPortal', tab, el); }
+        function showAdminTab(tab, el) { showTab('ad', 'adminPortal', tab, el); }
+
+        function tabLabel(tab) {
+            const map = {
+                home:'الرئيسية', map:'الولايات', live:'البث', market:'السوق', orders:'طلبات', escrow:'Escrow',
+                loyalty:'الولاء', account:'حسابي', products:'منتجاتي', wallet:'المحفظة', quality:'شهادات',
+                sourcing:'الاحتياجات', contracts:'العقود', shipments:'الشحنات',
+                jobs:'المهام', tracking:'التتبع', vehicle:'مركبتي',
+                requests:'الطلبات', reports:'التقارير', consulting:'الاستشارات',
+                users:'المستخدمين', transactions:'المعاملات', security:'الأمان', analytics:'التحليلات', settings:'الإعدادات'
+            };
+            return map[tab] || '';
+        }
+
+        const ALL_PORTALS = ['consumerPortal','farmerPortal','traderPortal','transporterPortal','expertPortal','adminPortal'];
+        const ALL_TAGS = ['portalTagConsumer','portalTagFarmer','portalTagTrader','portalTagTransporter','portalTagExpert','portalTagAdmin'];
+        const PORTAL_KEY = {
+            consumerPortal: 'portalTagConsumer',
+            farmerPortal: 'portalTagFarmer',
+            traderPortal: 'portalTagTrader',
+            transporterPortal: 'portalTagTransporter',
+            expertPortal: 'portalTagExpert',
+            adminPortal: 'portalTagAdmin'
+        };
+        const PORTAL_ID = {
+            consumer: 'consumerPortal', farmer: 'farmerPortal', trader: 'traderPortal',
+            transporter: 'transporterPortal', expert: 'expertPortal', admin: 'adminPortal'
+        };
+
+        function goToPortal(name) {
+            const targetId = PORTAL_ID[name];
+            ALL_PORTALS.forEach(p => document.getElementById(p).classList.add('hidden'));
+            ALL_TAGS.forEach(t => document.getElementById(t).classList.add('hidden'));
+            document.getElementById(targetId).classList.remove('hidden');
+            document.getElementById(PORTAL_KEY[targetId]).classList.remove('hidden');
+            const modal = document.getElementById('switcherModal');
+            if (modal) modal.classList.add('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function goHome() {
+            ALL_PORTALS.forEach(p => document.getElementById(p).classList.add('hidden'));
+            ALL_TAGS.forEach(t => document.getElementById(t).classList.add('hidden'));
+            alert('🏠 أنت الآن في الصفحة الرئيسية لمنصة آمنة (في هذا العرض التجريبي، استخدم "تبديل البوابة" للدخول إلى أي بوابة).');
+        }
+    </script>
+</body>
+</html>

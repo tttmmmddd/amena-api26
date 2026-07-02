@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>آمنة — السوق الزراعي الرقمي الجزائري</title>
+<style>
+/* ─── DESIGN TOKENS ─────────────────────────────────────── */
+:root {
+  --forest:   #0d4a2b;
+  --forest-m: #166534;
+  --forest-l: #1a7a3d;
+  --gold:     #c8931a;
+  --gold-l:   #f4c842;
+  --gold-bg:  #fdf6e3;
+  --cream:    #faf8f4;
+  --slate:    #2d3748;
+  --muted:    #6b7280;
+  --border:   #e5e0d8;
+  --white:    #ffffff;
+  --red:      #c0392b;
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 22px;
+  --shadow-s: 0 2px 8px rgba(13,74,43,.08);
+  --shadow-m: 0 8px 32px rgba(13,74,43,.12);
+  --shadow-l: 0 20px 60px rgba(13,74,43,.18);
+}
+
+/* ─── RESET ──────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--cream);color:var(--slate);line-height:1.6;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+
+/* ─── TYPOGRAPHY SCALE ───────────────────────────────────── */
+.display{font-size:clamp(2.4rem,6vw,4.2rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;color:var(--forest)}
+.h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.h2{font-size:clamp(1.2rem,3vw,1.9rem);font-weight:700;line-height:1.2}
+.h3{font-size:1.1rem;font-weight:700}
+.lead{font-size:clamp(1rem,2vw,1.2rem);color:var(--muted);line-height:1.7}
+.label{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+
+/* ─── LAYOUT ─────────────────────────────────────────────── */
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+.section{padding:88px 0}
+.section-sm{padding:48px 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr;gap:32px}.grid-4{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr}}
+@media(max-width:540px){.grid-4{grid-template-columns:1fr}.section{padding:56px 0}}
+
+/* ─── NAV ────────────────────────────────────────────────── */
+nav{position:sticky;top:0;z-index:200;background:rgba(13,74,43,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.nav-logo-text{font-size:1.3rem;font-weight:900;color:#fff;letter-spacing:-.02em}
+.nav-logo-text span{color:var(--gold-l)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:.88rem;font-weight:600;padding:8px 14px;border-radius:var(--radius-s);transition:.2s}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-cta{background:var(--gold);color:var(--forest);font-weight:800;padding:9px 20px;border-radius:var(--radius-s);text-decoration:none;font-size:.88rem;transition:.2s}
+.nav-cta:hover{background:var(--gold-l)}
+@media(max-width:640px){.nav-links{display:none}}
+
+/* ─── HERO ───────────────────────────────────────────────── */
+.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;background:var(--forest);position:relative;overflow:hidden;padding:80px 0 60px}
+.hero-geo{position:absolute;inset:0;pointer-events:none;opacity:.25}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media(max-width:860px){.hero-inner{grid-template-columns:1fr;text-align:center}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(200,147,26,.18);border:1px solid rgba(200,147,26,.35);color:var(--gold-l);font-size:.78rem;font-weight:700;letter-spacing:.1em;padding:5px 14px;border-radius:20px;margin-bottom:22px}
+.hero-eyebrow-dot{width:6px;height:6px;background:var(--gold-l);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{color:#fff;margin-bottom:16px}
+.hero-title em{color:var(--gold-l);font-style:normal;display:block}
+.hero-sub{color:rgba(255,255,255,.72);font-size:1.05rem;line-height:1.75;margin-bottom:36px;max-width:480px}
+@media(max-width:860px){.hero-sub{margin:0 auto 36px}}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+@media(max-width:860px){.hero-actions{justify-content:center}}
+.btn-hero{padding:14px 28px;border-radius:var(--radius-m);font-size:1rem;font-weight:800;cursor:pointer;border:none;font-family:inherit;transition:.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-gold{background:var(--gold);color:var(--forest)}
+.btn-gold:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,147,26,.4)}
+.btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.35)}
+.btn-ghost:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.6)}
+
+/* ─── HERO STATS ─────────────────────────────────────────── */
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.08);border-radius:var(--radius-m);overflow:hidden;margin-top:44px}
+.stat-cell{background:rgba(13,74,43,.5);padding:22px 18px;text-align:center}
+.stat-num{font-size:1.8rem;font-weight:900;color:var(--gold-l);line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:.75rem;color:rgba(255,255,255,.6);font-weight:600}
+
+/* ─── HERO VISUAL CARD ───────────────────────────────────── */
+.hero-visual{position:relative}
+.phone-frame{width:100%;max-width:320px;margin:0 auto;background:var(--slate);border-radius:36px;padding:12px;box-shadow:var(--shadow-l),0 0 0 8px rgba(255,255,255,.06);position:relative}
+.phone-notch{width:80px;height:22px;background:var(--slate);border-radius:0 0 14px 14px;margin:0 auto 8px;position:relative;z-index:2}
+.phone-screen{background:var(--cream);border-radius:26px;overflow:hidden;min-height:500px}
+.app-topbar{background:var(--forest);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.app-logo{font-weight:900;color:#fff;font-size:.95rem}
+.app-logo span{color:var(--gold-l)}
+.app-notif{width:28px;height:28px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.app-search{margin:12px;background:#fff;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;border:1.5px solid var(--border)}
+.app-search-icon{font-size:14px;color:var(--muted)}
+.app-search-text{font-size:.78rem;color:var(--muted)}
+.app-cats{display:flex;gap:8px;padding:4px 12px 12px;overflow-x:auto}
+.app-cat{background:var(--forest);color:#fff;font-size:.7rem;font-weight:700;padding:5px 12px;border-radius:20px;white-space:nowrap}
+.app-cat.dim{background:var(--border);color:var(--muted)}
+.app-section-lbl{padding:0 12px 8px;font-size:.72rem;font-weight:700;color:var(--muted)}
+.app-products{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px}
+.app-product{background:#fff;border-radius:var(--radius-s);padding:10px;border:1px solid var(--border)}
+.app-product-emoji{font-size:22px;margin-bottom:4px}
+.app-product-name{font-size:.7rem;font-weight:700;color:var(--slate);margin-bottom:2px}
+.app-product-price{font-size:.75rem;font-weight:800;color:var(--forest)}
+.app-product-badge{font-size:.6rem;background:var(--gold-bg);color:var(--gold);font-weight:700;padding:1px 6px;border-radius:10px;display:inline-block;margin-top:3px}
+
+/* ─── TRUST STRIP ────────────────────────────────────────── */
+.trust-strip{background:var(--forest-m);padding:18px 0}
+.trust-inner{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.85);font-size:.85rem;font-weight:600}
+.trust-icon{font-size:1.2rem}
+
+/* ─── SECTION HEADER ─────────────────────────────────────── */
+.sec-header{text-align:center;margin-bottom:52px}
+.sec-header .label{margin-bottom:10px;display:block}
+.sec-header .h1{margin-bottom:14px}
+.sec-header .lead{max-width:560px;margin:0 auto}
+
+/* ─── FOUR PILLARS ───────────────────────────────────────── */
+.pillars-section{background:var(--white)}
+.pillar-card{border-radius:var(--radius-l);padding:32px 28px;cursor:pointer;transition:.35s cubic-bezier(.34,1.56,.64,1);transform:rotate(-1.5deg);border:2px solid transparent;position:relative;overflow:hidden}
+.pillar-card::before{content:'';position:absolute;inset:0;opacity:0;transition:.3s}
+.pillar-card:hover{transform:rotate(0deg) translateY(-6px);box-shadow:var(--shadow-l)}
+.pillar-card:nth-child(1){background:linear-gradient(135deg,#fdf6e3,#fef9c3);border-color:#f4c842}
+.pillar-card:nth-child(2){background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac;transform:rotate(1.5deg)}
+.pillar-card:nth-child(3){background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#93c5fd;transform:rotate(-1deg)}
+.pillar-card:nth-child(4){background:linear-gradient(135deg,#fff1f2,#ffe4e6);border-color:#fca5a5;transform:rotate(1deg)}
+.pillar-card:hover{transform:rotate(0) translateY(-6px)}
+.pillar-icon{font-size:2.8rem;margin-bottom:16px;display:block}
+.pillar-title{font-size:1.2rem;font-weight:800;color:var(--slate);margin-bottom:12px}
+.pillar-items{list-style:none;display:flex;flex-direction:column;gap:9px}
+.pillar-items li{display:flex;align-items:flex-start;gap:8px;font-size:.88rem;color:var(--muted);line-height:1.4}
+.pillar-items li::before{content:'←';color:var(--forest);font-weight:800;flex-shrink:0;margin-top:1px}
+
+/* ─── HOW IT WORKS ───────────────────────────────────────── */
+.how-section{background:var(--cream)}
+.steps-row{display:flex;gap:0;position:relative}
+.steps-row::before{content:'';position:absolute;top:36px;right:12%;left:12%;height:2px;background:repeating-linear-gradient(90deg,var(--forest) 0,var(--forest) 12px,transparent 12px,transparent 22px);opacity:.2}
+@media(max-width:700px){.steps-row{flex-direction:column;gap:20px}.steps-row::before{display:none}}
+.step{flex:1;text-align:center;padding:0 12px;position:relative}
+.step-circle{width:72px;height:72px;border-radius:50%;background:var(--white);border:3px solid var(--forest);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:1.6rem;box-shadow:var(--shadow-s);position:relative;z-index:2;transition:.3s}
+.step:hover .step-circle{background:var(--forest);transform:scale(1.1)}
+.step-num{position:absolute;top:-4px;left:-4px;width:22px;height:22px;background:var(--gold);border-radius:50%;font-size:.65rem;font-weight:900;color:var(--forest);display:flex;align-items:center;justify-content:center}
+.step h3{font-size:.95rem;font-weight:700;color:var(--slate);margin-bottom:6px}
+.step p{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* ─── ESCROW EXPLAINER ───────────────────────────────────── */
+.escrow-section{background:linear-gradient(160deg,var(--forest) 0%,#1a5c35 100%);color:#fff}
+.escrow-section .h1{color:#fff}
+.escrow-section .lead{color:rgba(255,255,255,.75)}
+.escrow-flow-visual{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-radius:var(--radius-l);overflow:hidden;margin-top:36px;border:1px solid rgba(255,255,255,.12)}
+.flow-step{padding:28px 20px;text-align:center;border-left:1px solid rgba(255,255,255,.1);position:relative;transition:.3s}
+.flow-step:first-child{border-left:none}
+.flow-step:hover{background:rgba(255,255,255,.07)}
+.flow-step.active-flow{background:rgba(200,147,26,.18)}
+.flow-icon{font-size:2rem;margin-bottom:12px}
+.flow-title{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:6px}
+.flow-desc{font-size:.75rem;color:rgba(255,255,255,.6);line-height:1.5}
+.flow-badge{display:inline-block;background:var(--gold);color:var(--forest);font-size:.65rem;font-weight:800;padding:2px 10px;border-radius:20px;margin-top:8px}
+@media(max-width:700px){.escrow-flow-visual{grid-template-columns:1fr 1fr}.flow-step{border-left:none;border-top:1px solid rgba(255,255,255,.1)}.flow-step:nth-child(odd){border-left:none}.flow-step:nth-child(even){border-left:1px solid rgba(255,255,255,.1)}}
+
+/* ─── LIVE DEMO SECTION ──────────────────────────────────── */
+.demo-section{background:var(--white)}
+.demo-container{background:var(--cream);border-radius:var(--radius-l);border:2px solid var(--border);overflow:hidden;box-shadow:var(--shadow-l)}
+.demo-topbar{background:var(--slate);display:flex;align-items:center;gap:8px;padding:12px 20px}
+.demo-dot{width:12px;height:12px;border-radius:50%}
+.demo-url{flex:1;background:rgba(255,255,255,.08);border-radius:6px;padding:5px 14px;font-size:.75rem;font-family:monospace;color:rgba(255,255,255,.6);text-align:center}
+
+/* DEMO STEPS */
+.demo-steps-bar{display:flex;gap:0;background:var(--white);border-bottom:2px solid var(--border)}
+.demo-step-tab{flex:1;padding:14px 8px;text-align:center;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit}
+.demo-step-tab .tab-icon{font-size:1.2rem}
+.demo-step-tab.active-tab{color:var(--forest);border-bottom-color:var(--forest)}
+.demo-step-tab.done-tab{color:var(--forest-l);background:var(--gold-bg)}
+
+/* DEMO PANELS */
+.demo-panel{padding:28px;display:none}
+.demo-panel.active-panel{display:block}
+
+/* FORM STYLES INSIDE DEMO */
+.df{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.df label{font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.df input,.df select{padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-s);font-size:.88rem;font-family:inherit;color:var(--slate);background:var(--white);direction:rtl;outline:none;transition:.2s}
+.df input:focus,.df select:focus{border-color:var(--forest);box-shadow:0 0 0 3px rgba(13,74,43,.08)}
+.df input[readonly]{background:var(--cream);color:var(--muted)}
+.df2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.df2{grid-template-columns:1fr}}
+
+/* BUTTONS */
+.dbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:var(--radius-m);font-size:.88rem;font-weight:800;font-family:inherit;border:none;cursor:pointer;transition:.25s;text-decoration:none}
+.dbtn:disabled{opacity:.45;cursor:not-allowed}
+.dbtn-primary{background:var(--forest);color:#fff}
+.dbtn-primary:hover:not(:disabled){background:var(--forest-l);transform:translateY(-1px)}
+.dbtn-gold{background:var(--gold);color:var(--forest)}
+.dbtn-gold:hover:not(:disabled){background:var(--gold-l)}
+.dbtn-outline{background:transparent;border:2px solid var(--forest);color:var(--forest)}
+.dbtn-danger{background:var(--red);color:#fff}
+.dbtn-block{width:100%;margin-top:10px}
+.dbtn-sm{padding:7px 14px;font-size:.78rem}
+
+/* ALERTS */
+.dalert{padding:10px 14px;border-radius:var(--radius-s);font-size:.82rem;font-weight:600;margin:10px 0;line-height:1.5;display:none}
+.dalert.show{display:flex;align-items:flex-start;gap:8px}
+.dalert-success{background:#f0fdf4;color:#14532d;border:1px solid #86efac}
+.dalert-error{background:#fff1f2;color:#9f1239;border:1px solid #fca5a5}
+.dalert-info{background:#eff6ff;color:#1e3a8a;border:1px solid #93c5fd}
+.dalert-amber{background:var(--gold-bg);color:#78350f;border:1px solid #fcd34d}
+
+/* PRODUCT GRID */
+.dprod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:14px}
+.dprod-card{background:var(--white);border:2px solid var(--border);border-radius:var(--radius-m);padding:14px;cursor:pointer;transition:.25s}
+.dprod-card:hover{border-color:var(--forest);box-shadow:0 0 0 4px rgba(13,74,43,.07)}
+.dprod-card.sel{border-color:var(--forest);background:#f0fdf4}
+.dprod-emoji{font-size:2rem;margin-bottom:8px}
+.dprod-name{font-size:.82rem;font-weight:700;color:var(--slate);margin-bottom:4px}
+.dprod-price{font-size:.9rem;font-weight:800;color:var(--forest)}
+.dprod-sub{font-size:.7rem;color:var(--muted);margin-top:3px}
+
+/* ORDER SUMMARY BOX */
+.order-box{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-m);padding:16px;margin:16px 0}
+.order-line{display:flex;justify-content:space-between;font-size:.84rem;padding:6px 0;border-bottom:1px solid var(--border)}
+.order-line:last-child{border:none;font-weight:800;font-size:.95rem;color:var(--forest);padding-top:10px}
+
+/* ESCROW FLOW DEMO */
+.escrow-visual{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
+.ev-box{flex:1;min-width:90px;background:var(--cream);border:2px solid var(--border);border-radius:var(--radius-s);padding:12px 8px;text-align:center;font-size:.72rem;font-weight:700;color:var(--muted);transition:.4s}
+.ev-box.ev-done{background:#f0fdf4;border-color:#86efac;color:var(--forest-m)}
+.ev-box.ev-active{background:var(--gold-bg);border-color:var(--gold);color:#78350f}
+.ev-box-icon{font-size:1.4rem;margin-bottom:4px}
+.ev-arrow{display:flex;align-items:center;color:var(--border);font-size:1.2rem;padding-top:8px}
+
+/* SUCCESS */
+.success-card{background:linear-gradient(135deg,var(--forest),var(--forest-l));color:#fff;border-radius:var(--radius-l);padding:32px;text-align:center}
+.success-emoji{font-size:3.5rem;margin-bottom:12px}
+.success-card h2{font-size:1.4rem;font-weight:900;margin-bottom:8px}
+.success-card p{font-size:.88rem;opacity:.85;line-height:1.6;margin-bottom:20px}
+.success-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.smeta{background:rgba(255,255,255,.15);border-radius:var(--radius-s);padding:12px}
+.smeta-lbl{font-size:.68rem;opacity:.75;margin-bottom:3px}
+.smeta-val{font-size:.95rem;font-weight:800}
+
+/* TOKEN BOX */
+.token-box{background:var(--slate);color:#7ee787;font-family:monospace;font-size:.7rem;padding:8px 12px;border-radius:var(--radius-s);margin-top:8px;word-break:break-all;direction:ltr;text-align:left}
+
+/* SPINNER */
+.spin{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:rot .6s linear infinite;vertical-align:middle}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* API CONFIG */
+.api-cfg{background:var(--slate);border-radius:var(--radius-m) var(--radius-m) 0 0;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06)}
+.api-cfg label{font-size:.72rem;font-weight:700;color:#9ca3af;white-space:nowrap}
+.api-cfg input{flex:1;min-width:180px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:6px 12px;color:#e5e7eb;font-size:.78rem;font-family:monospace;direction:ltr;text-align:left;outline:none}
+.api-cfg input:focus{border-color:var(--gold)}
+.api-status-badge{font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;background:rgba(239,68,68,.2);color:#fca5a5;white-space:nowrap;transition:.3s}
+.api-status-badge.ok{background:rgba(74,222,128,.15);color:#4ade80}
+.cfg-btn{background:rgba(255,255,255,.1);border:none;color:#e5e7eb;font-size:.75rem;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:inherit;transition:.2s}
+.cfg-btn:hover{background:rgba(255,255,255,.18)}
+
+/* ─── WILAYAS SECTION ────────────────────────────────────── */
+.wilayas-section{background:var(--forest);padding:64px 0}
+.wilayas-section .h1{color:#fff;text-align:center;margin-bottom:8px}
+.wilayas-section .lead{color:rgba(255,255,255,.65);text-align:center;margin-bottom:40px}
+.wilaya-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.wilaya-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:8px 10px;text-align:center;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.8);transition:.2s;cursor:default}
+.wilaya-chip:hover{background:rgba(200,147,26,.2);border-color:rgba(200,147,26,.4);color:var(--gold-l)}
+.wilaya-chip.new-chip{background:rgba(200,147,26,.15);border-color:rgba(200,147,26,.35);color:var(--gold-l)}
+.wilaya-chip.new-chip::after{content:'جديدة';display:block;font-size:.55rem;opacity:.7;margin-top:2px;letter-spacing:.04em}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer{background:var(--slate);color:rgba(255,255,255,.6);padding:48px 0 24px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr 1fr}}
+.footer-brand-name{font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:10px}
+.footer-brand-name span{color:var(--gold-l)}
+.footer-desc{font-size:.82rem;line-height:1.6;margin-bottom:16px}
+.footer-col-title{font-size:.78rem;font-weight:800;color:#fff;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.footer-links a{color:rgba(255,255,255,.55);text-decoration:none;font-size:.82rem;transition:.2s}
+.footer-links a:hover{color:var(--gold-l)}
+.footer-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin-bottom:20px}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.78rem}
+.footer-badge{background:rgba(200,147,26,.15);color:var(--gold-l);border:1px solid rgba(200,147,26,.25);padding:3px 12px;border-radius:20px;font-size:.72rem;font-weight:700}
+
+/* ─── UTILS ──────────────────────────────────────────────── */
+.text-center{text-align:center}
+.mt-4{margin-top:16px}
+.mb-4{margin-bottom:16px}
+.mt-8{margin-top:32px}
+.gap-row{display:flex;gap:12px;flex-wrap:wrap}
+.divider{border:none;border-top:2px solid var(--border);margin:20px 0}
+
+/* ─── SCROLL REVEAL ──────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ─── REDUCED MOTION ─────────────────────────────────────── */
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ NAV ══════════════════════════════ -->
+<nav>
+  <div class="wrap nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">🌾</div>
+      <div class="nav-logo-text">آ<span>م</span>نة</div>
+    </a>
+    <div class="nav-links">
+      <a href="#pillars" class="nav-link">الأسواق</a>
+      <a href="#how" class="nav-link">كيف تعمل</a>
+      <a href="#escrow" class="nav-link">الدفع الآمن</a>
+      <a href="#demo" class="nav-link">جرّب الآن</a>
+      <a href="#demo" class="nav-cta">ابدأ مجاناً</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════ HERO ═════════════════════════════ -->
+<section class="hero">
+  <svg class="hero-geo" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+        <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#grid)"/>
+    <circle cx="900" cy="200" r="300" fill="rgba(200,147,26,.06)"/>
+    <circle cx="200" cy="600" r="200" fill="rgba(255,255,255,.03)"/>
+    <ellipse cx="600" cy="400" rx="500" ry="200" fill="rgba(22,101,52,.3)"/>
+    <!-- Palm tree silhouettes -->
+    <g opacity=".12" fill="rgba(200,147,26,1)">
+      <rect x="950" y="350" width="8" height="220" rx="4"/>
+      <ellipse cx="954" cy="340" rx="45" ry="28"/>
+      <ellipse cx="924" cy="360" rx="35" ry="18" transform="rotate(-25,924,360)"/>
+      <ellipse cx="984" cy="360" rx="35" ry="18" transform="rotate(25,984,360)"/>
+      <rect x="1060" y="420" width="6" height="160" rx="3"/>
+      <ellipse cx="1063" cy="412" rx="32" ry="20"/>
+    </g>
+  </svg>
+
+  <div class="wrap hero-inner">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        السوق الزراعي الرقمي الجزائري الأول
+      </div>
+      <h1 class="display hero-title">
+        من الحقل
+        <em>إلى طاولتك</em>
+      </h1>
+      <p class="hero-sub">
+        منصة آمنة تربط المزارعين بالمستهلكين والتجار مباشرةً —
+        دفع مضمون بنظام Escrow، تتبع QR حقيقي، وخبراء زراعيون معتمدون
+        عبر الـ 69 ولاية الجزائرية.
+      </p>
+      <div class="hero-actions">
+        <a href="#demo" class="btn-hero btn-gold">🚀 جرّب المنصة الآن</a>
+        <a href="#how" class="btn-hero btn-ghost">كيف تعمل؟</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-cell">
+          <div class="stat-num" id="counter-farmers">50,213</div>
+          <div class="stat-lbl">مزارع مسجّل</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">69</div>
+          <div class="stat-lbl">ولاية مغطاة</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num">4.2B</div>
+          <div class="stat-lbl">دج حجم المعاملات</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHONE MOCKUP -->
+    <div class="hero-visual">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-topbar">
+            <div class="app-logo">آ<span>م</span>نة</div>
+            <div class="app-notif">🔔</div>
+          </div>
+          <div class="app-search">
+            <span class="app-search-icon">🔍</span>
+            <span class="app-search-text">ابحث عن منتج أو مزارع...</span>
+          </div>
+          <div class="app-cats">
+            <span class="app-cat">🌴 التمور</span>
+            <span class="app-cat dim">🥕 خضروات</span>
+            <span class="app-cat dim">🫒 زيت زيتون</span>
+            <span class="app-cat dim">🌾 حبوب</span>
+          </div>
+          <div class="app-section-lbl">منتجات موثّقة بالقرب منك</div>
+          <div class="app-products">
+            <div class="app-product">
+              <div class="app-product-emoji">🌴</div>
+              <div class="app-product-name">تمور دقلة نور</div>
+              <div class="app-product-price">450 دج/كغ</div>
+              <div class="app-product-badge">⭐ 4.9 بسكرة</div>
+            </div>
+            <div class="app-product">
+              <div class="app-product-emoji">🫒</div>
+              <div class="app-product-name">زيت زيتون بكر</div>
+              <div class="app-product-price">1,100 دج/ل</div>
+              <div class="app-product-badge">⭐ 4.8 تيزي وزو</div>
+            </div>
+            <div class="app-product">
+              <div class="app-product-emoji">🥕</div>
+              <div class="app-product-name">خضروات موسمية</div>
+              <div class="app-product-price">80 دج/كغ</div>
+              <div class="app-product-badge">🔒 Escrow</div>
+            </div>
+            <div class="app-product">
+              <div class="app-product-emoji">🌾</div>
+              <div class="app-product-name">قمح صلب محلي</div>
+              <div class="app-product-price">65 دج/كغ</div>
+              <div class="app-product-badge">✅ موثّق</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TRUST STRIP ══════════════════════════ -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="trust-icon">🔒</span> دفع Escrow مضمون</div>
+    <div class="trust-item"><span class="trust-icon">📱</span> تتبع QR لحظة بلحظة</div>
+    <div class="trust-item"><span class="trust-icon">🏅</span> خبراء زراعيون معتمدون</div>
+    <div class="trust-item"><span class="trust-icon">🚚</span> نقل مبرد موثّق</div>
+    <div class="trust-item"><span class="trust-icon">🤖</span> مساعد ذكاء اصطناعي</div>
+  </div>
+</div>
+
+<!-- ══════════════════ FOUR PILLARS ═════════════════════════ -->
+<section class="section pillars-section" id="pillars">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <span class="label">الأسواق — الأعمدة الأربعة</span>
+      <h2 class="h1">كل ما يحتاجه القطاع الزراعي في مكان واحد</h2>
+      <p class="lead">هيكل متكامل يغطي دورة القيمة الزراعية من البذرة إلى التصدير عبر 69 ولاية</p>
+    </div>
+    <div class="grid-4">
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🌴</span>
+        <h3 class="pillar-title">المحاصيل الطازجة</h3>
+        <ul class="pillar-items">
+          <li>التمور (دقلة نور، برحي) — جملة / تجزئة / تصدير</li>
+          <li>الخضروات والفواكه الموسمية</li>
+          <li>المحاصيل الاستراتيجية (حبوب، بقوليات)</li>
+          <li>الزيتون وزيت الزيتون البكر</li>
+        </ul>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🧪</span>
+        <h3 class="pillar-title">مستلزمات الإنتاج</h3>
+        <ul class="pillar-items">
+          <li>الفسائل والبذور المعتمدة</li>
+          <li>الأسمدة العضوية والكيماوية</li>
+          <li>مواد الحماية والمبيدات المصادَقة</li>
+          <li>منظمات النمو ومعالجات التربة</li>
+        </ul>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🚜</span>
+        <h3 class="pillar-title">العتاد والآلات</h3>
+        <ul class="pillar-items">
+          <li>الجرارات وآلات الحصاد</li>
+          <li>أنظمة الري الحديثة والمستشعرات</li>
+          <li>معدات التغليف والصناديق</li>
+          <li>الطاقة الشمسية والمضخات</li>
+        </ul>
+      </div>
+      <div class="pillar-card reveal">
+        <span class="pillar-icon">🚚</span>
+        <h3 class="pillar-title">الخدمات واللوجستيات</h3>
+        <ul class="pillar-items">
+          <li>النقل المبرد والتخزين المؤقت</li>
+          <li>استشارات وتحاليل التربة / المياه</li>
+          <li>اليد العاملة المؤهلة (جني، تلقيح)</li>
+          <li>التقارير الجوية الذكية</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ HOW IT WORKS ═════════════════════════ -->
+<section class="section how-section" id="how">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <span class="label">كيف تعمل آمنة</span>
+      <h2 class="h1">دورة شراء كاملة في خمس خطوات</h2>
+      <p class="lead">بسيطة وآمنة — دفعك لا يصل للمزارع إلا بعد تأكيدك الاستلام</p>
+    </div>
+    <div class="steps-row reveal">
+      <div class="step">
+        <div class="step-circle">
+          <span class="step-num">1</span>
+          👤
+        </div>
+        <h3>سجّل حسابك</h3>
+        <p>مستهلك، مزارع، تاجر، أو ناقل — دقيقة واحدة</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          <span class="step-num">2</span>
+          🔍
+        </div>
+        <h3>تصفّح المنتجات</h3>
+        <p>فلترة حسب الولاية، الفئة، السعر مع شهادة جودة</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          <span class="step-num">3</span>
+          🛒
+        </div>
+        <h3>أنشئ طلبك</h3>
+        <p>حدّد الكمية وولاية التسليم — العمولة 2% فقط</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          <span class="step-num">4</span>
+          🔒
+        </div>
+        <h3>ادفع بأمان</h3>
+        <p>مبلغك مجمّد في Escrow، لا يُحوَّل للبائع بعد</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          <span class="step-num">5</span>
+          ✅
+        </div>
+        <h3>أكّد الاستلام</h3>
+        <p>بعد الوصول، اضغط تأكيد — يُحرَّر المبلغ للمزارع</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ESCROW ════════════════════════════════ -->
+<section class="section escrow-section" id="escrow">
+  <div class="wrap">
+    <div class="grid-2">
+      <div class="reveal">
+        <span class="label" style="color:var(--gold-l)">نظام الدفع الآمن</span>
+        <h2 class="h1" style="margin:12px 0">Escrow — ضامن المعاملات</h2>
+        <p class="lead">
+          المشكلة الكبرى في التجارة الإلكترونية الزراعية: من يدفع أولاً؟
+          آمنة تحلّها بنظام Escrow — وسيط أمين يحمل المبلغ حتى يتأكد الطرفان.
+        </p>
+        <div style="margin-top:28px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(200,147,26,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🛡️</div>
+            <div><div style="font-weight:700;color:#fff;margin-bottom:3px">حماية كاملة للمشتري</div><div style="font-size:.85rem;color:rgba(255,255,255,.65)">إن لم يصل الطلب أو كان مختلفاً، يُعاد المبلغ تلقائياً</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(200,147,26,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">🌾</div>
+            <div><div style="font-weight:700;color:#fff;margin-bottom:3px">ضمان للمزارع</div><div style="font-size:.85rem;color:rgba(255,255,255,.65)">المبلغ محجوز ومضمون — لا مخاطرة بعدم الدفع</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <div style="width:40px;height:40px;border-radius:10px;background:rgba(200,147,26,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">⚡</div>
+            <div><div style="font-weight:700;color:#fff;margin-bottom:3px">تحرير تلقائي بعد 48 ساعة</div><div style="font-size:.85rem;color:rgba(255,255,255,.65)">إن لم يُبلَّغ عن مشكلة، يُحرَّر المبلغ للبائع تلقائياً</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="escrow-flow-visual">
+          <div class="flow-step">
+            <div class="flow-icon">💳</div>
+            <div class="flow-title">المشتري يدفع</div>
+            <div class="flow-desc">BaridiMob / CIB / CCP</div>
+          </div>
+          <div class="flow-step active-flow">
+            <div class="flow-icon">🔒</div>
+            <div class="flow-title">مجمَّد في آمنة</div>
+            <div class="flow-desc">وسيط أمين يحمل المبلغ</div>
+            <div class="flow-badge">آمن 100%</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-icon">🚚</div>
+            <div class="flow-title">التسليم</div>
+            <div class="flow-desc">الناقل يوصل الطلب</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-icon">✅</div>
+            <div class="flow-title">المزارع يستلم</div>
+            <div class="flow-desc">بعد تأكيد المشتري</div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:20px">
+          <div style="background:rgba(200,147,26,.15);border:1px solid rgba(200,147,26,.3);border-radius:var(--radius-m);padding:20px">
+            <div style="font-size:2rem;font-weight:900;color:var(--gold-l)">98.7%</div>
+            <div style="font-size:.82rem;color:rgba(255,255,255,.65);margin-top:4px">نسبة معاملات مكتملة بنجاح</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ LIVE DEMO ════════════════════════════ -->
+<section class="section demo-section" id="demo">
+  <div class="wrap">
+    <div class="sec-header reveal">
+      <span class="label">جرّب الآن — مباشرة</span>
+      <h2 class="h1">دورة شراء حقيقية متصلة بالـ API</h2>
+      <p class="lead">هذه ليست محاكاة — كل خطوة ترسل طلباً حقيقياً للخادم وتحفظه في قاعدة البيانات</p>
+    </div>
+
+    <div class="demo-container reveal">
+      <!-- API CONFIG -->
+      <div class="api-cfg">
+        <label>🔗 الخادم:</label>
+        <input type="text" id="apiBase" value="http://127.0.0.1:8000/api/v1" placeholder="https://amena-api.onrender.com/api/v1">
+        <button class="cfg-btn" onclick="pingApi()">🔄 اتصال</button>
+        <div class="api-status-badge" id="apiStatusBadge">⚪ غير متصل</div>
+      </div>
+
+      <!-- BROWSER BAR -->
+      <div class="demo-topbar">
+        <div class="demo-dot" style="background:#ff5f57"></div>
+        <div class="demo-dot" style="background:#febc2e"></div>
+        <div class="demo-dot" style="background:#28c840"></div>
+        <div class="demo-url" id="demoUrl">amena.dz/demo</div>
+      </div>
+
+      <!-- STEP TABS -->
+      <div class="demo-steps-bar">
+        <button class="demo-step-tab active-tab" id="tab-1" onclick="switchTab(1)">
+          <span class="tab-icon">👤</span><span>التسجيل</span>
+        </button>
+        <button class="demo-step-tab" id="tab-2" onclick="switchTab(2)">
+          <span class="tab-icon">🛒</span><span>المنتجات</span>
+        </button>
+        <button class="demo-step-tab" id="tab-3" onclick="switchTab(3)">
+          <span class="tab-icon">📋</span><span>الطلب</span>
+        </button>
+        <button class="demo-step-tab" id="tab-4" onclick="switchTab(4)">
+          <span class="tab-icon">🔒</span><span>Escrow</span>
+        </button>
+        <button class="demo-step-tab" id="tab-5" onclick="switchTab(5)">
+          <span class="tab-icon">🎉</span><span>مكتمل</span>
+        </button>
+      </div>
+
+      <!-- ── PANEL 1: AUTH ── -->
+      <div class="demo-panel active-panel" id="panel-1">
+        <div id="auth-form-wrap">
+          <div class="df2">
+            <div class="df"><label>الاسم الكامل</label><input id="rName" value="فاطمة بن يوسف"></div>
+            <div class="df"><label>رقم الهاتف</label><input id="rPhone" value="+213550100001"></div>
+            <div class="df"><label>كلمة المرور</label><input type="password" id="rPass" value="TestPass2026"></div>
+            <div class="df">
+              <label>نوع الحساب</label>
+              <select id="rRole">
+                <option value="consumer" selected>🛒 مستهلك</option>
+                <option value="farmer">🌾 مزارع</option>
+                <option value="trader">🏪 تاجر</option>
+              </select>
+            </div>
+            <div class="df">
+              <label>الولاية</label>
+              <select id="rWilaya">
+                <option value="16" selected>الجزائر العاصمة</option>
+                <option value="7">بسكرة</option>
+                <option value="5">باتنة</option>
+                <option value="25">قسنطينة</option>
+                <option value="31">وهران</option>
+                <option value="15">تيزي وزو</option>
+                <option value="68">بوسعادة (جديدة)</option>
+              </select>
+            </div>
+          </div>
+          <div class="dalert" id="al-reg"></div>
+          <button class="dbtn dbtn-primary dbtn-block" onclick="doRegister()" id="btn-reg">
+            إنشاء الحساب ←
+          </button>
+          <div style="text-align:center;margin-top:12px;font-size:.78rem;color:var(--muted)">
+            لديك حساب؟ <a href="#" onclick="switchAuthMode('login');return false" style="color:var(--forest);font-weight:700">سجّل الدخول</a>
+          </div>
+        </div>
+        <div id="login-form-wrap" style="display:none">
+          <div class="df"><label>رقم الهاتف</label><input id="lPhone"></div>
+          <div class="df"><label>كلمة المرور</label><input type="password" id="lPass"></div>
+          <div class="dalert" id="al-login"></div>
+          <button class="dbtn dbtn-primary dbtn-block" onclick="doLogin()" id="btn-login">دخول ←</button>
+          <div style="text-align:center;margin-top:12px;font-size:.78rem;color:var(--muted)">
+            <a href="#" onclick="switchAuthMode('register');return false" style="color:var(--forest);font-weight:700">أنشئ حساباً جديداً</a>
+          </div>
+        </div>
+        <div id="logged-in-wrap" style="display:none">
+          <div class="dalert dalert-success show">✅ أهلاً <strong id="dispName"></strong> — تم تسجيل الدخول بنجاح!</div>
+          <div class="df mt-4"><label>رمز الجلسة (JWT)</label><div class="token-box" id="tokenDisp"></div></div>
+          <button class="dbtn dbtn-gold dbtn-block" onclick="switchTab(2)">التالي — تصفح المنتجات 🛒</button>
+        </div>
+      </div>
+
+      <!-- ── PANEL 2: PRODUCTS ── -->
+      <div class="demo-panel" id="panel-2">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+          <select id="fCat" onchange="loadProds()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-s);font-size:.82rem;font-family:inherit">
+            <option value="">📦 كل الفئات</option>
+            <option value="dates">🌴 تمور</option>
+            <option value="vegetables_fruits">🥕 خضروات</option>
+            <option value="olive_oil">🫒 زيت زيتون</option>
+            <option value="strategic_crops">🌾 حبوب</option>
+          </select>
+          <select id="fWilaya" onchange="loadProds()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--radius-s);font-size:.82rem;font-family:inherit">
+            <option value="">📍 كل الولايات</option>
+            <option value="7">بسكرة</option><option value="5">باتنة</option>
+            <option value="16">الجزائر</option><option value="31">وهران</option>
+          </select>
+          <button class="dbtn dbtn-outline dbtn-sm" onclick="loadProds()">🔄</button>
+        </div>
+        <div class="dalert" id="al-prods"></div>
+        <div id="prods-load" class="dalert dalert-info show">⏳ جاري التحميل من الـ API...</div>
+        <div id="prods-empty" class="dalert dalert-amber">📭 لا توجد منتجات — سجّل كمزارع وأضف منتجاً أولاً!</div>
+        <div class="dprod-grid" id="prods-grid"></div>
+        <div class="dalert dalert-success" id="al-sel" style="margin-top:14px"></div>
+        <div id="next-to-order" style="display:none;margin-top:14px">
+          <button class="dbtn dbtn-primary dbtn-block" onclick="switchTab(3)">التالي — تأكيد الطلب 📋</button>
+        </div>
+        <!-- Add product helper for farmers -->
+        <div id="add-prod-wrap" style="display:none;margin-top:20px;border-top:2px solid var(--border);padding-top:20px">
+          <div class="h3" style="margin-bottom:12px">➕ أضف منتجاً تجريبياً (أنت مزارع)</div>
+          <div class="df2">
+            <div class="df"><label>اسم المنتج</label><input id="pName" value="تمور دقلة نور"></div>
+            <div class="df"><label>السعر (دج/كغ)</label><input type="number" id="pPrice" value="450"></div>
+            <div class="df"><label>الكمية (كغ)</label><input type="number" id="pQty" value="500"></div>
+            <div class="df"><label>الفئة</label>
+              <select id="pCat"><option value="dates">🌴 تمور</option><option value="vegetables_fruits">🥕 خضروات</option><option value="olive_oil">🫒 زيت</option></select>
+            </div>
+          </div>
+          <div class="dalert" id="al-addprod"></div>
+          <button class="dbtn dbtn-gold" onclick="addProd()">إضافة المنتج</button>
+        </div>
+      </div>
+
+      <!-- ── PANEL 3: ORDER ── -->
+      <div class="demo-panel" id="panel-3">
+        <div class="df"><label>المنتج المختار</label><input id="oProduct" readonly></div>
+        <div class="df2">
+          <div class="df"><label>الكمية (كغ)</label><input type="number" id="oQty" value="3" min="1" oninput="calcTotal()"></div>
+          <div class="df">
+            <label>ولاية التوصيل</label>
+            <select id="oWilaya">
+              <option value="16" selected>الجزائر العاصمة</option>
+              <option value="7">بسكرة</option><option value="5">باتنة</option>
+              <option value="25">قسنطينة</option><option value="31">وهران</option>
+              <option value="68">بوسعادة (جديدة)</option>
+            </select>
+          </div>
+          <div class="df field-full"><label>عنوان التسليم</label><input id="oAddr" placeholder="حي، شارع، رقم..."></div>
+        </div>
+        <div class="order-box">
+          <div class="order-line"><span id="ol-name">—</span><span id="ol-sub">—</span></div>
+          <div class="order-line"><span>عمولة المنصة (2%)</span><span id="ol-comm">—</span></div>
+          <div class="order-line"><span>رسوم التوصيل</span><span>يُحدَّد لاحقاً</span></div>
+          <div class="order-line"><span>الإجمالي</span><span id="ol-total">—</span></div>
+        </div>
+        <div class="dalert" id="al-order"></div>
+        <button class="dbtn dbtn-primary dbtn-block" onclick="doOrder()" id="btn-order">تأكيد الطلب ←</button>
+      </div>
+
+      <!-- ── PANEL 4: ESCROW ── -->
+      <div class="demo-panel" id="panel-4">
+        <div class="dalert dalert-amber show" style="margin-bottom:16px">
+          🛡️ <strong>كيف يعمل Escrow:</strong> مبلغك مجمَّد بأمان — لا يصل للمزارع إلا بعد تأكيدك الاستلام.
+        </div>
+        <div class="escrow-visual">
+          <div class="ev-box" id="ev1"><div class="ev-box-icon">💳</div>أنت تدفع</div>
+          <div class="ev-arrow">←</div>
+          <div class="ev-box ev-active" id="ev2"><div class="ev-box-icon">🔒</div>محجوز</div>
+          <div class="ev-arrow">←</div>
+          <div class="ev-box" id="ev3"><div class="ev-box-icon">🚚</div>التسليم</div>
+          <div class="ev-arrow">←</div>
+          <div class="ev-box" id="ev4"><div class="ev-box-icon">✅</div>للمزارع</div>
+        </div>
+        <div class="order-box">
+          <div class="order-line"><span>رقم الطلب</span><span style="font-family:monospace;font-weight:800" id="esc-num">—</span></div>
+          <div class="order-line"><span>المبلغ الإجمالي</span><span class="order-total" id="esc-amount">—</span></div>
+          <div class="order-line"><span>حالة Escrow</span><span id="esc-status">—</span></div>
+        </div>
+        <div class="df">
+          <label>طريقة الدفع (محاكاة — بدون ربط بنكي حقيقي)</label>
+          <select id="payMethod">
+            <option value="baridimob">📱 BaridiMob — بريدي موب</option>
+            <option value="cib">💳 CIB — البطاقة الذهبية</option>
+            <option value="ccp">🏦 CCP — بريد الجزائر</option>
+          </select>
+        </div>
+        <div class="dalert" id="al-pay"></div>
+        <button class="dbtn dbtn-gold dbtn-block" onclick="doPay()" id="btn-pay">💳 تأكيد الدفع وتجميد المبلغ</button>
+
+        <div id="after-pay-wrap" style="display:none;margin-top:20px;border-top:2px solid var(--border);padding-top:20px">
+          <div class="dalert dalert-success show" id="al-paid">🔒 تم تجميد المبلغ بنجاح في Escrow!</div>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="dbtn dbtn-primary" onclick="doRelease()" id="btn-release">✅ أكّد الاستلام وحرّر المبلغ</button>
+            <button class="dbtn dbtn-danger dbtn-sm" onclick="doDispute()">⚠️ فتح نزاع</button>
+          </div>
+          <div class="dalert" id="al-release" style="margin-top:10px"></div>
+        </div>
+      </div>
+
+      <!-- ── PANEL 5: SUCCESS ── -->
+      <div class="demo-panel" id="panel-5">
+        <div class="success-card">
+          <div class="success-emoji">🎉</div>
+          <h2>دورة الشراء مكتملة!</h2>
+          <p>هذه المعاملة تمت عبر API حقيقي ومحفوظة في قاعدة البيانات الفعلية</p>
+          <div class="success-meta">
+            <div class="smeta"><div class="smeta-lbl">رقم الطلب</div><div class="smeta-val" id="fin-num">—</div></div>
+            <div class="smeta"><div class="smeta-lbl">المبلغ المكتمل</div><div class="smeta-val" id="fin-amt">—</div></div>
+            <div class="smeta"><div class="smeta-lbl">عمولة آمنة (2%)</div><div class="smeta-val" id="fin-comm">—</div></div>
+            <div class="smeta"><div class="smeta-lbl">حالة Escrow</div><div class="smeta-val">released ✅</div></div>
+          </div>
+        </div>
+        <div class="gap-row mt-8" style="justify-content:center">
+          <button class="dbtn dbtn-outline" onclick="location.reload()">🔄 تجربة جديدة</button>
+          <button class="dbtn dbtn-primary" onclick="window.open(getBase().replace('/api/v1','')+'/docs')">📖 API Docs</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 69 WILAYAS ════════════════════════════ -->
+<section class="wilayas-section">
+  <div class="wrap">
+    <h2 class="h1">تغطية كاملة — 69 ولاية جزائرية</h2>
+    <p class="lead">وفق التقسيم الإقليمي الجديد القانون 06-26 (أفريل 2026)</p>
+    <div class="wilaya-grid" id="wilaya-grid"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">آ<span>م</span>نة</div>
+        <p class="footer-desc">السوق الزراعي الرقمي الجزائري — يربط المزارعين بالمستهلكين والتجار عبر 69 ولاية بدفع Escrow مضمون.</p>
+        <div class="footer-badge">🌱 مشروع جزائري 100%</div>
+      </div>
+      <div>
+        <div class="footer-col-title">البوابات</div>
+        <ul class="footer-links">
+          <li><a href="#">بوابة المستهلك</a></li>
+          <li><a href="#">بوابة المزارع</a></li>
+          <li><a href="#">بوابة التاجر</a></li>
+          <li><a href="#">بوابة الناقل</a></li>
+          <li><a href="#">بوابة الخبير</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">المنصة</div>
+        <ul class="footer-links">
+          <li><a href="#pillars">الأسواق</a></li>
+          <li><a href="#escrow">الدفع الآمن</a></li>
+          <li><a href="#demo">النسخة التجريبية</a></li>
+          <li><a href="#" onclick="window.open(getBase().replace('/api/v1','')+'/docs');return false">API Docs</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">التقنية</div>
+        <ul class="footer-links">
+          <li><a href="#">FastAPI + PostgreSQL</a></li>
+          <li><a href="#">Flutter Mobile</a></li>
+          <li><a href="#">Escrow System</a></li>
+          <li><a href="#">QR Traceability</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-bottom">
+      <span>© 2026 منصة آمنة — جميع الحقوق محفوظة</span>
+      <span>بُني بـ FastAPI · PostgreSQL · Python · ❤️</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════ JAVASCRIPT ═════════════════════════ -->
+<script>
+// ─── STATE ───────────────────────────────────────────────────
+const S = { token:null, user:null, product:null, order:null, escrow:null };
+
+// ─── UTILS ───────────────────────────────────────────────────
+function getBase(){ return document.getElementById('apiBase').value.trim().replace(/\/$/,''); }
+
+async function req(method, path, body, token){
+  const h = {'Content-Type':'application/json'};
+  if(token) h['Authorization'] = `Bearer ${token}`;
+  const r = await fetch(getBase()+path, {method, headers:h, body:body?JSON.stringify(body):null});
+  const d = await r.json().catch(()=>({}));
+  return {ok:r.ok, status:r.status, data:d};
+}
+
+function alert_show(id, msg, type){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = `dalert dalert-${type} show`;
+  el.innerHTML = msg;
+}
+function alert_hide(id){ const el=document.getElementById(id); if(el){el.className='dalert';el.innerHTML='';} }
+
+function setBtn(id, html, disabled){
+  const b = document.getElementById(id);
+  if(b){b.innerHTML=html; b.disabled=disabled;}
+}
+
+// ─── HEALTH ──────────────────────────────────────────────────
+async function pingApi(){
+  const badge = document.getElementById('apiStatusBadge');
+  badge.className = 'api-status-badge';
+  badge.textContent = '⏳ جاري...';
+  try{
+    const r = await fetch(getBase().replace('/api/v1','')+'/health');
+    const d = await r.json();
+    if(d.status==='ok'){
+      badge.className = 'api-status-badge ok';
+      badge.textContent = '🟢 متصل — API يعمل';
+      document.getElementById('demoUrl').textContent = getBase();
+    } else throw new Error();
+  }catch{
+    badge.textContent = '🔴 غير متصل';
+    badge.className = 'api-status-badge';
+  }
+}
+
+// ─── TABS ─────────────────────────────────────────────────────
+function switchTab(n){
+  for(let i=1;i<=5;i++){
+    document.getElementById(`panel-${i}`).className = 'demo-panel'+(i===n?' active-panel':'');
+    const t = document.getElementById(`tab-${i}`);
+    t.className = 'demo-step-tab'+(i===n?' active-tab':i<n?' done-tab':'');
+  }
+}
+
+// ─── AUTH MODE ────────────────────────────────────────────────
+function switchAuthMode(m){
+  document.getElementById('auth-form-wrap').style.display = m==='register'?'block':'none';
+  document.getElementById('login-form-wrap').style.display = m==='login'?'block':'none';
+}
+
+// ─── REGISTER ────────────────────────────────────────────────
+async function doRegister(){
+  alert_hide('al-reg');
+  setBtn('btn-reg','<span class="spin"></span> جاري الإنشاء...',true);
+  const phone = document.getElementById('rPhone').value.trim();
+  const pass  = document.getElementById('rPass').value;
+  const role  = document.getElementById('rRole').value;
+  const r = await req('POST','/auth/register',{
+    full_name: document.getElementById('rName').value,
+    phone, password: pass,
+    primary_role: role,
+    wilaya_id: +document.getElementById('rWilaya').value
+  });
+  if(!r.ok){
+    alert_show('al-reg','❌ '+( r.data.detail||'تعذّر إنشاء الحساب'),'error');
+    setBtn('btn-reg','إنشاء الحساب ←',false); return;
+  }
+  // auto-login
+  const lr = await req('POST','/auth/login',{phone, password:pass});
+  if(!lr.ok){ alert_show('al-reg','❌ تم التسجيل لكن الدخول التلقائي فشل — جرّب تسجيل الدخول يدوياً','error'); setBtn('btn-reg','إنشاء الحساب ←',false); return; }
+  await finishLogin(lr.data, r.data, role);
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────
+async function doLogin(){
+  alert_hide('al-login');
+  setBtn('btn-login','<span class="spin"></span>',true);
+  const phone = document.getElementById('lPhone').value.trim();
+  const pass  = document.getElementById('lPass').value;
+  const r = await req('POST','/auth/login',{phone, password:pass});
+  if(!r.ok){ alert_show('al-login','❌ '+(r.data.detail||'بيانات خاطئة'),'error'); setBtn('btn-login','دخول ←',false); return; }
+  const me = await req('GET','/auth/me',null,r.data.access_token);
+  await finishLogin(r.data, me.data, me.data.primary_role);
+}
+
+async function finishLogin(tokenData, userData, role){
+  S.token = tokenData.access_token;
+  S.user  = userData;
+  document.getElementById('dispName').textContent = userData.full_name;
+  document.getElementById('tokenDisp').textContent = S.token.slice(0,36)+'…';
+  document.getElementById('auth-form-wrap').style.display = 'none';
+  document.getElementById('login-form-wrap').style.display = 'none';
+  document.getElementById('logged-in-wrap').style.display  = 'block';
+  // If farmer, create profile silently
+  if(role==='farmer'){
+    const pr = await req('POST','/profiles/farmer',{farm_name: userData.full_name+' — مزرعة'}, S.token);
+    S.isFarmer = pr.ok || pr.status===409;
+  }
+}
+
+// ─── PRODUCTS ─────────────────────────────────────────────────
+const CAT_EMOJI = {dates:'🌴',vegetables_fruits:'🥕',olive_oil:'🫒',strategic_crops:'🌾',seeds_seedlings:'🌱',tractors_harvesters:'🚜',cold_transport:'❄️'};
+const UNIT = {kg:'كغ',ton:'طن',liter:'لتر',unit:'وحدة',box:'صندوق',service:'خدمة'};
+
+async function loadProds(){
+  document.getElementById('prods-load').style.display='block';
+  document.getElementById('prods-empty').className='dalert';
+  document.getElementById('prods-grid').innerHTML='';
+  document.getElementById('next-to-order').style.display='none';
+  document.getElementById('al-sel').className='dalert';
+  const cat = document.getElementById('fCat').value;
+  const wil = document.getElementById('fWilaya').value;
+  let url = '/products?page_size=12';
+  if(cat) url+='&category='+cat;
+  if(wil) url+='&wilaya_id='+wil;
+  const r = await req('GET',url,null,S.token);
+  document.getElementById('prods-load').style.display='none';
+  if(!r.ok||r.data.total===0){
+    document.getElementById('prods-empty').className='dalert dalert-amber show';
+    if(S.user?.primary_role==='farmer') document.getElementById('add-prod-wrap').style.display='block';
+    return;
+  }
+  const g = document.getElementById('prods-grid');
+  r.data.items.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='dprod-card';
+    d.innerHTML=`<div class="dprod-emoji">${CAT_EMOJI[p.category]||'📦'}</div><div class="dprod-name">${p.name}</div><div class="dprod-price">${(+p.price).toLocaleString('ar-DZ')} دج/${UNIT[p.unit]||p.unit}</div><div class="dprod-sub">متاح: ${(+p.quantity_available).toLocaleString()} ${UNIT[p.unit]||''}</div>`;
+    d.onclick=()=>selectProd(p,d);
+    g.appendChild(d);
+  });
+}
+
+function selectProd(p,card){
+  document.querySelectorAll('.dprod-card').forEach(c=>c.classList.remove('sel'));
+  card.classList.add('sel');
+  S.product = p;
+  alert_show('al-sel','✅ اخترت: <strong>'+p.name+'</strong> — '+( +p.price).toLocaleString('ar-DZ')+' دج/'+( UNIT[p.unit]||p.unit),'success');
+  document.getElementById('next-to-order').style.display='block';
+  // pre-fill order panel
+  document.getElementById('oProduct').value=`${CAT_EMOJI[p.category]||'📦'} ${p.name} — ${(+p.price).toLocaleString('ar-DZ')} دج/${UNIT[p.unit]||p.unit}`;
+  calcTotal();
+}
+
+// ─── ADD PRODUCT (farmer helper) ─────────────────────────────
+async function addProd(){
+  alert_hide('al-addprod');
+  const r = await req('POST','/products',{
+    category: document.getElementById('pCat').value,
+    name: document.getElementById('pName').value,
+    price: +document.getElementById('pPrice').value,
+    unit:'kg',
+    quantity_available: +document.getElementById('pQty').value,
+    wilaya_id: S.user?.wilaya_id||7
+  }, S.token);
+  if(!r.ok){ alert_show('al-addprod','❌ '+(r.data.detail||'فشل'),'error'); return; }
+  alert_show('al-addprod','✅ تمت الإضافة — جاري التحديث...','success');
+  setTimeout(loadProds,1200);
+}
+
+// ─── ORDER ────────────────────────────────────────────────────
+function calcTotal(){
+  if(!S.product) return;
+  const qty = +document.getElementById('oQty').value||1;
+  const sub = qty * +S.product.price;
+  const com = (sub*0.02).toFixed(2);
+  document.getElementById('ol-name').textContent = S.product.name+' × '+qty;
+  document.getElementById('ol-sub').textContent  = sub.toLocaleString('ar-DZ')+' دج';
+  document.getElementById('ol-comm').textContent = (+com).toLocaleString('ar-DZ')+' دج';
+  document.getElementById('ol-total').textContent= sub.toLocaleString('ar-DZ')+' دج';
+}
+
+async function doOrder(){
+  if(!S.product){ alert_show('al-order','❌ اختر منتجاً أولاً','error'); return; }
+  alert_hide('al-order');
+  setBtn('btn-order','<span class="spin"></span> جاري الإرسال...',true);
+  const r = await req('POST','/orders',{
+    items:[{product_id:S.product.id, quantity:+document.getElementById('oQty').value}],
+    delivery_wilaya_id:+document.getElementById('oWilaya').value,
+    delivery_address: document.getElementById('oAddr').value||'عنوان تجريبي'
+  }, S.token);
+  setBtn('btn-order','تأكيد الطلب ←',false);
+  if(!r.ok){ alert_show('al-order','❌ '+(r.data.detail||'فشل إنشاء الطلب'),'error'); return; }
+  S.order = r.data;
+  document.getElementById('esc-num').textContent    = r.data.order_number;
+  document.getElementById('esc-amount').textContent = (+r.data.total_amount).toLocaleString('ar-DZ')+' دج';
+  document.getElementById('esc-status').textContent = '⏳ في انتظار الدفع';
+  switchTab(4);
+}
+
+// ─── PAY ESCROW ───────────────────────────────────────────────
+async function doPay(){
+  alert_hide('al-pay');
+  setBtn('btn-pay','<span class="spin"></span> معالجة الدفع...',true);
+  const r = await req('POST',`/escrow/orders/${S.order.id}/pay`,
+    {payment_method: document.getElementById('payMethod').value}, S.token);
+  if(!r.ok){ alert_show('al-pay','❌ '+(r.data.detail||'فشل الدفع'),'error'); setBtn('btn-pay','💳 تأكيد الدفع',false); return; }
+  S.escrow = r.data;
+  document.getElementById('btn-pay').style.display='none';
+  document.getElementById('esc-status').textContent='🔒 مجمَّد في Escrow';
+  document.getElementById('ev1').className='ev-box ev-done';
+  document.getElementById('ev2').className='ev-box ev-done';
+  alert_show('al-pay','✅ تم تجميد '+(+r.data.amount).toLocaleString('ar-DZ')+' دج بنجاح!','success');
+  document.getElementById('after-pay-wrap').style.display='block';
+}
+
+// ─── RELEASE ESCROW ───────────────────────────────────────────
+async function doRelease(){
+  setBtn('btn-release','<span class="spin"></span>',true);
+  const r = await req('POST',`/escrow/orders/${S.order.id}/release`,{confirm:true},S.token);
+  if(!r.ok){ alert_show('al-release','❌ '+(r.data.detail||'فشل'),'error'); setBtn('btn-release','✅ تأكيد الاستلام',false); return; }
+  document.getElementById('ev3').className='ev-box ev-done';
+  document.getElementById('ev4').className='ev-box ev-done';
+  document.getElementById('fin-num').textContent  = S.order.order_number;
+  document.getElementById('fin-amt').textContent  = (+S.order.total_amount).toLocaleString('ar-DZ')+' دج';
+  document.getElementById('fin-comm').textContent = (+S.order.platform_commission).toFixed(2)+' دج';
+  switchTab(5);
+}
+
+// ─── DISPUTE ─────────────────────────────────────────────────
+async function doDispute(){
+  const reason = prompt('سبب النزاع (10 أحرف على الأقل):');
+  if(!reason||reason.length<10) return;
+  const r = await req('POST',`/escrow/orders/${S.order.id}/dispute`,{reason},S.token);
+  if(r.ok) alert_show('al-release','⚠️ تم فتح النزاع — الإدارة ستتواصل معك خلال 48 ساعة.','info');
+}
+
+// ─── WILAYAS GRID ─────────────────────────────────────────────
+const WILAYAS = [
+  [1,'أدرار'],[2,'الشلف'],[3,'الأغواط'],[4,'أم البواقي'],[5,'باتنة'],[6,'بجاية'],
+  [7,'بسكرة'],[8,'بشار'],[9,'البليدة'],[10,'البويرة'],[11,'تمنراست'],[12,'تبسة'],
+  [13,'تلمسان'],[14,'تيارت'],[15,'تيزي وزو'],[16,'الجزائر'],[17,'الجلفة'],
+  [18,'جيجل'],[19,'سطيف'],[20,'سعيدة'],[21,'سكيكدة'],[22,'سيدي بلعباس'],
+  [23,'عنابة'],[24,'قالمة'],[25,'قسنطينة'],[26,'المدية'],[27,'مستغانم'],
+  [28,'المسيلة'],[29,'معسكر'],[30,'ورقلة'],[31,'وهران'],[32,'البيض'],
+  [33,'إليزي'],[34,'برج بوعريريج'],[35,'بومرداس'],[36,'الطارف'],[37,'تندوف'],
+  [38,'تيسمسيلت'],[39,'الوادي'],[40,'خنشلة'],[41,'سوق أهراس'],[42,'تيبازة'],
+  [43,'ميلة'],[44,'عين الدفلى'],[45,'النعامة'],[46,'عين تموشنت'],[47,'غرداية'],
+  [48,'غليزان'],[49,'تيميمون'],[50,'برج باجي مختار'],[51,'أولاد جلال'],
+  [52,'بني عباس'],[53,'عين صالح'],[54,'عين قزام'],[55,'تقرت'],[56,'جانت'],
+  [57,'المغير'],[58,'المنيعة'],[59,'أفلو',true],[60,'بريكة',true],
+  [61,'القنطرة',true],[62,'بئر العاتر',true],[63,'العريشة',true],
+  [64,'قصر الشلالة',true],[65,'عين وسارة',true],[66,'مسعد',true],
+  [67,'قصر البخاري',true],[68,'بوسعادة',true],[69,'الأبيض سيدي الشيخ',true]
+];
+
+function buildWilayasGrid(){
+  const g = document.getElementById('wilaya-grid');
+  WILAYAS.forEach(([id,name,isNew])=>{
+    const d=document.createElement('div');
+    d.className='wilaya-chip'+(isNew?' new-chip':'');
+    d.textContent=`${id}. ${name}`;
+    g.appendChild(d);
+  });
+}
+
+// ─── SCROLL REVEAL ────────────────────────────────────────────
+function initReveal(){
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible');});
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  buildWilayasGrid();
+  initReveal();
+  pingApi();
+  setInterval(pingApi,30000);
+  // randomize phone to avoid registration conflicts on repeated demos
+  document.getElementById('rPhone').value = '+21355010'+Math.floor(1000+Math.random()*9000);
+});
+</script>
+</body>
+</html>
