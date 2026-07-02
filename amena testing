@@ -1,0 +1,3765 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2D5016">
+<meta name="description" content="منصة آمنة AMENA - السوق الزراعي الرقمي الجزائري">
+<title>آمنة AMENA | السوق الزراعي الذكي المتكامل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ============================================================
+   AMENA PLATFORM — DESIGN SYSTEM
+   Algerian Digital Agricultural Market | v2.0 Production
+   ============================================================ */
+
+:root {
+  /* === Core Palette === */
+  --forest:    #1E3D14;
+  --forest-mid:#2D5016;
+  --emerald:   #3A6B1F;
+  --sage:      #4E8A30;
+  --leaf:      #68A84A;
+  --mint:      #A8D48A;
+
+  --sand:      #F5EDD6;
+  --parchment: #FDFAF2;
+  --warm-white:#FFFEF8;
+
+  --gold:      #C8922A;
+  --gold-light:#E0A840;
+  --gold-pale: #F0CC7A;
+  --gold-dark: #9A6E18;
+
+  --terracotta:#B85C38;
+  --clay:      #D4724C;
+  --sky-blue:  #2563EB;
+
+  --ink:       #141C0A;
+  --charcoal:  #2C3320;
+  --stone:     #5A6348;
+  --pebble:    #8A9478;
+  --fog:       #C2C9B8;
+  --mist:      #E8EDE0;
+
+  /* === Dark Mode === */
+  --bg:        var(--parchment);
+  --surface:   var(--warm-white);
+  --surface2:  #EFF4E8;
+  --text-main: var(--ink);
+  --text-sub:  var(--stone);
+  --text-muted:var(--pebble);
+  --border-col:var(--mist);
+
+  /* === Shadows === */
+  --sh-xs:  0 1px 4px rgba(30,61,20,0.06);
+  --sh-sm:  0 2px 10px rgba(30,61,20,0.09);
+  --sh-md:  0 6px 24px rgba(30,61,20,0.12);
+  --sh-lg:  0 16px 48px rgba(30,61,20,0.16);
+  --sh-xl:  0 32px 80px rgba(30,61,20,0.20);
+  --sh-gold:0 4px 24px rgba(200,146,42,0.30);
+
+  /* === Spacing & Radius === */
+  --r-sm:  8px;
+  --r-md:  14px;
+  --r-lg:  20px;
+  --r-xl:  28px;
+  --r-full:9999px;
+
+  /* === Transitions === */
+  --ease: cubic-bezier(0.4,0,0.2,1);
+  --t-fast: 0.15s var(--ease);
+  --t-mid:  0.3s  var(--ease);
+  --t-slow: 0.5s  var(--ease);
+}
+
+/* Dark Mode */
+body.dark {
+  --bg:         #0F1A08;
+  --surface:    #182410;
+  --surface2:   #1E2E13;
+  --text-main:  #EAF0DC;
+  --text-sub:   #9AAD82;
+  --text-muted: #607050;
+  --border-col: #2A3A1C;
+  --mist:       #2A3A1C;
+  --sand:       #1E2E13;
+  --parchment:  #0F1A08;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  line-height: 1.65;
+  overflow-x: hidden;
+  transition: background var(--t-mid), color var(--t-mid);
+  min-height: 100vh;
+}
+
+/* Fix: Prevent horizontal overflow */
+img, video, svg { max-width: 100%; display: block; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 7px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--emerald); }
+
+/* Focus Accessibility */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Selection */
+::selection { background: rgba(200,146,42,0.25); color: var(--ink); }
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4, h5 {
+  font-family: 'Tajawal', 'Cairo', sans-serif;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text-main);
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.container { max-width: 1360px; margin: 0 auto; padding: 0 28px; }
+.section { padding: 88px 0; }
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(200,146,42,0.12);
+  color: var(--gold-dark);
+  border: 1px solid rgba(200,146,42,0.25);
+  padding: 5px 14px;
+  border-radius: var(--r-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.section-title .accent { color: var(--sage); }
+
+.section-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.section-line::before,
+.section-line::after {
+  content: '';
+  height: 2px;
+  width: 60px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+  border-radius: 2px;
+}
+
+.section-line::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
+.section-line-icon { font-size: 1.2rem; }
+
+.section-sub {
+  text-align: center;
+  color: var(--text-sub);
+  font-size: 1.05rem;
+  margin-bottom: 56px;
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* Grid helpers */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--emerald), var(--forest-mid));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(58,107,31,0.35);
+}
+.btn-primary:hover { box-shadow: 0 8px 24px rgba(58,107,31,0.45); }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #fff;
+  box-shadow: var(--sh-gold);
+}
+.btn-gold:hover { box-shadow: 0 8px 28px rgba(200,146,42,0.50); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--emerald);
+  border: 2px solid var(--emerald);
+}
+.btn-outline:hover { background: var(--emerald); color: #fff; }
+
+.btn-outline-gold {
+  background: transparent;
+  color: var(--gold-dark);
+  border: 2px solid var(--gold);
+}
+.btn-outline-gold:hover { background: var(--gold); color: #fff; }
+
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text-main);
+  border: 1px solid var(--border-col);
+}
+.btn-ghost:hover { background: var(--mist); }
+
+.btn-icon {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border-col);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  transition: all var(--t-fast);
+}
+.btn-icon:hover { background: var(--gold); color: #fff; border-color: var(--gold); transform: translateY(-2px); }
+
+.btn-lg { padding: 14px 30px; font-size: 1rem; }
+.btn-sm { padding: 7px 16px; font-size: 0.82rem; }
+
+/* Notification Badge */
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--terracotta);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--surface);
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: rgba(253, 250, 242, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-col);
+  transition: box-shadow var(--t-mid), background var(--t-mid);
+}
+
+body.dark #site-header {
+  background: rgba(15,26,8,0.92);
+}
+
+#site-header.scrolled {
+  box-shadow: var(--sh-md);
+  border-bottom-color: rgba(200,146,42,0.3);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 28px;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  cursor: pointer;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--forest), var(--sage));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  box-shadow: 0 4px 14px rgba(30,61,20,0.35);
+  flex-shrink: 0;
+}
+
+.logo-text { display: flex; flex-direction: column; line-height: 1; }
+.logo-ar { font-family: 'Tajawal', sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--forest-mid); }
+.logo-en { font-size: 0.72rem; font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+
+/* Nav */
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.site-nav a {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  cursor: pointer;
+  padding: 7px 12px;
+  border-radius: var(--r-sm);
+  transition: all var(--t-fast);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.site-nav a:hover { background: var(--surface2); color: var(--emerald); }
+.site-nav a.active { color: var(--emerald); background: rgba(58,107,31,0.1); }
+
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Dark Mode Toggle */
+.dark-toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background: var(--surface2);
+  border: 2px solid var(--border-col);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background var(--t-fast), border-color var(--t-fast);
+  flex-shrink: 0;
+}
+
+.dark-toggle::after {
+  content: '☀️';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: right var(--t-mid);
+  box-shadow: var(--sh-xs);
+  line-height: 22px;
+  text-align: center;
+}
+
+body.dark .dark-toggle::after {
+  content: '🌙';
+  right: calc(100% - 23px);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 0 80px;
+  background: linear-gradient(160deg, var(--parchment) 0%, var(--warm-white) 45%, rgba(200,146,42,0.04) 100%);
+}
+
+/* Decorative background */
+.hero-bg-orbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-bg-orbs::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(58,107,31,0.08) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: orbFloat 10s ease-in-out infinite;
+}
+
+.hero-bg-orbs::after {
+  content: '';
+  position: absolute;
+  bottom: -180px;
+  left: -80px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(200,146,42,0.07) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: orbFloat 13s ease-in-out infinite reverse;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(25px, -20px) scale(1.05); }
+  66%       { transform: translate(-15px, 30px) scale(0.97); }
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero-live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-full);
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin-bottom: 32px;
+  box-shadow: var(--sh-sm);
+}
+
+.live-dot {
+  width: 9px;
+  height: 9px;
+  background: #22C55E;
+  border-radius: 50%;
+  animation: livePulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(34,197,94,0.6); }
+  50%       { opacity: 0.8; transform: scale(1.15); box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+}
+
+.live-sep { width: 1px; height: 16px; background: var(--border-col); }
+.live-users { font-weight: 700; color: var(--emerald); }
+
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  background: linear-gradient(145deg, var(--forest) 0%, var(--emerald) 40%, var(--gold-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-slogan {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  margin-bottom: 10px;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 48px;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+/* Hero Stats */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-md);
+  overflow: hidden;
+  max-width: 680px;
+  margin-inline: auto;
+  margin-bottom: 48px;
+}
+
+.hero-stat {
+  flex: 1;
+  min-width: 140px;
+  padding: 22px 16px;
+  text-align: center;
+  border-left: 1px solid var(--border-col);
+  transition: background var(--t-fast);
+}
+
+.hero-stat:last-child { border-left: none; }
+.hero-stat:first-child { border-left: none; }
+
+.hero-stat:hover { background: var(--surface2); }
+
+.stat-num {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--emerald);
+  display: block;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-lbl {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Hero Buttons */
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   MARKETS SECTION
+   ============================================================ */
+.market-card {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 32px 28px;
+  transition: transform var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid);
+  position: relative;
+  overflow: hidden;
+}
+
+.market-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sage), var(--gold));
+  opacity: 0;
+  transition: opacity var(--t-mid);
+}
+
+.market-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--sh-lg);
+  border-color: rgba(200,146,42,0.25);
+}
+
+.market-card:hover::before { opacity: 1; }
+
+.market-icon {
+  font-size: 2.4rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.market-card h3 {
+  font-size: 1.15rem;
+  color: var(--forest-mid);
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--border-col);
+}
+
+.market-list { list-style: none; }
+
+.market-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-col);
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  transition: color var(--t-fast);
+}
+
+.market-list li:last-child { border-bottom: none; }
+.market-list li:hover { color: var(--emerald); }
+
+.market-list li span { font-size: 1rem; flex-shrink: 0; }
+
+.tag-pill {
+  display: inline-block;
+  background: rgba(78,138,48,0.12);
+  color: var(--sage);
+  border: 1px solid rgba(78,138,48,0.2);
+  padding: 2px 9px;
+  border-radius: var(--r-full);
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-right: auto;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   PORTALS
+   ============================================================ */
+.portals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 18px;
+}
+
+.portal-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 32px 20px 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform var(--t-mid), box-shadow var(--t-mid), border-color var(--t-mid);
+  position: relative;
+  overflow: hidden;
+}
+
+.portal-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--forest-mid), var(--gold));
+  transform: scaleX(0);
+  transition: transform var(--t-mid);
+  transform-origin: right;
+}
+
+.portal-card:hover { transform: translateY(-7px); box-shadow: var(--sh-lg); border-color: rgba(58,107,31,0.25); }
+.portal-card:hover::after { transform: scaleX(1); }
+
+.portal-icon {
+  font-size: 2.8rem;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.portal-card h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.portal-card p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   MAP
+   ============================================================ */
+.map-wrapper {
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+  border: 2px solid rgba(200,146,42,0.25);
+}
+
+#liveMap {
+  height: 480px;
+  width: 100%;
+}
+
+/* Fix Leaflet z-index issues */
+.leaflet-pane { z-index: 1 !important; }
+.leaflet-top, .leaflet-bottom { z-index: 10 !important; }
+.leaflet-popup-pane { z-index: 20 !important; }
+
+.map-footer {
+  background: var(--surface2);
+  border-top: 1px solid var(--border-col);
+  padding: 20px 28px;
+}
+
+.map-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.map-stat {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  text-align: center;
+  border-right: 3px solid var(--sage);
+}
+
+.map-stat .n { font-size: 1.65rem; font-weight: 900; color: var(--emerald); line-height: 1; }
+.map-stat .l { font-size: 0.78rem; color: var(--text-muted); margin-top: 5px; }
+
+/* ============================================================
+   LIVE STREAMING
+   ============================================================ */
+.stream-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Video Area */
+.stream-video-card {
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--sh-lg);
+  border: 1px solid var(--border-col);
+}
+
+.video-area {
+  position: relative;
+  background: linear-gradient(135deg, var(--forest), #0A1A04);
+  height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Animated background for placeholder */
+.video-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.015) 0px,
+    rgba(255,255,255,0.015) 1px,
+    transparent 1px,
+    transparent 40px
+  );
+}
+
+.video-emoji-placeholder {
+  font-size: 8rem;
+  opacity: 0.35;
+  position: relative;
+  z-index: 1;
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-12px) scale(1.05); }
+}
+
+.video-overlay-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 18px 20px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 5;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #DC2626;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  animation: liveGlow 2s ease-in-out infinite;
+}
+
+@keyframes liveGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+}
+
+.live-badge-dot {
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border-radius: 50%;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.viewer-chip {
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.stream-info { padding: 24px 28px; }
+
+.stream-title { font-size: 1.25rem; color: var(--text-main); margin-bottom: 6px; }
+.stream-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
+
+.stream-quick-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stream-qs {
+  background: var(--surface2);
+  border-radius: var(--r-md);
+  padding: 14px 10px;
+  text-align: center;
+  border: 1px solid var(--border-col);
+}
+
+.stream-qs .sn { font-size: 1.3rem; font-weight: 900; color: var(--emerald); }
+.stream-qs .sl { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+.bid-box {
+  background: var(--surface2);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-md);
+  padding: 20px;
+}
+
+.bid-box h4 { font-size: 0.95rem; color: var(--text-main); margin-bottom: 14px; }
+
+.bid-row {
+  display: flex;
+  gap: 10px;
+}
+
+.bid-input {
+  flex: 1;
+  padding: 11px 16px;
+  background: var(--surface);
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--t-fast);
+  /* Fix: Remove browser default arrow for number input */
+  -moz-appearance: textfield;
+}
+
+.bid-input::-webkit-inner-spin-button,
+.bid-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+.bid-input:focus { border-color: var(--sage); }
+
+/* Chat */
+.stream-chat {
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--sh-md);
+  border: 1px solid var(--border-col);
+  display: flex;
+  flex-direction: column;
+  max-height: 680px;
+}
+
+.chat-header {
+  background: linear-gradient(135deg, var(--forest-mid), var(--emerald));
+  color: #fff;
+  padding: 18px 20px;
+  flex-shrink: 0;
+}
+
+.chat-header h3 { font-size: 1rem; color: #fff; margin-bottom: 3px; }
+.chat-online { font-size: 0.78rem; opacity: 0.85; display: flex; align-items: center; gap: 6px; }
+.chat-online-dot { width: 7px; height: 7px; background: #4ADE80; border-radius: 50%; animation: livePulse 1.5s infinite; }
+
+.chat-msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 280px;
+  max-height: 420px;
+}
+
+.chat-msg {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  animation: msgIn 0.3s var(--ease);
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chat-av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sage), var(--gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.chat-bubble-wrap { flex: 1; }
+.chat-name { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+.chat-bubble {
+  display: inline-block;
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  padding: 9px 13px;
+  border-radius: 0 12px 12px 12px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.45;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.chat-msg.seller .chat-av { background: linear-gradient(135deg, var(--forest), var(--gold-dark)); }
+.chat-msg.seller .chat-bubble { background: rgba(58,107,31,0.08); border-color: rgba(58,107,31,0.2); }
+.chat-msg.seller .chat-name { color: var(--sage); }
+
+.chat-input-area {
+  border-top: 1px solid var(--border-col);
+  padding: 14px 16px;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.chat-input:focus { border-color: var(--sage); background: var(--surface); }
+
+/* ============================================================
+   LOYALTY
+   ============================================================ */
+.loyalty-hero-card {
+  background: linear-gradient(135deg, var(--forest) 0%, var(--emerald) 60%, #4A7A28 100%);
+  border-radius: var(--r-xl);
+  padding: 48px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 48px;
+}
+
+/* Fix: decorative content as pseudo-element only (no content leaking) */
+.loyalty-hero-card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.loyalty-hero-card::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  right: -40px;
+  width: 400px;
+  height: 400px;
+  background: rgba(200,146,42,0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.loyalty-hero-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.loyalty-greeting { font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 8px; }
+.loyalty-tier { font-size: 0.9rem; opacity: 0.85; margin-bottom: 20px; }
+.loyalty-pts { font-size: 4.5rem; font-weight: 900; color: var(--gold-pale); line-height: 1; }
+.loyalty-pts small { font-size: 1rem; display: block; color: rgba(255,255,255,0.75); font-weight: 400; margin-top: 6px; }
+
+.loyalty-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.loyalty-q-stat {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 16px;
+  border-radius: var(--r-md);
+  text-align: center;
+}
+
+.loyalty-q-stat .icon { font-size: 1.6rem; margin-bottom: 6px; }
+.loyalty-q-stat .val { font-size: 1.4rem; font-weight: 900; color: var(--gold-pale); display: block; }
+.loyalty-q-stat .lbl { font-size: 0.75rem; opacity: 0.8; }
+
+/* Tier Cards */
+.tier-card {
+  background: var(--surface);
+  border: 2px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  text-align: center;
+  transition: all var(--t-mid);
+}
+
+.tier-card:hover { transform: translateY(-5px); box-shadow: var(--sh-md); }
+
+.tier-card.current {
+  border-color: var(--gold);
+  box-shadow: var(--sh-gold);
+  background: linear-gradient(135deg, rgba(200,146,42,0.06), transparent);
+}
+
+.tier-icon-wrap { font-size: 2.8rem; margin-bottom: 10px; }
+.tier-name { font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; }
+.tier-range { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; }
+.tier-perk {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--emerald);
+  background: rgba(78,138,48,0.1);
+  padding: 5px 12px;
+  border-radius: var(--r-full);
+  display: inline-block;
+}
+
+/* Spin Wheel */
+.wheel-section {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+  padding: 40px;
+  text-align: center;
+  box-shadow: var(--sh-md);
+  margin-top: 40px;
+}
+
+.wheel-wrap {
+  position: relative;
+  display: inline-block;
+  margin: 32px auto;
+}
+
+.wheel-pointer-el {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  z-index: 10;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  line-height: 1;
+}
+
+.spin-wheel {
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #4E8A30 0deg 60deg,
+    #C8922A 60deg 120deg,
+    #2D5016 120deg 180deg,
+    #E0A840 180deg 240deg,
+    #3A6B1F 240deg 300deg,
+    #B85C38 300deg 360deg
+  );
+  transition: transform 4.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  box-shadow: var(--sh-xl), inset 0 0 40px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 72px;
+  height: 72px;
+  background: var(--surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: var(--sh-md);
+  z-index: 5;
+}
+
+.wheel-result {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--emerald);
+  min-height: 36px;
+  margin-bottom: 20px;
+}
+
+/* ============================================================
+   ACHIEVEMENTS
+   ============================================================ */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.badge-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 24px 20px;
+  text-align: center;
+  transition: all var(--t-mid);
+  position: relative;
+}
+
+.badge-card:hover { transform: translateY(-6px); box-shadow: var(--sh-md); }
+
+.badge-card.earned {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, rgba(200,146,42,0.06), transparent);
+}
+
+.earned-check {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+  background: var(--sage);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.badge-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+.badge-name { font-size: 0.95rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; }
+.badge-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4; }
+
+.progress-bar {
+  height: 6px;
+  background: var(--surface2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sage), var(--gold));
+  border-radius: 3px;
+  transition: width 1s var(--ease);
+}
+
+.badge-pct {
+  font-size: 0.75rem;
+  color: var(--gold-dark);
+  font-weight: 700;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+/* ============================================================
+   ANALYTICS
+   ============================================================ */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  border-right: 3px solid var(--gold);
+  transition: all var(--t-mid);
+}
+
+.kpi-card:hover { transform: translateY(-4px); box-shadow: var(--sh-md); }
+
+.kpi-val {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--emerald);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.kpi-lbl { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; }
+.kpi-change { font-size: 0.8rem; font-weight: 700; color: #22C55E; }
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  transition: all var(--t-mid);
+}
+
+.chart-card:hover { box-shadow: var(--sh-md); }
+.chart-card h3 { font-size: 1rem; color: var(--text-main); margin-bottom: 20px; }
+
+.chart-wrap {
+  position: relative;
+  height: 240px;
+}
+
+/* ============================================================
+   REFERRAL
+   ============================================================ */
+.referral-hero-card {
+  background: linear-gradient(135deg, var(--forest), var(--emerald));
+  border-radius: var(--r-xl);
+  padding: 48px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.referral-hero-card::before {
+  content: '🎁';
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  font-size: 180px;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.referral-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.ref-code-box {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  border: 2px dashed rgba(255,255,255,0.3);
+  border-radius: var(--r-lg);
+  padding: 24px;
+}
+
+.ref-code-label { font-size: 0.85rem; opacity: 0.8; margin-bottom: 10px; }
+.ref-code {
+  font-family: 'Courier New', monospace;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--gold-pale);
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.referral-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.ref-stat {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--r-md);
+  padding: 18px;
+  text-align: center;
+}
+
+.ref-stat .n { font-size: 1.8rem; font-weight: 900; color: var(--gold-pale); display: block; line-height: 1; margin-bottom: 5px; }
+.ref-stat .l { font-size: 0.78rem; opacity: 0.85; }
+
+/* ============================================================
+   PAYMENT
+   ============================================================ */
+.payment-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.order-summary {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  box-shadow: var(--sh-md);
+}
+
+.order-summary h3 { font-size: 1.1rem; margin-bottom: 5px; }
+.order-id { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 22px; }
+
+.order-items { border-top: 1px solid var(--border-col); padding-top: 16px; }
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-col);
+  font-size: 0.9rem;
+}
+
+.order-item:last-child { border-bottom: none; }
+.order-item span { color: var(--text-sub); }
+.order-item strong { font-weight: 700; color: var(--text-main); }
+
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 0;
+  border-top: 2px solid var(--border-col);
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--emerald);
+}
+
+.escrow-banner {
+  background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(37,99,235,0.04));
+  border: 1px solid rgba(37,99,235,0.2);
+  border-radius: var(--r-md);
+  padding: 16px;
+  margin: 18px 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.escrow-banner .esc-icon { font-size: 1.5rem; flex-shrink: 0; }
+.escrow-banner h4 { color: var(--sky-blue); font-size: 0.88rem; margin-bottom: 4px; }
+.escrow-banner p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+.savings-strip {
+  background: linear-gradient(135deg, rgba(200,146,42,0.08), rgba(200,146,42,0.04));
+  border: 1px solid rgba(200,146,42,0.2);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.savings-strip .s-label strong { color: var(--gold-dark); }
+.savings-strip .s-label small { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.savings-strip .s-amount { font-size: 1.3rem; font-weight: 900; color: var(--gold); }
+
+.payment-methods-card {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  box-shadow: var(--sh-md);
+}
+
+.payment-methods-card h3 { font-size: 1.1rem; margin-bottom: 22px; color: var(--text-main); }
+
+.methods-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.method-card {
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-md);
+  padding: 18px;
+  cursor: pointer;
+  transition: all var(--t-mid);
+  position: relative;
+  background: var(--surface);
+}
+
+.method-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+
+.method-card.selected {
+  border-color: var(--sage);
+  background: linear-gradient(135deg, rgba(78,138,48,0.07), transparent);
+}
+
+.method-check {
+  display: none;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 22px;
+  height: 22px;
+  background: var(--sage);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.method-card.selected .method-check { display: flex; }
+
+.method-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.method-card h4 { font-size: 0.88rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+.method-card p { font-size: 0.75rem; color: var(--text-muted); }
+
+.pay-btn {
+  width: 100%;
+  padding: 17px;
+  background: linear-gradient(135deg, var(--forest-mid), var(--emerald));
+  color: #fff;
+  border: none;
+  border-radius: var(--r-lg);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all var(--t-mid);
+  margin-top: 10px;
+  box-shadow: 0 6px 20px rgba(30,61,20,0.3);
+}
+
+.pay-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(30,61,20,0.4);
+}
+
+.pay-btn:active { transform: translateY(0); }
+
+.security-badges {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.sec-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   AI ASSISTANT
+   ============================================================ */
+.ai-float {
+  position: fixed;
+  bottom: 110px;
+  right: 28px;
+  width: 62px;
+  height: 62px;
+  background: linear-gradient(135deg, var(--forest-mid), var(--emerald));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 800;
+  box-shadow: 0 8px 28px rgba(30,61,20,0.4);
+  transition: all var(--t-mid);
+  animation: aiFloat 4s ease-in-out infinite;
+  font-size: 1.6rem;
+  border: 2px solid rgba(255,255,255,0.15);
+}
+
+@keyframes aiFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-7px) scale(1.03); }
+}
+
+.ai-float:hover { transform: scale(1.12) !important; box-shadow: 0 12px 36px rgba(30,61,20,0.5); }
+
+/* AI Chat Window */
+.ai-chat-window {
+  position: fixed;
+  bottom: 190px;
+  right: 28px;
+  width: 380px;
+  max-height: 580px;
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-xl);
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-col);
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--t-mid);
+}
+
+.ai-chat-window.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.ai-chat-header {
+  background: linear-gradient(135deg, var(--forest-mid), var(--emerald));
+  color: #fff;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ai-chat-header-left { display: flex; align-items: center; gap: 12px; }
+
+.ai-avatar {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.ai-chat-header h4 { font-size: 0.95rem; color: #fff; margin-bottom: 2px; }
+.ai-chat-status { font-size: 0.75rem; opacity: 0.85; display: flex; align-items: center; gap: 5px; }
+.ai-status-dot { width: 6px; height: 6px; background: #4ADE80; border-radius: 50%; }
+
+.ai-close-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t-fast);
+}
+
+.ai-close-btn:hover { background: rgba(255,255,255,0.35); }
+
+.ai-suggestions {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-col);
+  background: var(--surface2);
+  flex-shrink: 0;
+}
+
+.ai-sug-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+
+.ai-sug-item {
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-sm);
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-bottom: 6px;
+  color: var(--text-sub);
+  transition: all var(--t-fast);
+  line-height: 1.4;
+}
+
+.ai-sug-item:hover { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+.ai-sug-item:last-child { margin-bottom: 0; }
+
+.ai-messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ai-msg { display: flex; gap: 9px; align-items: flex-start; }
+.ai-msg.user { flex-direction: row-reverse; }
+
+.ai-msg-av {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--forest-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.ai-msg.user .ai-msg-av { background: var(--gold); }
+
+.ai-bubble {
+  max-width: 78%;
+  padding: 11px 14px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border-radius: 0 14px 14px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  color: var(--text-main);
+}
+
+.ai-msg.user .ai-bubble {
+  background: var(--emerald);
+  color: #fff;
+  border-color: transparent;
+  border-radius: 14px 0 14px 14px;
+}
+
+.ai-input-area {
+  border-top: 1px solid var(--border-col);
+  padding: 12px 16px;
+  background: var(--surface);
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ai-text-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-full);
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+
+.ai-text-input:focus { border-color: var(--sage); }
+
+/* ============================================================
+   WHATSAPP FLOAT
+   ============================================================ */
+.wa-float {
+  position: fixed;
+  bottom: 32px;
+  left: 28px;
+  width: 58px;
+  height: 58px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 800;
+  box-shadow: 0 6px 20px rgba(37,211,102,0.45);
+  transition: all var(--t-mid);
+  animation: waPulse 2.5s ease-in-out infinite;
+  text-decoration: none;
+}
+
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,0.6); }
+  50%       { box-shadow: 0 0 0 18px rgba(37,211,102,0); }
+}
+
+.wa-float:hover { transform: scale(1.1); background: #22C55E; }
+.wa-float svg { width: 28px; height: 28px; fill: #fff; }
+
+/* ============================================================
+   NOTIFICATION TOAST
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  top: 90px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: 340px;
+}
+
+.toast {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-right: 4px solid var(--sage);
+  border-radius: var(--r-md);
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  box-shadow: var(--sh-lg);
+  pointer-events: all;
+  animation: toastIn 0.35s var(--ease);
+  line-height: 1.4;
+}
+
+@keyframes toastIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.toast.out { animation: toastOut 0.3s var(--ease) forwards; }
+@keyframes toastOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(120%); opacity: 0; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  background: linear-gradient(160deg, var(--forest) 0%, #0D1A08 100%);
+  color: #fff;
+  padding: 64px 0 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--gold), var(--terracotta), var(--gold), var(--sage));
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+.footer-col h4 { font-size: 1rem; color: var(--gold-pale); margin-bottom: 18px; }
+
+.footer-col p {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+}
+
+.footer-col a {
+  display: block;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color var(--t-fast);
+  cursor: pointer;
+}
+
+.footer-col a:hover { color: var(--gold-pale); }
+
+.footer-slogan {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 24px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .stream-layout { grid-template-columns: 1fr; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .payment-layout { grid-template-columns: 1fr; }
+  .loyalty-hero-inner, .referral-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .site-nav { display: none; }
+  .hero-title { font-size: 2.2rem; }
+  .hero-stats { max-width: 100%; }
+  .hero-stat { min-width: 120px; }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+  .methods-grid { grid-template-columns: 1fr; }
+  .loyalty-quick-grid { grid-template-columns: repeat(2, 1fr); }
+  .ai-chat-window { width: calc(100vw - 32px); right: 16px; bottom: 100px; }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-actions .btn:not(.btn-primary) { display: none; }
+  .stream-quick-stats { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .section { padding: 60px 0; }
+  .hero { padding: 70px 0 60px; }
+  .hero-stats { border-radius: var(--r-md); }
+  .hero-stat { min-width: 90px; padding: 16px 10px; }
+  .stat-num { font-size: 1.5rem; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .portals-grid { grid-template-columns: repeat(2, 1fr); }
+  .loyalty-hero-card, .referral-hero-card { padding: 28px 20px; }
+  .wheel-section { padding: 24px 16px; }
+  .spin-wheel { width: 260px; height: 260px; }
+  .badges-grid { grid-template-columns: repeat(2, 1fr); }
+  .methods-grid { grid-template-columns: 1fr; }
+  .map-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   SECTION BG ALTERNATION
+   ============================================================ */
+.section-alt { background: var(--surface2); }
+
+/* Leaflet Custom Markers */
+.custom-marker-icon {
+  background: none;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+}
+
+/* ============================================================
+   NEEDS BOARD
+   ============================================================ */
+.needs-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.need-form-card {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  box-shadow: var(--sh-md);
+}
+
+.need-form-card h3 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+  margin-bottom: 20px;
+}
+
+.need-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.need-type-btn {
+  padding: 10px 8px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  text-align: center;
+}
+
+.need-type-btn:hover,
+.need-type-btn.active {
+  background: var(--emerald);
+  color: #fff;
+  border-color: var(--emerald);
+}
+
+.need-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  margin-top: 14px;
+}
+
+.need-input {
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-md);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+
+.need-input:focus { border-color: var(--sage); }
+
+.need-fields-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Match Results */
+.match-results-card {
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+  padding: 32px;
+  box-shadow: var(--sh-md);
+}
+
+.match-results-card h3 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.match-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+}
+
+.match-list { display: flex; flex-direction: column; gap: 14px; }
+
+.match-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-md);
+  transition: all var(--t-fast);
+  cursor: pointer;
+}
+
+.match-item:hover {
+  border-color: var(--gold);
+  transform: translateX(-4px);
+  box-shadow: var(--sh-sm);
+}
+
+.match-avatar {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  background: var(--surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border-col);
+}
+
+.match-info { flex: 1; }
+.match-title { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+.match-meta { font-size: 0.78rem; color: var(--text-muted); }
+
+.match-score {
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--sage);
+  background: rgba(78,138,48,0.1);
+  border: 1px solid rgba(78,138,48,0.2);
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   TRUST LAYER
+   ============================================================ */
+.trust-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border-col);
+  border-radius: var(--r-lg);
+  padding: 28px 22px;
+  text-align: center;
+  transition: all var(--t-mid);
+  position: relative;
+  overflow: hidden;
+}
+
+.trust-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--emerald), var(--gold));
+  opacity: 0;
+  transition: opacity var(--t-mid);
+}
+
+.trust-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--sh-lg);
+  border-color: rgba(200,146,42,0.3);
+}
+
+.trust-card:hover::before { opacity: 1; }
+
+.trust-icon { font-size: 2.6rem; margin-bottom: 14px; display: block; }
+.trust-card h4 { font-size: 1rem; font-weight: 800; color: var(--forest-mid); margin-bottom: 10px; }
+.trust-card p { font-size: 0.83rem; color: var(--text-sub); line-height: 1.6; }
+
+.trust-badges-strip {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(30,61,20,0.05), rgba(200,146,42,0.05));
+  border: 1px solid var(--border-col);
+  border-radius: var(--r-xl);
+}
+
+.tbadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-col);
+  padding: 12px 20px;
+  border-radius: var(--r-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-main);
+  box-shadow: var(--sh-xs);
+  transition: all var(--t-fast);
+}
+
+.tbadge:hover {
+  border-color: var(--gold);
+  box-shadow: var(--sh-gold);
+  transform: translateY(-2px);
+}
+
+.tbadge-icon { font-size: 1.3rem; }
+.tbadge small { display: block; font-size: 0.72rem; font-weight: 400; color: var(--text-muted); margin-top: 1px; }
+
+/* RESPONSIVE additions */
+@media (max-width: 768px) {
+  .needs-layout { grid-template-columns: 1fr; }
+  .need-type-grid { grid-template-columns: repeat(2, 1fr); }
+  .need-fields-row { grid-template-columns: 1fr; }
+  .trust-badges-strip { gap: 10px; }
+  .tbadge { padding: 10px 14px; font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header id="site-header">
+  <div class="header-inner">
+    <a class="logo" onclick="goTo('home')" role="button" aria-label="آمنة - الصفحة الرئيسية">
+      <div class="logo-mark">🌾</div>
+      <div class="logo-text">
+        <span class="logo-ar">آمنة</span>
+        <span class="logo-en">AMENA</span>
+      </div>
+    </a>
+
+    <nav class="site-nav" role="navigation" aria-label="التنقل الرئيسي">
+      <a onclick="goTo('home')">الرئيسية</a>
+      <a onclick="goTo('markets')">الأسواق</a>
+      <a onclick="goTo('map-sec')">الخريطة</a>
+      <a onclick="goTo('live-sec')">البث</a>
+      <a onclick="goTo('loyalty-sec')">الولاء</a>
+      <a onclick="goTo('analytics-sec')">التحليلات</a>
+      <a onclick="goTo('payment-sec')">الدفع</a>
+    </nav>
+
+    <div class="header-actions">
+      <div class="dark-toggle" onclick="toggleDark()" title="تبديل الوضع الليلي" role="switch" tabindex="0" aria-label="تبديل الوضع الليلي"></div>
+      <button class="btn-icon" onclick="toggleAI()" title="المساعد الذكي" aria-label="فتح المساعد الذكي">🤖</button>
+      <button class="btn-icon" style="position:relative" aria-label="الإشعارات">
+        🔔
+        <span class="notif-badge" aria-label="3 إشعارات">3</span>
+      </button>
+      <button class="btn btn-ghost btn-sm">دخول</button>
+      <button class="btn btn-primary btn-sm">حساب جديد</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="home" class="hero">
+  <div class="hero-bg-orbs" aria-hidden="true"></div>
+  <div class="container hero-inner">
+
+    <div class="hero-live-pill" role="status" aria-live="polite">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>المنصة حية الآن</span>
+      <span class="live-sep" aria-hidden="true"></span>
+      <span class="live-users" id="liveCount">1,247</span>
+      <span>مستخدم متصل</span>
+    </div>
+
+    <h1 class="hero-title">منصة السوق الزراعي الذكي</h1>
+    <p class="hero-slogan">🌾 آمنة... من الحقل إلى السوق بثقة</p>
+    <p class="hero-sub">Algerian Digital Agricultural Market — منتج موجود · خدمات وسوق بلا حدود</p>
+
+    <div class="hero-stats" role="list">
+      <div class="hero-stat" role="listitem">
+        <span class="stat-num" data-target="328000">0</span>
+        <span class="stat-lbl">مستخدم نشط</span>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <span class="stat-num" data-target="50000">0</span>
+        <span class="stat-lbl">فلاح موثق</span>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <span class="stat-num" data-target-text="4.2B">4.2B</span>
+        <span class="stat-lbl">دج معاملات</span>
+      </div>
+      <div class="hero-stat" role="listitem">
+        <span class="stat-num" data-target-text="+200%">+200%</span>
+        <span class="stat-lbl">عائد استثمار</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <button class="btn btn-primary btn-lg" onclick="goTo('markets')">🌾 استكشف الأسواق</button>
+      <button class="btn btn-gold btn-lg" onclick="goTo('live-sec')">📺 البث المباشر</button>
+      <button class="btn btn-outline btn-lg" onclick="goTo('loyalty-sec')">🎁 نظام الولاء</button>
+      <button class="btn btn-outline-gold btn-lg" onclick="goTo('payment-sec')">💳 الدفع الآمن</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MARKETS
+     ============================================================ -->
+<section id="markets" class="section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🏪 مركز الأسواق</span>
+    </div>
+    <h2 class="section-title">8 أسواق متخصصة <span class="accent">في فضاء واحد</span></h2>
+    <div class="section-line"><span class="section-line-icon">🌿</span></div>
+    <p class="section-sub">سوق زراعي واقعي بكل تفاصيله — جملة، تجزئة، تصدير، مزادات، خدمات ومدخلات — في الفضاء الرقمي الجزائري</p>
+
+    <div class="grid-auto">
+      <div class="market-card">
+        <span class="market-icon">📦</span>
+        <h3>سوق الجملة</h3>
+        <ul class="market-list">
+          <li><span>🌴</span> صفقات كبيرة منتج ↔ تاجر <span class="tag-pill">Wholesale</span></li>
+          <li><span>📑</span> عقود توريد دورية</li>
+          <li><span>💳</span> حدود ائتمان وتسهيلات دفع</li>
+          <li><span>📊</span> أسعار الجملة اللحظية</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">🛍️</span>
+        <h3>سوق التجزئة</h3>
+        <ul class="market-list">
+          <li><span>👤</span> بيع مباشر للمستهلك النهائي <span class="tag-pill">Retail</span></li>
+          <li><span>🥕</span> خضر وفواكه وتمور بالكيلو</li>
+          <li><span>⭐</span> تقييمات وثقة المستهلك</li>
+          <li><span>🚚</span> توصيل سريع للمنازل</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">🍂</span>
+        <h3>سوق موسمي</h3>
+        <ul class="market-list">
+          <li><span>🌾</span> منتجات الحصاد <span class="tag-pill">Seasonal</span></li>
+          <li><span>📅</span> تقويم المواسم الزراعية</li>
+          <li><span>🔔</span> تنبيهات بداية/نهاية الموسم</li>
+          <li><span>📈</span> توقعات أسعار الموسم</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">✈️</span>
+        <h3>سوق التصدير</h3>
+        <ul class="market-list">
+          <li><span>🌍</span> عملاء دوليون <span class="tag-pill">Export</span></li>
+          <li><span>📜</span> شهادات الجودة والمعايير الدولية</li>
+          <li><span>🫒</span> دقلة نور وزيت الزيتون البكر</li>
+          <li><span>📦</span> تغليف وفق المواصفات العالمية</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">🔴</span>
+        <h3>سوق المزادات الحية</h3>
+        <ul class="market-list">
+          <li><span>📺</span> بث مباشر من الحقل <span class="tag-pill">Live Auction</span></li>
+          <li><span>🔨</span> مزايدة فورية شفافة</li>
+          <li><span>👁️</span> متابعة لحظية للمزايدين</li>
+          <li><span>🔒</span> إغلاق آلي عبر Escrow</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">🏢</span>
+        <h3>سوق B2B</h3>
+        <ul class="market-list">
+          <li><span>🤝</span> تعاملات شركات وتجار كبار <span class="tag-pill">B2B</span></li>
+          <li><span>📑</span> عقود إطارية وتوريد مستمر</li>
+          <li><span>🏭</span> ربط مع مصانع التحويل الغذائي</li>
+          <li><span>📊</span> تقارير وتحليلات مخصصة</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">🧪</span>
+        <h3>سوق المدخلات</h3>
+        <ul class="market-list">
+          <li><span>🌱</span> الفسائل والبذور المعتمدة <span class="tag-pill">Inputs</span></li>
+          <li><span>🧪</span> الأسمدة العضوية والكيماوية</li>
+          <li><span>🚜</span> الجرارات والآلات ومعدات الري</li>
+          <li><span>☀️</span> الطاقة الشمسية والمضخات</li>
+        </ul>
+      </div>
+
+      <div class="market-card">
+        <span class="market-icon">🛠️</span>
+        <h3>سوق الخدمات</h3>
+        <ul class="market-list">
+          <li><span>🚚</span> نقل مبرد وتخزين <span class="tag-pill">Services</span></li>
+          <li><span>👨‍🔬</span> استشارات وتشخيص خبراء</li>
+          <li><span>👷</span> يد عاملة فنية (جني، تلقيح، تركيب)</li>
+          <li><span>🛡️</span> تأمين زراعي وتمويل</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     NEEDS BOARD — تحديد الاحتياجات والمطابقة
+     ============================================================ -->
+<section id="needs-sec" class="section section-alt">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🧭 لوحة الاحتياجات</span>
+    </div>
+    <h2 class="section-title">حدّد حاجتك <span class="accent">والمنصة تجد لك المطابقة</span></h2>
+    <div class="section-line"><span class="section-line-icon">🔄</span></div>
+    <p class="section-sub">كل فاعل في السوق — منتج، تاجر، ناقل، خبير، يد عاملة — يحدد ما يحتاجه، والمحرك الذكي يربطه بأقرب عرض مناسب</p>
+
+    <div class="needs-layout">
+      <div class="need-form-card">
+        <h3>📝 أحتاج إلى...</h3>
+        <div class="need-type-grid">
+          <button class="need-type-btn active" onclick="selectNeedType(this,'product')" type="button">🌾 منتج</button>
+          <button class="need-type-btn" onclick="selectNeedType(this,'transport')" type="button">🚚 نقل</button>
+          <button class="need-type-btn" onclick="selectNeedType(this,'expert')" type="button">👨‍🔬 استشارة</button>
+          <button class="need-type-btn" onclick="selectNeedType(this,'labor')" type="button">👷 يد عاملة</button>
+          <button class="need-type-btn" onclick="selectNeedType(this,'input')" type="button">🧪 مدخلات</button>
+          <button class="need-type-btn" onclick="selectNeedType(this,'finance')" type="button">🏦 تمويل/تأمين</button>
+        </div>
+        <div class="need-fields">
+          <label class="need-label">الوصف</label>
+          <input type="text" class="need-input" id="needDesc" placeholder="مثال: أحتاج 500 كغ بطاطا جودة أولى — ولاية الوادي">
+          <div class="need-fields-row">
+            <div>
+              <label class="need-label">الولاية</label>
+              <select class="need-input" id="needWilaya">
+                <option>الوادي</option><option>بسكرة</option><option>سطيف</option>
+                <option>البليدة</option><option>غرداية</option><option>وهران</option>
+              </select>
+            </div>
+            <div>
+              <label class="need-label">الميزانية التقريبية (دج)</label>
+              <input type="number" class="need-input" id="needBudget" placeholder="50000" min="0" step="500">
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-gold btn-lg" style="width:100%;margin-top:16px;" onclick="postNeed()">🚀 نشر الطلب والبحث عن مطابقة</button>
+      </div>
+
+      <div class="match-results-card">
+        <h3>🔗 نتائج المطابقة الذكية</h3>
+        <p class="match-sub">عروض حية من المنصة تطابق احتياجك حالياً</p>
+        <div class="match-list" id="matchList">
+          <div class="match-item">
+            <div class="match-avatar">🌾</div>
+            <div class="match-info">
+              <div class="match-title">عرض بطاطا جودة أولى — 480 كغ متاح</div>
+              <div class="match-meta">👨‍🌾 مزرعة بن دحمان · عين الدفلى · ⭐ 4.7</div>
+            </div>
+            <div class="match-score">96%</div>
+          </div>
+          <div class="match-item">
+            <div class="match-avatar">🚚</div>
+            <div class="match-info">
+              <div class="match-title">ناقل مبرد متاح اليوم — الوادي → سطيف</div>
+              <div class="match-meta">🚛 شركة النقل السريع · ⭐ 4.9 · تسليم 24 ساعة</div>
+            </div>
+            <div class="match-score">91%</div>
+          </div>
+          <div class="match-item">
+            <div class="match-avatar">👨‍🔬</div>
+            <div class="match-info">
+              <div class="match-title">خبير تربة متاح للاستشارة عن بعد</div>
+              <div class="match-meta">🔬 د. كمال شريف · معتمد ITGC · 320 دج/دقيقة</div>
+            </div>
+            <div class="match-score">88%</div>
+          </div>
+        </div>
+        <button class="btn btn-outline" style="width:100%;margin-top:14px;" onclick="toast('📨 تم إرسال طلب تواصل لجميع المطابقات المختارة')">📨 تواصل مع كل المطابقات</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PORTALS
+     ============================================================ -->
+<section id="portals-sec" class="section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">👥 البوابات</span>
+    </div>
+    <h2 class="section-title">8 بوابات لكل فاعل <span class="accent">في السلسلة الزراعية</span></h2>
+    <div class="section-line"><span class="section-line-icon">⚙️</span></div>
+    <p class="section-sub">من الفلاح إلى المستهلك، عبر الناقل والخبير واليد العاملة والشركاء — كل واحد له فضاؤه الخاص</p>
+
+    <div class="portals-grid">
+      <button class="portal-card" onclick="toast('فتح بوابة الفلاح — إدارة المحاصيل والمبيعات والبث المباشر')" aria-label="بوابة الفلاح">
+        <span class="portal-icon">🌾</span>
+        <h4>بوابة الفلاح</h4>
+        <p>إدارة المحاصيل والمبيعات والبث المباشر</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح بوابة التاجر — طلبات الجملة والعقود وحد الائتمان')" aria-label="بوابة التاجر">
+        <span class="portal-icon">🏪</span>
+        <h4>بوابة التاجر</h4>
+        <p>طلبات الجملة والعقود وحد الائتمان</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح بوابة الناقل — تتبع GPS والرحلات والفواتير')" aria-label="بوابة الناقل">
+        <span class="portal-icon">🚚</span>
+        <h4>بوابة الناقل</h4>
+        <p>تتبع GPS والرحلات والفواتير</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح بوابة الخبير — استشارات وتشخيص AI واعتماد')" aria-label="بوابة الخبير">
+        <span class="portal-icon">👨‍🔬</span>
+        <h4>بوابة الخبير</h4>
+        <p>استشارات وتشخيص AI واعتماد</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح بوابة اليد العاملة — عرض المهارات وطلبات العمل القريبة')" aria-label="بوابة اليد العاملة الفنية">
+        <span class="portal-icon">👷</span>
+        <h4>بوابة اليد العاملة</h4>
+        <p>عرض المهارات وطلبات العمل القريبة</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح بوابة المستهلك — تسوق آمن ونقاط ولاء وتتبع')" aria-label="بوابة المستهلك">
+        <span class="portal-icon">👤</span>
+        <h4>بوابة المستهلك</h4>
+        <p>تسوق آمن ونقاط ولاء وتتبع</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح بوابة الشركاء — تأمين زراعي، تمويل، تخزين وتغليف')" aria-label="بوابة الشركاء">
+        <span class="portal-icon">🤝</span>
+        <h4>بوابة الشركاء</h4>
+        <p>تأمين زراعي، تمويل، تخزين وتغليف</p>
+      </button>
+      <button class="portal-card" onclick="toast('فتح لوحة الإدارة — مراقبة المنصة وحل النزاعات')" aria-label="لوحة الإدارة">
+        <span class="portal-icon">⚙️</span>
+        <h4>لوحة الإدارة</h4>
+        <p>مراقبة المنصة وحل النزاعات</p>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MAP
+     ============================================================ -->
+<section id="map-sec" class="section section-alt">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🗺️ الخريطة الحية</span>
+    </div>
+    <h2 class="section-title">خريطة السوق الزراعي في الوقت الحقيقي</h2>
+    <div class="section-line"><span class="section-line-icon">📍</span></div>
+    <p class="section-sub">تتبع الشحنات والمزارع والناقلين عبر كل ولايات الجزائر</p>
+
+    <div class="map-wrapper">
+      <div id="liveMap" aria-label="خريطة تفاعلية للسوق الزراعي"></div>
+      <div class="map-footer">
+        <div class="map-stats-row">
+          <div class="map-stat"><div class="n">156</div><div class="l">شحنة نشطة</div></div>
+          <div class="map-stat"><div class="n">1,247</div><div class="l">فلاح متصل</div></div>
+          <div class="map-stat"><div class="n">4°C</div><div class="l">متوسط حرارة التبريد</div></div>
+          <div class="map-stat"><div class="n">96%</div><div class="l">التسليم في الوقت</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRUST LAYER — KYC, Escrow, شارات، نزاعات
+     ============================================================ -->
+<section id="trust-sec" class="section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🔐 طبقة الثقة</span>
+    </div>
+    <h2 class="section-title">الثقة <span class="accent">في كل خطوة</span></h2>
+    <div class="section-line"><span class="section-line-icon">🛡️</span></div>
+    <p class="section-sub">نظام متكامل يجعل كل صفقة آمنة وشفافة بين جميع الأطراف</p>
+
+    <div class="grid-4">
+      <div class="trust-card">
+        <span class="trust-icon">🪪</span>
+        <h4>توثيق الهوية KYC</h4>
+        <p>سجل فلاحي، سجل تجاري، رخصة نقل، شهادات مهنية — كل مستخدم موثّق قبل البيع أو الشراء</p>
+      </div>
+      <div class="trust-card">
+        <span class="trust-icon">🔒</span>
+        <h4>دفع مضمون Escrow</h4>
+        <p>يُجمَّد المبلغ حتى تأكيد الاستلام بالجودة المطلوبة، مع فترة سماح 48-72 ساعة لفتح نزاع</p>
+      </div>
+      <div class="trust-card">
+        <span class="trust-icon">🏅</span>
+        <h4>شارات الموثوقية</h4>
+        <p>"بائع موثوق"، "مصدّر معتمد"، "ناقل سريع"، "خبير معتمد" — تُمنح تلقائياً وفق الأداء</p>
+      </div>
+      <div class="trust-card">
+        <span class="trust-icon">⚖️</span>
+        <h4>نظام النزاعات</h4>
+        <p>فتح نزاع برفع أدلة (صور/فيديو)، وساطة من الإدارة، واسترجاع كامل أو جزئي أو تعويض</p>
+      </div>
+    </div>
+
+    <div class="trust-badges-strip">
+      <div class="tbadge"><span class="tbadge-icon">✅</span><span>بائع موثوق <small>تقييم 4.5+</small></span></div>
+      <div class="tbadge"><span class="tbadge-icon">✈️</span><span>مصدّر معتمد <small>معايير دولية</small></span></div>
+      <div class="tbadge"><span class="tbadge-icon">🚚</span><span>ناقل سريع <small>تسليم 95%+ في الوقت</small></span></div>
+      <div class="tbadge"><span class="tbadge-icon">👨‍🔬</span><span>خبير معتمد <small>ITGC / وزارة الفلاحة</small></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LIVE STREAMING
+     ============================================================ -->
+<section id="live-sec" class="section section-alt">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">📺 البث المباشر</span>
+    </div>
+    <h2 class="section-title">البث المباشر والمزايدات الفورية</h2>
+    <div class="section-line"><span class="section-line-icon">🔴</span></div>
+    <p class="section-sub">شاهد المحاصيل مباشرة من الحقل وشارك في المزادات بكل شفافية</p>
+
+    <div class="stream-layout">
+      <!-- Main Stream -->
+      <div class="stream-video-card">
+        <div class="video-area">
+          <div class="video-emoji-placeholder" aria-hidden="true">🌴</div>
+          <div class="video-overlay-top">
+            <div class="live-badge">
+              <span class="live-badge-dot" aria-hidden="true"></span>
+              مباشر الآن
+            </div>
+            <div class="viewer-chip">👁️ <span id="viewCount">1,247</span> مشاهد</div>
+          </div>
+        </div>
+
+        <div class="stream-info">
+          <h3 class="stream-title">مزرعة نور الهدى — حصاد دقلة نور 2026</h3>
+          <p class="stream-meta">👨‍🌾 نور الهدى قاسم &nbsp;·&nbsp; وادي سوف &nbsp;·&nbsp; ⭐ 4.9 (238 تقييم)</p>
+
+          <div class="stream-quick-stats">
+            <div class="stream-qs">
+              <div class="sn">2,000 كغ</div>
+              <div class="sl">الكمية المتاحة</div>
+            </div>
+            <div class="stream-qs">
+              <div class="sn" style="color:var(--gold)">15</div>
+              <div class="sl">مزايد نشط</div>
+            </div>
+            <div class="stream-qs">
+              <div class="sn" style="color:var(--terracotta)" id="countdown">25:43</div>
+              <div class="sl">الوقت المتبقي</div>
+            </div>
+          </div>
+
+          <div class="bid-box">
+            <h4>💰 السعر الحالي: <strong style="color:var(--emerald)">380 دج/كغ</strong></h4>
+            <div class="bid-row" style="margin-top:12px;">
+              <input
+                type="number"
+                class="bid-input"
+                id="bidInput"
+                placeholder="أدخل سعر مزايدتك (دج/كغ)"
+                min="381"
+                step="5"
+                aria-label="سعر المزايدة"
+              >
+              <button class="btn btn-primary" onclick="placeBid()">🔨 زايد الآن</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <div class="stream-chat">
+        <div class="chat-header">
+          <h3>💬 دردشة البث المباشر</h3>
+          <div class="chat-online">
+            <span class="chat-online-dot" aria-hidden="true"></span>
+            <span id="chatOnlineCount">1,247</span> متصل
+          </div>
+        </div>
+
+        <div class="chat-msgs" id="streamChat" role="log" aria-live="polite" aria-label="رسائل الدردشة">
+          <div class="chat-msg">
+            <div class="chat-av" aria-hidden="true">م</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-name">محمد الحجازي</div>
+              <div class="chat-bubble">التمور تبدو ممتازة! 🔥</div>
+            </div>
+          </div>
+          <div class="chat-msg">
+            <div class="chat-av" aria-hidden="true">ف</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-name">فاطمة الزهراء</div>
+              <div class="chat-bubble">كم كمية الحد الأدنى للطلب؟</div>
+            </div>
+          </div>
+          <div class="chat-msg seller">
+            <div class="chat-av" aria-hidden="true">ن</div>
+            <div class="chat-bubble-wrap">
+              <div class="chat-name">نور الهدى (البائع) ✓</div>
+              <div class="chat-bubble">الحد الأدنى 50 كغ مع شحن مجاني للطلبات فوق 200 كغ 🚚</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="chat-input-row">
+            <input
+              type="text"
+              class="chat-input"
+              id="chatInput"
+              placeholder="اكتب رسالتك..."
+              aria-label="رسالة الدردشة"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"
+            >
+            <button class="btn btn-primary btn-sm" onclick="sendChat()">إرسال</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     LOYALTY
+     ============================================================ -->
+<section id="loyalty-sec" class="section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🎁 الولاء</span>
+    </div>
+    <h2 class="section-title">نظام الولاء والمكافآت</h2>
+    <div class="section-line"><span class="section-line-icon">🏆</span></div>
+    <p class="section-sub">اكسب النقاط، اصعد المستويات، واحصل على مكافآت حصرية</p>
+
+    <!-- Loyalty Hero -->
+    <div class="loyalty-hero-card">
+      <div class="loyalty-hero-inner">
+        <div>
+          <h2 class="loyalty-greeting">أحمد بن يوسف 🏆</h2>
+          <p class="loyalty-tier">عضو ذهبي · مستوى 12 · 28 يوم متتالي</p>
+          <div class="loyalty-pts">8,450<small>نقطة متاحة</small></div>
+        </div>
+        <div class="loyalty-quick-grid">
+          <div class="loyalty-q-stat">
+            <div class="icon">🏅</div>
+            <span class="val">47</span>
+            <span class="lbl">مهمة مكتملة</span>
+          </div>
+          <div class="loyalty-q-stat">
+            <div class="icon">🎯</div>
+            <span class="val">12</span>
+            <span class="lbl">شارة مستلمة</span>
+          </div>
+          <div class="loyalty-q-stat">
+            <div class="icon">🎁</div>
+            <span class="val">5</span>
+            <span class="lbl">مكافآت قابلة</span>
+          </div>
+          <div class="loyalty-q-stat">
+            <div class="icon">🔥</div>
+            <span class="val">28</span>
+            <span class="lbl">يوم متتالي</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tiers -->
+    <h3 style="text-align:center; font-size:1.5rem; margin-bottom:24px;">🏆 مستويات العضوية</h3>
+    <div class="grid-4" style="margin-bottom:48px;">
+      <div class="tier-card">
+        <div class="tier-icon-wrap">🥉</div>
+        <div class="tier-name">برونزي</div>
+        <div class="tier-range">0 — 999 نقطة</div>
+        <span class="tier-perk">خصم 2%</span>
+      </div>
+      <div class="tier-card">
+        <div class="tier-icon-wrap">🥈</div>
+        <div class="tier-name">فضي</div>
+        <div class="tier-range">1,000 — 4,999 نقطة</div>
+        <span class="tier-perk">خصم 5%</span>
+      </div>
+      <div class="tier-card current">
+        <div class="tier-icon-wrap">🥇</div>
+        <div class="tier-name">ذهبي ✦ حالي</div>
+        <div class="tier-range">5,000 — 14,999 نقطة</div>
+        <span class="tier-perk">خصم 10% + شحن مجاني</span>
+      </div>
+      <div class="tier-card">
+        <div class="tier-icon-wrap">💎</div>
+        <div class="tier-name">بلاتيني</div>
+        <div class="tier-range">+15,000 نقطة</div>
+        <span class="tier-perk">خصم 15% + مدير حساب</span>
+      </div>
+    </div>
+
+    <!-- Spin Wheel -->
+    <div class="wheel-section">
+      <h3 style="font-size:1.5rem; margin-bottom:8px;">🎡 عجلة الحظ اليومية</h3>
+      <p style="color:var(--text-muted); margin-bottom:0;">دوّر العجلة مرة واحدة يومياً لكسب مكافآت فورية</p>
+
+      <div class="wheel-wrap">
+        <div class="wheel-pointer-el" aria-hidden="true">▼</div>
+        <div class="spin-wheel" id="spinWheel" aria-label="عجلة الحظ">
+          <div class="wheel-center" aria-hidden="true">🎁</div>
+        </div>
+      </div>
+
+      <div class="wheel-result" id="wheelResult" aria-live="polite">اضغط الزر لتدوير العجلة!</div>
+      <button class="btn btn-gold btn-lg" onclick="spinWheel()" id="spinBtn">🎯 دوّر العجلة (محاولة مجانية)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ACHIEVEMENTS
+     ============================================================ -->
+<section class="section section-alt">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🏆 الإنجازات</span>
+    </div>
+    <h2 class="section-title">نظام الإنجازات والشارات</h2>
+    <div class="section-line"><span class="section-line-icon">🎖️</span></div>
+    <p class="section-sub">اكسب الشارات، اصعد المستويات، وكن في قمة السوق الزراعي</p>
+
+    <div class="badges-grid">
+      <div class="badge-card earned">
+        <div class="earned-check" aria-label="مكتملة">✓</div>
+        <span class="badge-icon">🌱</span>
+        <div class="badge-name">أول محصول</div>
+        <div class="badge-desc">بعت أول منتج على المنصة</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="badge-card earned">
+        <div class="earned-check" aria-label="مكتملة">✓</div>
+        <span class="badge-icon">💼</span>
+        <div class="badge-name">تاجر ناجح</div>
+        <div class="badge-desc">أكملت 10 صفقات بنجاح</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="badge-card earned">
+        <div class="earned-check" aria-label="مكتملة">✓</div>
+        <span class="badge-icon">⭐</span>
+        <div class="badge-name">بائع موثوق</div>
+        <div class="badge-desc">حصلت على تقييم 4.5+ نجوم</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="badge-card">
+        <span class="badge-icon">🚀</span>
+        <div class="badge-name">سريع النمو</div>
+        <div class="badge-desc">ضاعف مبيعاتك في شهر واحد</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+        <span class="badge-pct">70%</span>
+      </div>
+      <div class="badge-card">
+        <span class="badge-icon">🏆</span>
+        <div class="badge-name">متصدر السوق</div>
+        <div class="badge-desc">كن من أفضل 10 بائعين</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+        <span class="badge-pct">45%</span>
+      </div>
+      <div class="badge-card">
+        <span class="badge-icon">✈️</span>
+        <div class="badge-name">مصدّر معتمد</div>
+        <div class="badge-desc">أكملت أول عملية تصدير</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div>
+        <span class="badge-pct">20%</span>
+      </div>
+      <div class="badge-card">
+        <span class="badge-icon">🎯</span>
+        <div class="badge-name">دقة عالية</div>
+        <div class="badge-desc">95%+ من الطلبات مكتملة</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+        <span class="badge-pct">85%</span>
+      </div>
+      <div class="badge-card">
+        <span class="badge-icon">💎</span>
+        <div class="badge-name">عميل بلاتيني</div>
+        <div class="badge-desc">وصلت للمستوى البلاتيني</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+        <span class="badge-pct">60%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ANALYTICS
+     ============================================================ -->
+<section id="analytics-sec" class="section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">📊 التحليلات</span>
+    </div>
+    <h2 class="section-title">لوحة التحليلات التفاعلية</h2>
+    <div class="section-line"><span class="section-line-icon">📈</span></div>
+    <p class="section-sub">تحليلات شاملة لأداء مبيعاتك وسلوك السوق في الوقت الحقيقي</p>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-val">2.1M دج</div>
+        <div class="kpi-lbl">إجمالي المبيعات</div>
+        <div class="kpi-change">↑ 23% هذا الشهر</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">847</div>
+        <div class="kpi-lbl">عدد الطلبات</div>
+        <div class="kpi-change">↑ 15% هذا الأسبوع</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">4.9 ⭐</div>
+        <div class="kpi-lbl">متوسط التقييم</div>
+        <div class="kpi-change">↑ 0.2 تحسن</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-val">94%</div>
+        <div class="kpi-lbl">معدل الإكمال</div>
+        <div class="kpi-change">↑ 3% تحسن</div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>📈 المبيعات الشهرية</h3>
+        <div class="chart-wrap"><canvas id="salesChart" aria-label="مخطط المبيعات الشهرية"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>🥧 توزيع المنتجات</h3>
+        <div class="chart-wrap"><canvas id="productsChart" aria-label="مخطط توزيع المنتجات"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>🗺️ المبيعات حسب الولاية</h3>
+        <div class="chart-wrap"><canvas id="regionsChart" aria-label="مخطط المبيعات الإقليمية"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>👥 سلوك العملاء</h3>
+        <div class="chart-wrap"><canvas id="customersChart" aria-label="مخطط سلوك العملاء"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     REFERRAL
+     ============================================================ -->
+<section class="section section-alt">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">🎁 الإحالة</span>
+    </div>
+    <h2 class="section-title">نظام الإحالة والمكافآت</h2>
+    <div class="section-line"><span class="section-line-icon">🤝</span></div>
+    <p class="section-sub">ادعُ أصدقاءك واحصل على مكافآت نقدية ونقاط ولاء فورية</p>
+
+    <div class="referral-hero-card">
+      <div class="referral-inner">
+        <div>
+          <h2 style="font-size:2rem; font-weight:900; color:#fff; margin-bottom:10px;">كود الإحالة الخاص بك</h2>
+          <p style="opacity:0.88; margin-bottom:22px; font-size:0.95rem;">شارك هذا الكود واحصل على 500 نقطة لكل صديق ينضم</p>
+          <div class="ref-code-box">
+            <div class="ref-code-label">كود الإحالة الخاص بك:</div>
+            <span class="ref-code" id="refCode">AMENA-7X9K2M</span>
+            <button class="btn btn-gold" onclick="copyRef()" aria-label="نسخ كود الإحالة">📋 نسخ الكود</button>
+          </div>
+        </div>
+        <div class="referral-stats-grid">
+          <div class="ref-stat"><span class="n">47</span><span class="l">صديق مدعو</span></div>
+          <div class="ref-stat"><span class="n">23</span><span class="l">تحويل ناجح</span></div>
+          <div class="ref-stat"><span class="n">11,500</span><span class="l">نقطة مكتسبة</span></div>
+          <div class="ref-stat"><span class="n">2,875 دج</span><span class="l">مكافآت نقدية</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAYMENT
+     ============================================================ -->
+<section id="payment-sec" class="section">
+  <div class="container">
+    <div style="text-align:center; margin-bottom:8px;">
+      <span class="section-eyebrow">💳 الدفع الآمن</span>
+    </div>
+    <h2 class="section-title">نظام الدفع المتكامل مع Escrow</h2>
+    <div class="section-line"><span class="section-line-icon">🔒</span></div>
+    <p class="section-sub">ادفع بأمان عبر بوابتنا المحمية مع نظام الضمان المالي المعتمد</p>
+
+    <div class="payment-layout">
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3>📦 ملخص الطلب</h3>
+        <p class="order-id">طلب #AM-2026-1024</p>
+
+        <div class="order-items">
+          <div class="order-item">
+            <span>🌴 دقلة نور × 100 كغ</span>
+            <strong>35,000 دج</strong>
+          </div>
+          <div class="order-item">
+            <span>🚚 شحن مبرد</span>
+            <strong>3,000 دج</strong>
+          </div>
+          <div class="order-item">
+            <span>💳 رسوم المنصة (2%)</span>
+            <strong>770 دج</strong>
+          </div>
+        </div>
+
+        <div class="order-total">
+          <span>الإجمالي</span>
+          <span>38,770 دج</span>
+        </div>
+
+        <div class="escrow-banner">
+          <span class="esc-icon">🔒</span>
+          <div>
+            <h4>نظام الدفع المضمون (Escrow)</h4>
+            <p>يتم تجميد المبلغ في حساب وسيط آمن حتى تأكيد استلامك للمنتج. لديك 48 ساعة لفتح نزاع في حال وجود مشكلة.</p>
+          </div>
+        </div>
+
+        <div class="savings-strip">
+          <div class="s-label">
+            <strong>🎁 وفرت باستخدام نقاط الولاء</strong>
+            <small>500 نقطة = 500 دج خصم</small>
+          </div>
+          <span class="s-amount">-500 دج</span>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="payment-methods-card">
+        <h3>💳 اختر طريقة الدفع</h3>
+        <div class="methods-grid">
+          <div class="method-card selected" onclick="selectPayMethod(this)" role="radio" aria-checked="true" tabindex="0">
+            <div class="method-check" aria-hidden="true">✓</div>
+            <div class="method-icon">💳</div>
+            <h4>بطاقة CIB/Edahabia</h4>
+            <p>دفع فوري آمن</p>
+          </div>
+          <div class="method-card" onclick="selectPayMethod(this)" role="radio" aria-checked="false" tabindex="0">
+            <div class="method-check" aria-hidden="true">✓</div>
+            <div class="method-icon">🏦</div>
+            <h4>CCP بريد الجزائر</h4>
+            <p>تحويل مباشر</p>
+          </div>
+          <div class="method-card" onclick="selectPayMethod(this)" role="radio" aria-checked="false" tabindex="0">
+            <div class="method-check" aria-hidden="true">✓</div>
+            <div class="method-icon">📱</div>
+            <h4>BaridiMob</h4>
+            <p>دفع عبر التطبيق</p>
+          </div>
+          <div class="method-card" onclick="selectPayMethod(this)" role="radio" aria-checked="false" tabindex="0">
+            <div class="method-check" aria-hidden="true">✓</div>
+            <div class="method-icon">🔒</div>
+            <h4>دفع مضمون Escrow</h4>
+            <p>حماية 100%</p>
+          </div>
+        </div>
+
+        <button class="pay-btn" onclick="doPay()">🔐 تأكيد الدفع الآمن — 38,270 دج</button>
+
+        <div class="security-badges">
+          <div class="sec-badge">🔒 تشفير SSL 256-bit</div>
+          <div class="sec-badge">🛡️ حماية PCI-DSS</div>
+          <div class="sec-badge">✅ معتمد من بنك الجزائر</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>🌾 آمنة AMENA</h4>
+        <p>منصة السوق الزراعي الرقمي الجزائري — ربط الفلاحين بالمستهلكين بثقة وشفافية كاملة.</p>
+        <span class="footer-slogan">منتج موجود، خدمات وسوق بلا حدود</span>
+      </div>
+      <div class="footer-col">
+        <h4>روابط سريعة</h4>
+        <a onclick="goTo('home')">الرئيسية</a>
+        <a onclick="goTo('markets')">الأسواق</a>
+        <a onclick="goTo('live-sec')">البث المباشر</a>
+        <a onclick="goTo('loyalty-sec')">نظام الولاء</a>
+        <a onclick="goTo('payment-sec')">طرق الدفع</a>
+      </div>
+      <div class="footer-col">
+        <h4>الدعم والمساعدة</h4>
+        <a href="#">مركز المساعدة</a>
+        <a href="#">الأسئلة الشائعة</a>
+        <a href="#">سياسة الخصوصية</a>
+        <a href="#">الشروط والأحكام</a>
+      </div>
+      <div class="footer-col">
+        <h4>تواصل معنا</h4>
+        <a href="mailto:contact@amena-platform.dz">📧 contact@amena-platform.dz</a>
+        <a href="tel:+21321000000">📱 +213 21 XXXX XXXX</a>
+        <a onclick="toggleAI()">🤖 المساعد الذكي</a>
+        <a href="https://wa.me/21321000000" target="_blank" rel="noopener">💬 واتساب</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 منصة آمنة AMENA — جميع الحقوق محفوظة &nbsp;|&nbsp; Algerian Digital Agricultural Market
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     AI ASSISTANT FLOAT
+     ============================================================ -->
+<button class="ai-float" onclick="toggleAI()" aria-label="فتح المساعد الذكي" title="المساعد الذكي">🤖</button>
+
+<!-- AI Chat Window -->
+<div class="ai-chat-window" id="aiWindow" role="dialog" aria-label="مساعد آمنة الذكي" aria-modal="false">
+  <div class="ai-chat-header">
+    <div class="ai-chat-header-left">
+      <div class="ai-avatar" aria-hidden="true">🤖</div>
+      <div>
+        <h4>مساعد آمنة الذكي</h4>
+        <div class="ai-chat-status">
+          <span class="ai-status-dot" aria-hidden="true"></span>
+          متصل الآن · يحلل السوق
+        </div>
+      </div>
+    </div>
+    <button class="ai-close-btn" onclick="toggleAI()" aria-label="إغلاق المساعد">✕</button>
+  </div>
+
+  <div class="ai-suggestions">
+    <div class="ai-sug-label">💡 توصيات ذكية</div>
+    <div class="ai-sug-item" onclick="askAI('ما أفضل وقت لبيع التمور؟')" role="button" tabindex="0">📅 أفضل وقت لبيع التمور: نوفمبر-ديسمبر (ارتفاع 23%)</div>
+    <div class="ai-sug-item" onclick="askAI('اقترح سعر لـ 100 كغ بطاطا')" role="button" tabindex="0">💰 سعر مقترح لـ 100 كغ بطاطا: 52-58 دج/كغ</div>
+    <div class="ai-sug-item" onclick="askAI('ما المنتجات الأكثر طلباً؟')" role="button" tabindex="0">🔥 المنتجات الأكثر طلباً: دقلة نور، طماطم، زيتون</div>
+  </div>
+
+  <div class="ai-messages-area" id="aiMessages" role="log" aria-live="polite">
+    <div class="ai-msg">
+      <div class="ai-msg-av" aria-hidden="true">🤖</div>
+      <div class="ai-bubble">مرحباً! 🌾 أنا مساعدك الذكي. يمكنني مساعدتك في:<br>• تحليل أسعار السوق<br>• اقتراح أفضل توقيت للبيع<br>• توصيات لزيادة أرباحك<br>• الإجابة على أسئلتك الزراعية</div>
+    </div>
+  </div>
+
+  <div class="ai-input-area">
+    <input
+      type="text"
+      class="ai-text-input"
+      id="aiInput"
+      placeholder="اكتب سؤالك..."
+      aria-label="سؤال للمساعد الذكي"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendToAI();}"
+    >
+    <button class="btn btn-primary btn-sm" onclick="sendToAI()" aria-label="إرسال">إرسال</button>
+  </div>
+</div>
+
+<!-- WhatsApp Float -->
+<a class="wa-float" href="https://wa.me/21321000000" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer" aria-live="assertive" aria-atomic="true"></div>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+'use strict';
+
+/* ===== UTILS ===== */
+function goTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toast(msg, duration = 3500) {
+  const container = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('out');
+    el.addEventListener('animationend', () => el.remove(), { once: true });
+  }, duration);
+}
+
+/* ===== DARK MODE ===== */
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('amena-dark', document.body.classList.contains('dark') ? '1' : '0');
+}
+if (localStorage.getItem('amena-dark') === '1') document.body.classList.add('dark');
+
+/* ===== HEADER SCROLL ===== */
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* ===== COUNTER ANIMATION ===== */
+function animateCounter(el, target) {
+  if (el.dataset.targetText) return; // Skip if static text
+  let current = 0;
+  const step = Math.ceil(target / 80);
+  const timer = setInterval(() => {
+    current = Math.min(current + step, target);
+    if (target >= 1000) {
+      el.textContent = (current >= 1000 ? (current / 1000).toFixed(current >= 10000 ? 0 : 1) + 'K' : current);
+    } else {
+      el.textContent = current.toLocaleString('ar-DZ');
+    }
+    if (current >= target) clearInterval(timer);
+  }, 18);
+}
+
+// Intersection Observer for stats
+const heroStats = document.querySelectorAll('.stat-num[data-target]');
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        animateCounter(el, parseInt(el.dataset.target));
+        io.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  heroStats.forEach(el => io.observe(el));
+}
+
+/* ===== LIVE USER COUNT SIMULATION ===== */
+setInterval(() => {
+  const base = 1247;
+  const delta = Math.floor(Math.random() * 40) - 18;
+  const newCount = Math.max(1100, base + delta);
+  const el = document.getElementById('liveCount');
+  const vc = document.getElementById('viewCount');
+  const co = document.getElementById('chatOnlineCount');
+  const formatted = newCount.toLocaleString('ar-DZ');
+  if (el) el.textContent = formatted;
+  if (vc) vc.textContent = formatted;
+  if (co) co.textContent = formatted;
+}, 7000);
+
+/* ===== AUCTION COUNTDOWN ===== */
+let countdownSeconds = 25 * 60 + 43;
+setInterval(() => {
+  if (countdownSeconds <= 0) return;
+  countdownSeconds--;
+  const m = Math.floor(countdownSeconds / 60);
+  const s = countdownSeconds % 60;
+  const el = document.getElementById('countdown');
+  if (el) el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}, 1000);
+
+/* ===== MAP ===== */
+(function initMap() {
+  try {
+    const map = L.map('liveMap', {
+      center: [28.5, 2.5],
+      zoom: 5,
+      zoomControl: false,
+      attributionControl: true
+    });
+
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(map);
+
+    const mkIcon = (emoji) => L.divIcon({
+      html: `<div style="font-size:24px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.35))">${emoji}</div>`,
+      className: 'custom-marker-icon',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+      popupAnchor: [0, -18]
+    });
+
+    const farms = [
+      { lat: 33.37, lng:  6.86, name: 'الوادي — تمور دقلة نور',     icon: '🌾' },
+      { lat: 34.85, lng:  5.73, name: 'بسكرة — دقلة نور ممتازة',    icon: '🌴' },
+      { lat: 36.37, lng:  2.80, name: 'البليدة — حمضيات وخضروات',   icon: '🍊' },
+      { lat: 36.19, lng:  5.41, name: 'سطيف — حبوب استراتيجية',     icon: '🌾' },
+      { lat: 35.37, lng:  1.32, name: 'سعيدة — كروم العنب',         icon: '🍇' },
+      { lat: 35.69, lng: -0.63, name: 'وهران — مستودع رئيسي',       icon: '🏪' },
+      { lat: 36.75, lng:  3.04, name: 'الجزائر العاصمة — مركز توزيع', icon: '🏬' },
+      { lat: 31.63, lng:  2.99, name: 'غرداية — واحة النخيل',       icon: '🌴' },
+    ];
+
+    farms.forEach(f => {
+      L.marker([f.lat, f.lng], { icon: mkIcon(f.icon) })
+        .addTo(map)
+        .bindPopup(`<strong style="font-family:'Cairo',sans-serif">${f.name}</strong>`);
+    });
+
+    // Animated carrier
+    let carrierLat = 33.4, carrierLng = 6.6;
+    const carrier = L.marker([carrierLat, carrierLng], { icon: mkIcon('🚚') }).addTo(map);
+    carrier.bindPopup('<strong style="font-family:Cairo,sans-serif">شاحنة مبردة — في الطريق</strong>');
+
+    setInterval(() => {
+      carrierLat += (Math.random() - 0.48) * 0.12;
+      carrierLng += (Math.random() - 0.52) * 0.12;
+      carrier.setLatLng([carrierLat, carrierLng]);
+    }, 4000);
+
+  } catch (e) {
+    console.warn('Map init failed:', e);
+  }
+})();
+
+/* ===== LIVE STREAM CHAT ===== */
+const autoMessages = [
+  { user: 'كريم جلالي',   text: 'التمور رائعة هذا الموسم! 🔥',                   seller: false },
+  { user: 'سارة بوعلام',  text: 'هل الشحن متوفر لولاية الجزائر؟',               seller: false },
+  { user: 'يوسف بن علي',  text: 'أريد 100 كغ بالتغليف المخصص للتصدير',           seller: false },
+  { user: 'نور الهدى ✓',  text: 'نعم! الشحن متاح لجميع الولايات ❄️🚚',           seller: true  },
+  { user: 'أمينة لعروسي', text: 'ما نسبة الرطوبة في التمور؟',                   seller: false },
+  { user: 'نور الهدى ✓',  text: 'الرطوبة 18-22٪ وهي المعيار الدولي للتصدير 📜', seller: true  },
+];
+
+let autoMsgIdx = 0;
+setInterval(() => {
+  if (autoMsgIdx >= autoMessages.length) return;
+  addChatMsg(autoMessages[autoMsgIdx], false);
+  autoMsgIdx++;
+}, 9000);
+
+function addChatMsg(msgObj, isMe = false) {
+  const chat = document.getElementById('streamChat');
+  if (!chat) return;
+  const div = document.createElement('div');
+  div.className = `chat-msg${msgObj.seller ? ' seller' : ''}`;
+
+  const initial = isMe ? 'أ' : (msgObj.user ? msgObj.user[0] : '?');
+  div.innerHTML = `
+    <div class="chat-av" aria-hidden="true">${initial}</div>
+    <div class="chat-bubble-wrap">
+      <div class="chat-name">${isMe ? 'أنت' : (msgObj.user || 'مجهول')}</div>
+      <div class="chat-bubble">${escHtml(msgObj.text || msgObj)}</div>
+    </div>
+  `;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  addChatMsg({ text: msg }, true);
+  input.value = '';
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ===== BID ===== */
+function placeBid() {
+  const input = document.getElementById('bidInput');
+  const val = parseFloat(input.value);
+  if (!val || val <= 380) {
+    toast('⚠️ يجب أن تكون مزايدتك أعلى من 380 دج/كغ');
+    input.focus();
+    return;
+  }
+  toast(`✅ تم تقديم مزايدتك بسعر ${val} دج/كغ — أنت المزايد الأعلى الآن!`);
+  input.value = '';
+}
+
+/* ===== SPIN WHEEL ===== */
+const prizes = ['50 نقطة 🪙', '100 نقطة 🪙', '200 نقطة 🪙', '500 نقطة 🎁', 'خصم 5% 🏷️', 'حظ أوفر 🍀'];
+let wheelAngle = 0;
+let spinning = false;
+
+function spinWheel() {
+  if (spinning) return;
+  spinning = true;
+  const btn = document.getElementById('spinBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري التدوير...';
+
+  const result = document.getElementById('wheelResult');
+  result.textContent = '🌀 جارٍ التدوير...';
+
+  const extraSpins = 5 + Math.floor(Math.random() * 4);
+  const extraDeg   = Math.random() * 360;
+  wheelAngle += extraSpins * 360 + extraDeg;
+
+  const wheel = document.getElementById('spinWheel');
+  wheel.style.transition = 'transform 4.5s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+  wheel.style.transform = `rotate(${wheelAngle}deg)`;
+
+  setTimeout(() => {
+    const prizeIndex = Math.floor(Math.random() * prizes.length);
+    result.textContent = `🎉 مبروك! ربحت: ${prizes[prizeIndex]}`;
+    toast(`🎁 جائزتك: ${prizes[prizeIndex]} — تمت إضافتها لرصيدك!`);
+    spinning = false;
+    btn.disabled = false;
+    btn.textContent = '🎯 دوّر العجلة مرة أخرى (غداً)';
+    btn.disabled = true; // One spin per day
+  }, 4600);
+}
+
+/* ===== CHARTS ===== */
+// Fix: Use Chart.js v4 syntax
+(function initCharts() {
+  if (typeof Chart === 'undefined') return;
+
+  // Shared palette
+  const green  = '#3A6B1F';
+  const gold   = '#C8922A';
+  const sage   = '#4E8A30';
+  const terra  = '#B85C38';
+  const mint   = '#68A84A';
+  const goldL  = '#E0A840';
+
+  const isDark = () => document.body.classList.contains('dark');
+
+  const fontColor = () => isDark() ? '#EAF0DC' : '#2C3320';
+  const gridColor = () => isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.07)';
+
+  // Defaults
+  Chart.defaults.font.family = "'Cairo', 'Tajawal', sans-serif";
+  Chart.defaults.font.size   = 12;
+
+  // Sales Bar Chart
+  new Chart(document.getElementById('salesChart'), {
+    type: 'bar',
+    data: {
+      labels: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو'],
+      datasets: [{
+        label: 'المبيعات (ألف دج)',
+        data: [180, 220, 195, 280, 310, 350, 420],
+        backgroundColor: `${green}CC`,
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: gridColor() },
+          ticks: { color: fontColor() }
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: fontColor() }
+        }
+      }
+    }
+  });
+
+  // Products Doughnut
+  new Chart(document.getElementById('productsChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['دقلة نور', 'بطاطا', 'طماطم', 'زيتون', 'حمضيات', 'أخرى'],
+      datasets: [{
+        data: [45, 20, 15, 10, 7, 3],
+        backgroundColor: [green, sage, gold, goldL, terra, mint],
+        borderWidth: 2,
+        borderColor: isDark() ? '#182410' : '#fff',
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: fontColor(), padding: 12, font: { size: 11 } }
+        }
+      }
+    }
+  });
+
+  // Regions Polar Area
+  new Chart(document.getElementById('regionsChart'), {
+    type: 'polarArea',
+    data: {
+      labels: ['الوادي', 'بسكرة', 'البليدة', 'سطيف', 'تلمسان', 'جيجل'],
+      datasets: [{
+        data: [35, 28, 20, 18, 15, 12],
+        backgroundColor: [
+          `${green}CC`, `${sage}CC`, `${gold}CC`,
+          `${goldL}CC`, `${terra}CC`, `${mint}CC`
+        ],
+        borderWidth: 1,
+        borderColor: isDark() ? '#0F1A08' : '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: fontColor(), padding: 10, font: { size: 11 } }
+        }
+      },
+      scales: {
+        r: {
+          ticks: { color: fontColor(), backdropColor: 'transparent' },
+          grid:  { color: gridColor() }
+        }
+      }
+    }
+  });
+
+  // Customers Radar
+  new Chart(document.getElementById('customersChart'), {
+    type: 'radar',
+    data: {
+      labels: ['ولاء', 'تكرار', 'قيمة', 'تنوع', 'تفاعل'],
+      datasets: [
+        {
+          label: 'هذا الشهر',
+          data: [85, 78, 92, 70, 88],
+          borderColor: green,
+          backgroundColor: `${green}25`,
+          pointBackgroundColor: green,
+          pointRadius: 4
+        },
+        {
+          label: 'الشهر الماضي',
+          data: [72, 65, 80, 68, 75],
+          borderColor: gold,
+          backgroundColor: `${gold}20`,
+          pointBackgroundColor: gold,
+          pointRadius: 4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { color: fontColor(), font: { size: 11 } }
+        }
+      },
+      scales: {
+        r: {
+          beginAtZero: true,
+          ticks:    { color: fontColor(), backdropColor: 'transparent', stepSize: 20 },
+          grid:     { color: gridColor() },
+          pointLabels: { color: fontColor(), font: { size: 11 } }
+        }
+      }
+    }
+  });
+})();
+
+/* ===== PAYMENT ===== */
+function selectPayMethod(card) {
+  document.querySelectorAll('.method-card').forEach(c => {
+    c.classList.remove('selected');
+    c.setAttribute('aria-checked', 'false');
+  });
+  card.classList.add('selected');
+  card.setAttribute('aria-checked', 'true');
+}
+
+// Keyboard support for payment method cards
+document.querySelectorAll('.method-card').forEach(card => {
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      selectPayMethod(card);
+    }
+  });
+});
+
+function doPay() {
+  toast('✅ تم تأكيد دفعتك بنجاح! المبلغ مجمّد في حساب Escrow حتى استلامك للمنتج 🔒');
+}
+
+/* ===== REFERRAL ===== */
+function copyRef() {
+  const code = document.getElementById('refCode')?.textContent || 'AMENA-7X9K2M';
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code)
+      .then(() => toast(`✅ تم نسخ كود الإحالة: ${code}`))
+      .catch(() => toast('⚠️ تعذّر النسخ التلقائي، يرجى النسخ يدوياً: ' + code));
+  } else {
+    toast('كود الإحالة: ' + code);
+  }
+}
+
+/* ===== AI ASSISTANT ===== */
+const aiOpen = { val: false };
+
+function toggleAI() {
+  aiOpen.val = !aiOpen.val;
+  const win = document.getElementById('aiWindow');
+  if (win) {
+    win.classList.toggle('open', aiOpen.val);
+    if (aiOpen.val) {
+      setTimeout(() => document.getElementById('aiInput')?.focus(), 300);
+    }
+  }
+}
+
+const aiKnowledge = {
+  'التمور':    '📊 أفضل وقت لبيع التمور هو نوفمبر-ديسمبر حيث يرتفع السعر 23%. دقلة نور تحقق أعلى الأسعار في السوق الأوروبية.',
+  'بطاطا':     '💰 السعر المقترح لـ 100 كغ بطاطا: 52-58 دج/كغ. الجودة الأولى من منطقة عين الدفلى أو قسنطينة تحقق سعراً أعلى.',
+  'المنتجات':  '🔥 المنتجات الأكثر طلباً حالياً: 1) دقلة نور 45% 2) طماطم 20% 3) زيتون 15% 4) حمضيات 12% 5) بطاطا 8%.',
+  'سعر':       '💡 لحساب السعر الأمثل، قارن أسعار السوق الثلاثة الأخيرة في ولايتك وأضف هامش 8-12% للجودة.',
+  'تصدير':     '✈️ أهم أسواق التصدير الجزائري: فرنسا، كندا، ألمانيا. دقلة نور وزيت الزيتون البكر الأعلى طلباً.',
+  'شحن':       '🚚 خدمة الشحن المبرد متاحة لجميع الولايات. الوقت المتوسط 24-72 ساعة. شحن مجاني للطلبات فوق 200 كغ.',
+  'ولاء':      '🎁 يمكنك كسب النقاط عبر: كل عملية شراء (1 دج = 1 نقطة)، التقييمات، الإحالات، والمهام اليومية.',
+  'default':   '🤖 شكراً لسؤالك! يمكنني مساعدتك في أسعار السوق، توقيت البيع، خدمات الشحن، والمزيد. حدد سؤالك أكثر.'
+};
+
+function askAI(q) {
+  const input = document.getElementById('aiInput');
+  if (input) input.value = q;
+  sendToAI();
+}
+
+function sendToAI() {
+  const input = document.getElementById('aiInput');
+  if (!input) return;
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  addAIMsg(msg, true);
+  input.value = '';
+
+  // Show typing indicator
+  const typing = addAIMsg('...', false, true);
+
+  setTimeout(() => {
+    typing?.remove();
+    let response = aiKnowledge.default;
+    for (const key of Object.keys(aiKnowledge)) {
+      if (key !== 'default' && msg.includes(key)) {
+        response = aiKnowledge[key];
+        break;
+      }
+    }
+    addAIMsg(response, false);
+  }, 900);
+}
+
+function addAIMsg(text, isUser = false, isTyping = false) {
+  const container = document.getElementById('aiMessages');
+  if (!container) return null;
+  const div = document.createElement('div');
+  div.className = `ai-msg${isUser ? ' user' : ''}`;
+  div.innerHTML = `
+    <div class="ai-msg-av" aria-hidden="true">${isUser ? '👤' : '🤖'}</div>
+    <div class="ai-bubble">${isTyping ? '<em style="opacity:0.6">يكتب...</em>' : escHtml(text)}</div>
+  `;
+  if (isTyping) div.style.opacity = '0.65';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return div;
+}
+
+// Keyboard support for AI suggestions
+document.querySelectorAll('.ai-sug-item').forEach(item => {
+  item.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      item.click();
+    }
+  });
+});
+
+/* ===== ACTIVE NAV LINK ===== */
+const sections = ['home','markets','map-sec','live-sec','loyalty-sec','analytics-sec','payment-sec'];
+const navLinks  = document.querySelectorAll('.site-nav a');
+
+if ('IntersectionObserver' in window) {
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const id = entry.target.id;
+        const match = [...navLinks].find(a => a.getAttribute('onclick')?.includes(id));
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) navIO.observe(el);
+  });
+}
+
+/* ===== NEEDS BOARD ===== */
+let currentNeedType = 'product';
+
+function selectNeedType(btn, type) {
+  document.querySelectorAll('.need-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentNeedType = type;
+}
+
+const needMatches = {
+  product: [
+    { icon:'🌾', title:'عرض بطاطا جودة أولى — 480 كغ متاح', meta:'👨‍🌾 مزرعة بن دحمان · عين الدفلى · ⭐ 4.7', score:'96%' },
+    { icon:'🥕', title:'طماطم طازجة من الحقل — 200 كغ', meta:'👨‍🌾 فلاح وهراني · سيدي بلعباس · ⭐ 4.5', score:'89%' },
+    { icon:'🌴', title:'دقلة نور درجة أولى — 100 كغ', meta:'👨‍🌾 مزرعة الواحة · الوادي · ⭐ 4.9', score:'85%' },
+  ],
+  transport: [
+    { icon:'🚚', title:'ناقل مبرد متاح اليوم — الوادي → سطيف', meta:'🚛 شركة النقل السريع · ⭐ 4.9 · 24 ساعة', score:'94%' },
+    { icon:'🚛', title:'شاحنة 10 طن — رحلة غداً', meta:'🚛 أبو خالد للنقل · تيارت · ⭐ 4.6', score:'87%' },
+  ],
+  expert: [
+    { icon:'👨‍🔬', title:'خبير تربة — استشارة عن بعد', meta:'🔬 د. كمال شريف · معتمد ITGC · 320 دج/دقيقة', score:'92%' },
+    { icon:'🌿', title:'مرشد زراعي — تشخيص الآفات بالصورة', meta:'🌿 م. سليمان بلعيد · ⭐ 4.8', score:'88%' },
+  ],
+  labor: [
+    { icon:'👷', title:'فريق جني 5 أشخاص — متاح الأسبوع القادم', meta:'👷 مجموعة العمل الزراعي · الوادي · ⭐ 4.7', score:'91%' },
+    { icon:'🌾', title:'عمال تلقيح نخيل — خبرة 10 سنوات', meta:'👷 بن عيسى وشركاه · بسكرة · ⭐ 4.9', score:'88%' },
+  ],
+  input: [
+    { icon:'🧪', title:'سماد عضوي معتمد — 500 كغ متاح', meta:'🏭 مؤسسة الخضراء للأسمدة · ⭐ 4.6', score:'93%' },
+    { icon:'🌱', title:'بذور ذرة معتمدة — حصة الموسم', meta:'🌱 توريد الإتحاد الوطني الفلاحي · ⭐ 4.8', score:'90%' },
+  ],
+  finance: [
+    { icon:'🏦', title:'قرض فلاحي بدون فوائد — BNA', meta:'🏦 البنك الوطني الجزائري · موثوق · ⭐ 4.5', score:'88%' },
+    { icon:'🛡️', title:'تأمين على المحصول — شركة CAAR', meta:'🛡️ CAAR · تغطية شاملة للمواسم · ⭐ 4.7', score:'85%' },
+  ],
+};
+
+function postNeed() {
+  const desc = document.getElementById('needDesc')?.value?.trim();
+  const wilaya = document.getElementById('needWilaya')?.value;
+  if (!desc) { toast('⚠️ الرجاء وصف احتياجك أولاً'); return; }
+
+  const list = document.getElementById('matchList');
+  if (!list) return;
+
+  list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">🔍 جارٍ البحث عن مطابقات...</div>';
+
+  setTimeout(() => {
+    const matches = needMatches[currentNeedType] || needMatches.product;
+    list.innerHTML = matches.map(m => `
+      <div class="match-item">
+        <div class="match-avatar">${m.icon}</div>
+        <div class="match-info">
+          <div class="match-title">${m.title}</div>
+          <div class="match-meta">${m.meta} · ${wilaya}</div>
+        </div>
+        <div class="match-score">${m.score}</div>
+      </div>
+    `).join('');
+    toast(\`✅ وجدنا \${matches.length} مطابقات لطلبك في \${wilaya}!\`);
+  }, 1200);
+}
+
+</script>
+</body>
+</html>
